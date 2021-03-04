@@ -24,7 +24,8 @@ GET /
         id: 1,
         name: "Nike Air Force 1",
         original_price: 800.00,
-        category: "男子运动鞋"
+        category: "男子运动鞋",
+        thumb: "../static/...jpg"
       }
     ]，
     sales: [
@@ -33,7 +34,8 @@ GET /
         name: "Nike Air Max",
     		current_price: 399.00,
         original_price: 599.00,
-        category: "男子运动鞋"
+        category: "男子运动鞋",
+        thumb: "../static/...jpg"
   		}
     ],
   	new_arrivals: [
@@ -41,7 +43,8 @@ GET /
   			id: 3,
         name: "Air Jordan",
         original_price: 1499.00,
-        category: "男子篮球鞋"
+        category: "男子篮球鞋",
+        thumb: "../static/...jpg"
 			}
   	] 
   }
