@@ -10,10 +10,11 @@
 
     <div class="hot">
       <p class="text">热门商品</p>
-      <el-carousel height="300px">
+      <el-carousel height="450px">
+        <el-carousel-item :key="1">
         <el-row :gutter="20">
           <el-col :span="6" v-for="item in hot">
-            <div class="lunbo">
+            <div class="lunbo" v-if="item.id <= 4">
               <el-image :src="item.thumb" class="image"></el-image>
               <p>{{item.name}}</p>
               <p>{{item.original_price}}</p>
@@ -21,15 +22,30 @@
             </div>
           </el-col>
         </el-row>
+        </el-carousel-item>
+
+        <el-carousel-item :key="2">
+          <el-row :gutter="20">
+            <el-col :span="6" v-for="item in hot">
+              <div class="lunbo" v-if="item.id > 4">
+                <el-image :src="item.thumb" class="image"></el-image>
+                <p>{{item.name}}</p>
+                <p>{{item.original_price}}</p>
+                <p>{{item.category}}</p>
+              </div>
+            </el-col>
+          </el-row>
+        </el-carousel-item>
       </el-carousel>
     </div><br/>
 
     <div class="sales">
       <p class="text">特价商品</p>
-      <el-carousel height="300px">
+      <el-carousel height="450px">
+        <el-carousel-item :key="1">
         <el-row :gutter="20">
           <el-col :span="6" v-for="item in sales" :key="item.id">
-            <div class="lunbo">
+            <div class="lunbo" v-if="item.id <= 4">
               <el-image :src="item.thumb" class="image"></el-image>
               <p>{{item.name}}</p>
               <p>{{item.current_price}} <span class="original_price"> {{item.original_price}}</span></p>
@@ -37,22 +53,51 @@
             </div>
           </el-col>
         </el-row>
+        </el-carousel-item>
+
+        <el-carousel-item :key="1">
+          <el-row :gutter="20">
+            <el-col :span="6" v-for="item in sales" :key="item.id">
+              <div class="lunbo" v-if="item.id <= 4">
+                <el-image :src="item.thumb" class="image"></el-image>
+                <p>{{item.name}}</p>
+                <p>{{item.current_price}} <span class="original_price"> {{item.original_price}}</span></p>
+                <p>{{item.category}}</p>
+              </div>
+            </el-col>
+          </el-row>
+        </el-carousel-item>
       </el-carousel>
     </div><br/>
 
     <div class="new">
       <p class="text">最新上架</p>
-      <el-carousel height="300px">
-        <el-row :gutter="20">
-          <el-col :span="6" v-for="item in new_arrivals">
-            <div class="lunbo">
-              <el-image :src="item.thumb" class="image"></el-image>
-              <p>{{item.name}}</p>
-              <p>{{item.original_price}}</p>
-              <p>{{item.category}}</p>
-            </div>
-          </el-col>
-        </el-row>
+      <el-carousel height="450px">
+        <el-carousel-item :key="1">
+          <el-row :gutter="20">
+            <el-col :span="6" v-for="item in hot">
+              <div class="lunbo" v-if="item.id <= 4">
+                <el-image :src="item.thumb" class="image"></el-image>
+                <p>{{item.name}}</p>
+                <p>{{item.original_price}}</p>
+                <p>{{item.category}}</p>
+              </div>
+            </el-col>
+          </el-row>
+        </el-carousel-item>
+
+        <el-carousel-item :key="2">
+          <el-row :gutter="20">
+            <el-col :span="6" v-for="item in hot">
+              <div class="lunbo" v-if="item.id > 4">
+                <el-image :src="item.thumb" class="image"></el-image>
+                <p>{{item.name}}</p>
+                <p>{{item.original_price}}</p>
+                <p>{{item.category}}</p>
+              </div>
+            </el-col>
+          </el-row>
+        </el-carousel-item>
       </el-carousel>
     </div><br/>
 
@@ -136,13 +181,13 @@ export default {
           category: "男/女篮球鞋",
           thumb: "../static/g4.jpg"
         },
-        /*{
+        {
           id: 5,
           name: "Nike Blazer Low LE",
           original_price: 599.00,
           category: "女子运动鞋",
-          thumb: "../static/g4.jpg"
-        }*/
+          thumb: "../static/g5.jpg"
+        }
       ],
       sales:[
         {
@@ -177,14 +222,14 @@ export default {
           category: "男/女篮球鞋",
           thumb: "../static/g4.jpg"
         },
-        /*{
+        {
           id: 5,
           name: "Nike Blazer Low LE",
           current_price: 399.00,
           original_price: 599.00,
           category: "女子运动鞋",
-          thumb: "../static/g4.jpg"
-        }*/
+          thumb: "../static/g5.jpg"
+        }
       ],
       new_arrivals:[
         {
@@ -215,13 +260,13 @@ export default {
           category: "男/女篮球鞋",
           thumb: "../static/g4.jpg"
         },
-        /*{
+        {
           id: 5,
           name: "Nike Blazer Low LE",
           original_price: 599.00,
           category: "女子运动鞋",
-          thumb: "../static/g4.jpg"
-        }*/
+          thumb: "../static/g5.jpg"
+        }
       ],
       vip_center: "../static/3.jpg"
     }
