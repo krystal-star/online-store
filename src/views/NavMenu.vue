@@ -22,9 +22,25 @@
                 <el-menu-item index="2-2">选项2</el-menu-item>
                 <el-menu-item index="2-3">选项3</el-menu-item>
             </el-submenu>
-            <el-menu-item index="3">儿童</el-menu-item>
-            <el-menu-item index="4">运动</el-menu-item>
-            <el-menu-item index="5">特价</el-menu-item>
+            <el-submenu index="3">
+                <template slot="title">儿童</template>
+                <el-menu-item index="3-1">选项1</el-menu-item>
+                <el-menu-item index="3-2">选项2</el-menu-item>
+                <el-menu-item index="3-3">选项3</el-menu-item>
+            </el-submenu>
+            <el-submenu index="4">
+                <template slot="title">运动</template>
+                <el-menu-item index="4-1">选项1</el-menu-item>
+                <el-menu-item index="4-2">选项2</el-menu-item>
+                <el-menu-item index="4-3">选项3</el-menu-item>
+            </el-submenu>
+            <el-submenu index="5">
+                <template slot="title">特价</template>
+                <el-menu-item index="5-1">选项1</el-menu-item>
+                <el-menu-item index="5-2">选项2</el-menu-item>
+                <el-menu-item index="5-3">选项3</el-menu-item>
+            </el-submenu>
+
             <el-input class="search-box"
                     placeholder="请输入内容"
                     prefix-icon="el-icon-search"
