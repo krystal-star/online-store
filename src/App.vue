@@ -9,18 +9,20 @@
       </el-main>
 
       <el-footer>
-        footer
+        <Footer/>
       </el-footer>
   </div>
 </template>
 
 <script>
   import NavMenu from './views/NavMenu'
+  import Footer from "./views/Footer";
 
 export default {
   name: 'app',
   components:{
-    NavMenu
+    NavMenu,
+      Footer
   }
 }
 </script>
