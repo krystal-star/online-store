@@ -1,45 +1,43 @@
 <template>
     <div class="nav-menu">
         <div class="nav-header">
-            <el-link :underline="false" href="#" target="_blank">在线客服</el-link>
-            <el-link :underline="false" href="#" target="_blank">登陆</el-link>
+            <el-link :underline="false" class="icons" href="https://www.nike.com/cn/">
+                <el-image style="width: 50px; height: 50px"
+                          src="../static/icons/nike-logo-black.png"></el-image></el-link>
+            <el-link :underline="false" class="icons" href="https://www.adidas.com.cn/">
+                <el-image style="width: 40px; height: 40px"
+                          src="../static/icons/adidas-logo-black.png"></el-image></el-link>
+            <el-link :underline="false" class="right" href="#" target="_blank">
+                帮助<i class="el-icon-question"></i></el-link>
+            <el-link :underline="false" class="right" href="#" target="_blank">
+                加入我们<i class="el-icon-phone"></i></el-link>
+            <el-link :underline="false" class="right" href="#" target="_blank">
+                登陆<i class="el-icon-user-solid"></i></el-link>
         </div>
 
-        <el-menu
-                mode="horizontal"
-                @select="handleSelect"
-                text-color="black"
-                >
-            <el-submenu index="1">
-                <template slot="title">男子</template>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-submenu>
-            <el-submenu index="2">
-                <template slot="title">女子</template>
-                <el-menu-item index="2-1">选项1</el-menu-item>
-                <el-menu-item index="2-2">选项2</el-menu-item>
-                <el-menu-item index="2-3">选项3</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3">
-                <template slot="title">儿童</template>
-                <el-menu-item index="3-1">选项1</el-menu-item>
-                <el-menu-item index="3-2">选项2</el-menu-item>
-                <el-menu-item index="3-3">选项3</el-menu-item>
-            </el-submenu>
-            <el-submenu index="4">
-                <template slot="title">运动</template>
-                <el-menu-item index="4-1">选项1</el-menu-item>
-                <el-menu-item index="4-2">选项2</el-menu-item>
-                <el-menu-item index="4-3">选项3</el-menu-item>
-            </el-submenu>
-            <el-submenu index="5">
-                <template slot="title">特价</template>
-                <el-menu-item index="5-1">选项1</el-menu-item>
-                <el-menu-item index="5-2">选项2</el-menu-item>
-                <el-menu-item index="5-3">选项3</el-menu-item>
-            </el-submenu>
+
+        <el-menu mode="horizontal" text-color="black" style="height: 60px;">
+
+            <el-menu-item id="logo" @click="toHomePage">
+                    <el-image style="width: 200px; height: 25px"
+                              src="../static/icons/bestbuyer-logo.png"></el-image>
+            </el-menu-item>
+
+            <el-menu-item
+                    v-for="(item,index1) in classification"
+                    :index="index1.toString()"
+                    @mouseover.native="toVisible(index1)"
+                    @mouseleave.native="toInvisibile(index1)">
+                {{item.name}}
+                <div class="menu-dropdown">
+                    <el-row>
+                        <el-col :span="4" v-for="subitem in item.categories">
+                            <h4 class="cate">{{subitem.name}}</h4>
+                                <li v-for="style in subitem.styles">{{style}}</li>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-menu-item>
 
             <el-input class="search-box"
                     placeholder="请输入内容"
@@ -48,8 +46,12 @@
                     clearable>
             </el-input>
 
-            <i class="el-icon-shopping-bag-1" id="shopping-bag"></i>
-            <i class="el-icon-star-off" id="star"></i>
+            <el-link :underline="false" id="shopping-bag" href="#">
+                <el-image style="width: 25px; height: 25px"
+                          src="../static/icons/shopping-bag.png"></el-image></el-link>
+            <el-link :underline="false" id="star" href="#">
+                <el-image style="width: 30px; height: 30px"
+                          src="../static/icons/heart-off.png"></el-image></el-link>
         </el-menu>
 
     </div>
@@ -60,41 +62,193 @@
         name: "NavMenu",
         data() {
             return {
+                classification:[
+                    {
+                        name: "男子",
+                        categories: [
+                            {
+                                name: "鞋类",
+                                styles: ["运动鞋","篮球鞋","拖鞋"]
+                            },
+                            {
+                                name: "服装",
+                                styles: ["卫衣","外套","运动裤"]
+                            },
+                            {
+                                name: "配件",
+                                styles: ["包","袜子","帽子"]
+                            }
+                        ]
+                    },
+                    {
+                        name: "女子",
+                        categories: [
+                            {
+                                name: "鞋类",
+                                styles: ["运动鞋","篮球鞋","拖鞋"]
+                            },
+                            {
+                                name: "服装",
+                                styles: ["卫衣","外套","运动裤"]
+                            },
+                            {
+                                name: "配件",
+                                styles: ["包","袜子","帽子"]
+                            }
+                        ]
+                    },
+                    {
+                        name: "儿童",
+                        categories: [
+                            {
+                                name: "鞋类",
+                                styles: ["运动鞋","篮球鞋","拖鞋"]
+                            },
+                            {
+                                name: "服装",
+                                styles: ["卫衣","外套","运动裤"]
+                            },
+                            {
+                                name: "配件",
+                                styles: ["包","袜子","帽子"]
+                            }
+                        ]
+                    },
+                    {
+                        name: "分类",
+                        categories: [
+                            {
+                                name: "品牌",
+                                styles: ["Nike","Adidas"]
+                            }
+                        ]
+                    },
+                    {
+                        name: "热卖",
+                        categories: [
+                            {
+                                name: "男子热卖",
+                                styles: ["鞋类","服装","配件"]
+                            },
+                            {
+                                name: "女子热卖",
+                                styles: ["鞋类","服装","配件"]
+                            },
+                            {
+                                name: "儿童热卖",
+                                styles: ["鞋类","服装","配件"]
+                            }
+                        ]
+                    }
+                ],
                 input: '',
             };
         },
         methods: {
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+            toVisible: function(index){
+                let node = document.getElementsByClassName("menu-dropdown")[index].parentElement;
+                node.style = "color: #909399";
+            },
+            toInvisibile: function(index){
+                let node = document.getElementsByClassName("menu-dropdown")[index].parentElement;
+                node.style = "color:black";
+            },
+            toHomePage(){
+                window.location.href = "/"
             }
         }
     }
 </script>
 
 <style scoped>
-    .el-link{
+    div.nav-header{
+        background-color: rgba(144, 147, 153, 0.2);
+        height: 35px;
+    }
+    .icons{
+        padding-left: 10px;
+        padding-right: 10px;
+        right: 450px;
+        bottom: 10px;
+    }
+    .el-link.right{
         padding-left: 20px;
         padding-right: 20px;
-        left: 500px;
-        font-size: 12px;
+        left: 450px;
+        font-size: 14px;
+        color: black;
+        bottom: 12px;
+    }
+    .el-link.right:hover{
+        color: #909399;
     }
     .el-menu-item{
         padding-right: 30px;
         padding-left: 30px;
+        right: 20%;
     }
     .el-menu{
         padding-left: 360px;
     }
 
+    #logo{
+        right: 38%;
+    }
+
 .el-input{
     display: inline-block;
     width: 200px;
-    bottom: 3px;
+    top: 10px;
+    right: 10%;
 }
-    i#shopping-bag,i#star{
-        font-size: 28px;
-        padding-left: 30px;
-        padding-top: 15px;
+    #shopping-bag{
+        right: 25px;
+        top: 10px;
         cursor: pointer;
+    }
+    #star{
+        bottom: 25px;
+        left: 25px;
+        cursor: pointer;
+    }
+    #shopping-bag:hover,#star:hover, #logo:hover, .icons:hover{
+        opacity: 0.5;
+    }
+    .menu-dropdown{
+        width: 1344px;
+        margin: auto;
+        padding-bottom: 40px;
+        overflow: auto;
+        max-height: 100vh;
+        visibility: hidden;
+        position: absolute;
+        z-index: 999;
+        background-color: white;
+    }
+    .el-menu-item{
+        position: relative;
+        font-weight: bold;
+        font-size: 16px;
+        letter-spacing: 0.1em;
+    }
+    .el-menu-item:hover .menu-dropdown{
+        visibility: visible;
+    }
+    .el-row{
+        padding-left: 60px;
+        text-align: left;
+        color: black;
+    }
+    li{
+        list-style: none;
+        font-weight: normal;
+        color: #606266;
+        line-height: 25px;
+    }
+    li:hover{
+        color: black;
+    }
+    h4.cate{
+        margin-bottom: 1px;
     }
 </style>

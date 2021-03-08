@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <el-header style="height: 100px">
+      <el-header style="height: 120px">
         <NavMenu />
       </el-header>
 
@@ -35,5 +35,10 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+    body{
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 
 </style>

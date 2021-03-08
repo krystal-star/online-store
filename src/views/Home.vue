@@ -2,8 +2,8 @@
   <div class="home">
     <div class="poster">
       <el-carousel height="500px">
-        <el-carousel-item v-for="item in posters" :key="item.id">
-          <el-image :src="item.thumb" class="image"></el-image>
+        <el-carousel-item v-for="(item,index) in posters" :key="index">
+          <el-image :src="item.img" class="image"></el-image>
         </el-carousel-item>
       </el-carousel><br/>
     </div>
@@ -13,12 +13,12 @@
       <el-carousel height="450px">
         <el-carousel-item :key="1">
         <el-row :gutter="20">
-          <el-col :span="6" v-for="item in hot">
-            <div class="lunbo" v-if="item.id <= 4">
-              <el-image :src="item.thumb" class="image"></el-image>
+          <el-col :span="6" v-for="(item,index) in hot">
+            <div class="lunbo" v-if="index < 4">
+              <el-image :src="item.img" class="image"></el-image>
               <p>{{item.name}}</p>
-              <p>{{item.original_price}}</p>
-              <p>{{item.category}}</p>
+              <p>{{item.price}}</p>
+              <p>{{item.group}}{{item.style}}</p>
             </div>
           </el-col>
         </el-row>
@@ -26,12 +26,12 @@
 
         <el-carousel-item :key="2">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="item in hot">
-              <div class="lunbo" v-if="item.id > 4">
-                <el-image :src="item.thumb" class="image"></el-image>
+            <el-col :span="6" v-for="(item,index) in hot">
+              <div class="lunbo" v-if="index >= 4">
+                <el-image :src="item.img" class="image"></el-image>
                 <p>{{item.name}}</p>
-                <p>{{item.original_price}}</p>
-                <p>{{item.category}}</p>
+                <p>{{item.price}}</p>
+                <p>{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
@@ -44,25 +44,25 @@
       <el-carousel height="450px">
         <el-carousel-item :key="1">
         <el-row :gutter="20">
-          <el-col :span="6" v-for="item in sales" :key="item.id">
-            <div class="lunbo" v-if="item.id <= 4">
-              <el-image :src="item.thumb" class="image"></el-image>
+          <el-col :span="6" v-for="(item,index) in sales" :key="item.id">
+            <div class="lunbo" v-if="index < 4">
+              <el-image :src="item.img" class="image"></el-image>
               <p>{{item.name}}</p>
-              <p>{{item.current_price}} <span class="original_price"> {{item.original_price}}</span></p>
-              <p>{{item.category}}</p>
+              <p>{{item.price}} <span class="original_price"> {{item.previousPrice}}</span></p>
+              <p>{{item.group}}{{item.style}}</p>
             </div>
           </el-col>
         </el-row>
         </el-carousel-item>
 
-        <el-carousel-item :key="1">
+        <el-carousel-item :key="2">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="item in sales" :key="item.id">
-              <div class="lunbo" v-if="item.id <= 4">
-                <el-image :src="item.thumb" class="image"></el-image>
+            <el-col :span="6" v-for="(item,index) in sales" :key="item.id">
+              <div class="lunbo" v-if="index >= 4">
+                <el-image :src="item.img" class="image"></el-image>
                 <p>{{item.name}}</p>
-                <p>{{item.current_price}} <span class="original_price"> {{item.original_price}}</span></p>
-                <p>{{item.category}}</p>
+                <p>{{item.price}} <span class="original_price"> {{item.previousPrice}}</span></p>
+                <p>{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
@@ -75,12 +75,12 @@
       <el-carousel height="450px">
         <el-carousel-item :key="1">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="item in hot">
-              <div class="lunbo" v-if="item.id <= 4">
-                <el-image :src="item.thumb" class="image"></el-image>
+            <el-col :span="6" v-for="(item,index) in hot">
+              <div class="lunbo" v-if="index < 4">
+                <el-image :src="item.img" class="image"></el-image>
                 <p>{{item.name}}</p>
-                <p>{{item.original_price}}</p>
-                <p>{{item.category}}</p>
+                <p>{{item.price}}</p>
+                <p>{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
@@ -88,12 +88,12 @@
 
         <el-carousel-item :key="2">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="item in hot">
-              <div class="lunbo" v-if="item.id > 4">
-                <el-image :src="item.thumb" class="image"></el-image>
+            <el-col :span="6" v-for="(item,index) in hot">
+              <div class="lunbo" v-if="index >= 4">
+                <el-image :src="item.img" class="image"></el-image>
                 <p>{{item.name}}</p>
-                <p>{{item.original_price}}</p>
-                <p>{{item.category}}</p>
+                <p>{{item.price}}</p>
+                <p>{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
@@ -140,41 +140,44 @@
 export default {
   name: 'Home',
   components: {},
-  data(){
-    return{
-      posters:[
+  data() {
+    return {
+      posters: [
         {
-          id:1,
-          thumb: "../static/1.jpg"
+          id: 1,
+          img: "../static/1.jpg"
         },
         {
-          id:2,
-          thumb: "../static/2.jpg"
+          id: 2,
+          img: "../static/2.jpg"
         }
       ],
-      hot:[
+      hot: [
         {
-          id:1,
+          id: 1,
           name: "Nike Air Force 1",
-          original_price: 800.00,
-          category: "男子运动鞋",
-          thumb: "../static/g1.jpg"
+          price: 800.00,
+          group: "男子",
+          style: "运动鞋",
+          img: "../static/g1.jpg"
         },
         {
           id: 2,
           name: "Nike Air Max",
           original_price: 599.00,
-          category: "男子运动鞋",
-          thumb: "../static/g2.jpg"
+          group: "男子",
+          style: "运动鞋",
+          img: "../static/g2.jpg"
         },
         {
           id: 3,
           name: "Air Jordan",
           original_price: 1499.00,
-          category: "男子篮球鞋",
-          thumb: "../static/g3.jpg"
-        },
-        {
+          group: "男子",
+          style: "篮球鞋",
+          img: "../static/g3.jpg"
+        }
+        /*{
           id: 4,
           name: "Nike Cosmic Unity EP",
           original_price: 1199.00,
@@ -187,34 +190,37 @@ export default {
           original_price: 599.00,
           category: "女子运动鞋",
           thumb: "../static/g5.jpg"
-        }
+        }*/
       ],
-      sales:[
+      sales: [
         {
-          id:1,
+          id: 1,
           name: "Nike Air Force 1",
-          current_price: 699.00,
-          original_price: 800.00,
-          category: "男子运动鞋",
-          thumb: "../static/g1.jpg"
+          price: 699.00,
+          previousPrice: 800.00,
+          group: "男子",
+          style: "运动鞋",
+          img: "../static/g1.jpg"
         },
         {
           id: 2,
           name: "Nike Air Max",
-          current_price: 499.00,
-          original_price: 599.00,
-          category: "男子运动鞋",
-          thumb: "../static/g2.jpg"
+          price: 499.00,
+          previousPrice: 599.00,
+          group: "男子",
+          style: "运动鞋",
+          img: "../static/g2.jpg"
         },
         {
           id: 3,
           name: "Air Jordan",
-          current_price: 1399.00,
-          original_price: 1499.00,
-          category: "男子篮球鞋",
-          thumb: "../static/g3.jpg"
+          price: 1399.00,
+          previousPrice: 1499.00,
+          group: "男子",
+          style: "篮球鞋",
+          img: "../static/g3.jpg"
         },
-        {
+        /*{
           id: 4,
           name: "Nike Cosmic Unity EP",
           current_price: 1099.00,
@@ -229,31 +235,34 @@ export default {
           original_price: 599.00,
           category: "女子运动鞋",
           thumb: "../static/g5.jpg"
-        }
+        }*/
       ],
-      new_arrivals:[
+      new_arrivals: [
         {
-          id:1,
+          id: 1,
           name: "Nike Air Force 1",
-          original_price: 800.00,
-          category: "男子运动鞋",
-          thumb: "../static/g1.jpg"
+          price: 800.00,
+          group: "男子",
+          style: "运动鞋",
+          img: "../static/g1.jpg"
         },
         {
           id: 2,
           name: "Nike Air Max",
-          original_price: 599.00,
-          category: "男子运动鞋",
-          thumb: "../static/g2.jpg"
+          price: 599.00,
+          group: "男子",
+          style: "运动鞋",
+          img: "../static/g2.jpg"
         },
         {
           id: 3,
           name: "Air Jordan",
           original_price: 1499.00,
-          category: "男子篮球鞋",
-          thumb: "../static/g3.jpg"
+          group: "男子",
+          style: "篮球鞋",
+          img: "../static/g3.jpg"
         },
-        {
+        /*{
           id: 4,
           name: "Nike Cosmic Unity EP",
           original_price: 1199.00,
@@ -266,11 +275,21 @@ export default {
           original_price: 599.00,
           category: "女子运动鞋",
           thumb: "../static/g5.jpg"
-        }
+        }*/
       ],
       vip_center: "../static/3.jpg"
     }
-  }
+  },
+  /*created() {
+    const _this = this
+    axios.get('http://localhost:8181/home').then(function (resp) {
+      _this.hot = resp.data.data.trending
+      _this.sales = resp.data.data.discount
+      _this.new_arrivals = resp.data.data.new_arrivals
+      _this.posters = resp.data.data.poster
+
+    })
+  }*/
 }
 </script>
 
