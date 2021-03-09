@@ -23,7 +23,24 @@ export default {
   components:{
     NavMenu,
       Footer
-  }
+  },
+    mounted () {
+        window.addEventListener('scroll', this.handleScroll, true);
+        // 监听（绑定）滚轮 滚动事件
+    },
+    methods:{
+      handleScroll(){
+          var distanceToTop = window.pageYOffset;
+          var scroll = distanceToTop - this.i;
+          this.i = distanceToTop;
+          let nav = document.getElementsByClassName("nav-menu")[0];
+          if (scroll > 0 && distanceToTop >= 90){
+              nav.style = "visibility: hidden;"
+          }else{
+              nav.style = "visibility: visible;"
+          }
+      }
+    }
 }
 </script>
 

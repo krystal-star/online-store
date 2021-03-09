@@ -16,7 +16,7 @@
         </div>
 
 
-        <el-menu mode="horizontal" text-color="black" style="height: 60px;">
+        <el-menu mode="horizontal" text-color="black" style="height: 60px;" >
 
             <el-menu-item id="logo" @click="toHomePage">
                     <el-image style="width: 200px; height: 25px"
@@ -31,7 +31,7 @@
                 {{item.name}}
                 <div class="menu-dropdown">
                     <el-row>
-                        <el-col :span="4" v-for="subitem in item.categories">
+                        <el-col :span="6" v-for="subitem in item.categories">
                             <h4 class="cate">{{subitem.name}}</h4>
                                 <li v-for="style in subitem.styles">{{style}}</li>
                         </el-col>
@@ -144,6 +144,10 @@
                 input: '',
             };
         },
+        mounted () {
+            window.addEventListener('scroll', this.handleScroll, true);
+            // 监听（绑定）滚轮 滚动事件
+        },
         methods: {
             toVisible: function(index){
                 let node = document.getElementsByClassName("menu-dropdown")[index].parentElement;
@@ -161,8 +165,14 @@
 </script>
 
 <style scoped>
+    div.nav-menu {
+        position: fixed;
+        _position: absolute;
+        z-index: 9999;
+        padding-right: 28px;
+    }
     div.nav-header{
-        background-color: rgba(144, 147, 153, 0.2);
+        background-color: #E9E9EA;
         height: 35px;
     }
     .icons{
@@ -189,6 +199,7 @@
     }
     .el-menu{
         padding-left: 360px;
+        text-align: left;
     }
 
     #logo{
@@ -202,20 +213,20 @@
     right: 10%;
 }
     #shopping-bag{
-        right: 25px;
-        top: 10px;
         cursor: pointer;
+        right: 20px;
+        top: 11px;
     }
     #star{
-        bottom: 25px;
-        left: 25px;
         cursor: pointer;
+        left: 130px;
+        bottom: 25px;
     }
     #shopping-bag:hover,#star:hover, #logo:hover, .icons:hover{
         opacity: 0.5;
     }
     .menu-dropdown{
-        width: 1344px;
+        width: 1332px;
         margin: auto;
         padding-bottom: 40px;
         overflow: auto;
@@ -224,6 +235,7 @@
         position: absolute;
         z-index: 999;
         background-color: white;
+        left: -426px;
     }
     .el-menu-item{
         position: relative;
