@@ -1,24 +1,34 @@
 <template>
   <div class="home">
-    <div class="poster">
-      <el-carousel height="500px">
-        <el-carousel-item v-for="(item,index) in posters" :key="index">
-          <el-image :src="item.img" class="image"></el-image>
+    <div class="notification">
+      <el-carousel height="50px" indicator-position="none" arrow="never">
+        <el-carousel-item>
+          <p class="small">COVID-19导致所有地区都无法送货，敬请谅解！</p>
         </el-carousel-item>
-      </el-carousel><br/>
+        <el-carousel-item>
+          <p class="small">COVID-19导致所有地区都无法送货，敬请谅解！</p>
+        </el-carousel-item>
+      </el-carousel>
     </div>
 
-    <div class="hot">
-      <p class="text">热门商品</p>
-      <el-carousel height="450px">
+    <div class="poster">
+        <el-link :underline="false" class="poster" href="#">
+          <el-image :src="poster" fit="scale-down"></el-image></el-link>
+      </div>
+
+    <!--一周热卖-->
+    <div class="trending">
+      <p class="text">一周热卖</p>
+      <p class="view-all" @click="">View all</p>
+      <el-carousel height="550px" indicator-position="outside">
         <el-carousel-item :key="1">
         <el-row :gutter="20">
-          <el-col :span="6" v-for="(item,index) in hot">
-            <div class="lunbo" v-if="index < 4">
+          <el-col :span="8" v-for="(item,index) in trending">
+            <div class="lunbo" v-if="index < 3">
               <el-image :src="item.img" class="image"></el-image>
-              <p>{{item.name}}</p>
-              <p>{{item.price}}</p>
-              <p>{{item.group}}{{item.style}}</p>
+              <p class="name">{{item.name}}</p>
+              <p class="price">¥{{item.price}}</p>
+              <p class="group-style">{{item.group}}{{item.style}}</p>
             </div>
           </el-col>
         </el-row>
@@ -26,61 +36,47 @@
 
         <el-carousel-item :key="2">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="(item,index) in hot">
-              <div class="lunbo" v-if="index >= 4">
+            <el-col :span="8" v-for="(item,index) in trending">
+              <div class="lunbo" v-if="index >= 3">
                 <el-image :src="item.img" class="image"></el-image>
-                <p>{{item.name}}</p>
-                <p>{{item.price}}</p>
-                <p>{{item.group}}{{item.style}}</p>
+                <p class="name">{{item.name}}</p>
+                <p class="price">¥{{item.price}}</p>
+                <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
         </el-carousel-item>
       </el-carousel>
-    </div><br/>
+    </div>
 
-    <div class="sales">
-      <p class="text">特价商品</p>
-      <el-carousel height="450px">
-        <el-carousel-item :key="1">
-        <el-row :gutter="20">
-          <el-col :span="6" v-for="(item,index) in sales" :key="item.id">
-            <div class="lunbo" v-if="index < 4">
-              <el-image :src="item.img" class="image"></el-image>
-              <p>{{item.name}}</p>
-              <p>{{item.price}} <span class="original_price"> {{item.previousPrice}}</span></p>
-              <p>{{item.group}}{{item.style}}</p>
-            </div>
-          </el-col>
-        </el-row>
-        </el-carousel-item>
-
-        <el-carousel-item :key="2">
-          <el-row :gutter="20">
-            <el-col :span="6" v-for="(item,index) in sales" :key="item.id">
-              <div class="lunbo" v-if="index >= 4">
-                <el-image :src="item.img" class="image"></el-image>
-                <p>{{item.name}}</p>
-                <p>{{item.price}} <span class="original_price"> {{item.previousPrice}}</span></p>
-                <p>{{item.group}}{{item.style}}</p>
-              </div>
-            </el-col>
-          </el-row>
-        </el-carousel-item>
-      </el-carousel>
-    </div><br/>
-
-    <div class="new">
+    <!--最新上架-->
+    <div class="new-arrivals">
       <p class="text">最新上架</p>
-      <el-carousel height="450px">
+      <p class="view-all" @click="">View all</p>
+          <el-row :gutter="20">
+            <el-col :span="12">
+                <el-image :src="new_arrivals[0].img" class="image"></el-image>
+            </el-col>
+            <el-col :span="12" >
+              <el-image :src="new_arrivals[1].img" class="image"></el-image>
+            </el-col>
+          </el-row>
+    </div>
+
+    <!--特价商品-->
+    <div class="discount">
+      <p class="text">特价商品</p>
+      <p class="view-all" @click="">View all</p>
+      <el-carousel height="550px" indicator-position="outside">
         <el-carousel-item :key="1">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="(item,index) in hot">
-              <div class="lunbo" v-if="index < 4">
+            <el-col :span="8" v-for="(item,index) in discount">
+              <div class="lunbo" v-if="index < 3">
                 <el-image :src="item.img" class="image"></el-image>
-                <p>{{item.name}}</p>
-                <p>{{item.price}}</p>
-                <p>{{item.group}}{{item.style}}</p>
+                <p class="name">{{item.name}}</p>
+                <p class="pre-price">¥{{item.previousPrice}}</p>
+                <p class="cur-price">¥{{item.price}}</p>
+                <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
@@ -88,25 +84,56 @@
 
         <el-carousel-item :key="2">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="(item,index) in hot">
-              <div class="lunbo" v-if="index >= 4">
+            <el-col :span="8" v-for="(item,index) in discount">
+              <div class="lunbo" v-if="index >= 3">
                 <el-image :src="item.img" class="image"></el-image>
-                <p>{{item.name}}</p>
-                <p>{{item.price}}</p>
-                <p>{{item.group}}{{item.style}}</p>
+                <p class="name">{{item.name}}</p>
+                <p class="pre-price">¥{{item.previousPrice}}</p>
+                <p class="cur-price">¥{{item.price}}</p>
+                <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
           </el-row>
         </el-carousel-item>
       </el-carousel>
-    </div><br/>
+    </div>
 
+    <!--精选-->
+    <div class="recommend">
+      <p class="text">精选</p>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-image :src="recommend[0].img" class="image"></el-image>
+        </el-col>
+        <el-col :span="12" >
+          <el-image :src="recommend[1].img" class="image"></el-image>
+        </el-col>
+      </el-row>
+    </div>
+
+    <!--更多buyer-->
+    <div class="accessories">
+      <p class="text">更多Buyer</p>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-image :src="accessories[0].img" class="image"></el-image>
+        </el-col>
+        <el-col :span="8" >
+          <el-image :src="accessories[1].img" class="image"></el-image>
+        </el-col>
+        <el-col :span="8" >
+          <el-image :src="accessories[2].img" class="image"></el-image>
+        </el-col>
+      </el-row>
+    </div>
+
+    <!--会员中心-->
     <div class="vip-center">
       <p class="text">会员中心</p>
-      <el-image :src="vip_center" class="image"></el-image>
+      <el-image :src="vip_poster" class="image"></el-image>
     </div>
 
-    <div class="contact">
+    <!--<div class="contact">
       <el-divider></el-divider>
       <el-row>
         <el-col :span="4">联系我们</el-col>
@@ -130,7 +157,7 @@
         </el-col>
       </el-row>
       <el-divider></el-divider>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -142,142 +169,141 @@ export default {
   components: {},
   data() {
     return {
-      posters: [
+      poster: "../static/poster1.jpg",
+      trending: [
         {
-          id: 1,
-          img: "../static/1.jpg"
+          id: 8,
+          brand: "Nike",
+          name: "Sportswear Essentials",
+          img: "../static/sportswear-essentials-backpack-0.jpg",
+          price: 320,
+          group: "男子",
+          style: "背包",
         },
         {
-          id: 2,
-          img: "../static/2.jpg"
-        }
-      ],
-      hot: [
-        {
-          id: 1,
-          name: "Nike Air Force 1",
-          price: 800.00,
-          group: "男子",
+          id: 6,
+          brand: "Adidas",
+          name: "Tensaur",
+          img: "../static/Tensaur_Shoes_Black-0.jpg",
+          price: 210,
+          group: "儿童",
           style: "运动鞋",
-          img: "../static/g1.jpg"
-        },
-        {
-          id: 2,
-          name: "Nike Air Max",
-          original_price: 599.00,
-          group: "男子",
-          style: "运动鞋",
-          img: "../static/g2.jpg"
-        },
-        {
-          id: 3,
-          name: "Air Jordan",
-          original_price: 1499.00,
-          group: "男子",
-          style: "篮球鞋",
-          img: "../static/g3.jpg"
-        }
-        /*{
-          id: 4,
-          name: "Nike Cosmic Unity EP",
-          original_price: 1199.00,
-          category: "男/女篮球鞋",
-          thumb: "../static/g4.jpg"
         },
         {
           id: 5,
-          name: "Nike Blazer Low LE",
-          original_price: 599.00,
-          category: "女子运动鞋",
-          thumb: "../static/g5.jpg"
-        }*/
-      ],
-      sales: [
-        {
-          id: 1,
-          name: "Nike Air Force 1",
-          price: 699.00,
-          previousPrice: 800.00,
-          group: "男子",
-          style: "运动鞋",
-          img: "../static/g1.jpg"
+          brand: "Adidas",
+          name: "HER Studio London",
+          img: "../static/HER_Studio_London_T-Shirt-0.jpg",
+          price: 200,
+          group: "女子",
+          style: "T恤",
         },
         {
-          id: 2,
-          name: "Nike Air Max",
-          price: 499.00,
-          previousPrice: 599.00,
-          group: "男子",
-          style: "运动鞋",
-          img: "../static/g2.jpg"
-        },
-        {
-          id: 3,
-          name: "Air Jordan",
-          price: 1399.00,
-          previousPrice: 1499.00,
-          group: "男子",
-          style: "篮球鞋",
-          img: "../static/g3.jpg"
-        },
-        /*{
           id: 4,
-          name: "Nike Cosmic Unity EP",
-          current_price: 1099.00,
-          original_price: 1199.00,
-          category: "男/女篮球鞋",
-          thumb: "../static/g4.jpg"
+          brand: "Nike",
+          name: "Air Max 90",
+          img: "../static/air-max-90-eoi-0.jpg",
+          price: 390,
+          group: "男子",
+          style: "运动鞋",
+        },
+        {
+          id: 6,
+          brand: "Adidas",
+          name: "Tensaur",
+          img: "../static/Tensaur_Shoes_Black-0.jpg",
+          price: 210,
+          group: "儿童",
+          style: "运动鞋",
+        }
+      ], //热卖
+      discount: [
+        {
+          id: 8,
+          brand: "Nike",
+          name: "Sportswear Essentials",
+          img: "../static/sportswear-essentials-backpack-0.jpg",
+          price: 320,
+          previousPrice: 499,
+          group: "男子",
+          style: "背包",
+        },
+        {
+          id: 6,
+          brand: "Adidas",
+          name: "Tensaur",
+          img: "../static/Tensaur_Shoes_Black-0.jpg",
+          price: 210,
+          previousPrice: 240,
+          group: "儿童",
+          style: "运动鞋",
         },
         {
           id: 5,
-          name: "Nike Blazer Low LE",
-          current_price: 399.00,
-          original_price: 599.00,
-          category: "女子运动鞋",
-          thumb: "../static/g5.jpg"
-        }*/
+          brand: "Adidas",
+          name: "HER Studio London",
+          img: "../static/HER_Studio_London_T-Shirt-0.jpg",
+          price: 200,
+          previousPrice: 290,
+          group: "女子",
+          style: "T恤",
+        },
+        {
+          id: 4,
+          brand: "Nike",
+          name: "Air Max 90",
+          img: "../static/air-max-90-eoi-0.jpg",
+          price: 390,
+          previousPrice: 490,
+          group: "男子",
+          style: "运动鞋",
+        },
+        {
+          id: 6,
+          brand: "Adidas",
+          name: "Tensaur",
+          img: "../static/Tensaur_Shoes_Black-0.jpg",
+          price: 210,
+          previousPrice: 240,
+          group: "儿童",
+          style: "运动鞋",
+        }
       ],
       new_arrivals: [
         {
-          id: 1,
-          name: "Nike Air Force 1",
-          price: 800.00,
-          group: "男子",
-          style: "运动鞋",
-          img: "../static/g1.jpg"
+          id: 9,
+          img: "../static/sportswear-heritage-hip-pack-0.jpg"
         },
         {
-          id: 2,
-          name: "Nike Air Max",
-          price: 599.00,
-          group: "男子",
-          style: "运动鞋",
-          img: "../static/g2.jpg"
-        },
-        {
-          id: 3,
-          name: "Air Jordan",
-          original_price: 1499.00,
-          group: "男子",
-          style: "篮球鞋",
-          img: "../static/g3.jpg"
-        },
-        /*{
           id: 4,
-          name: "Nike Cosmic Unity EP",
-          original_price: 1199.00,
-          category: "男/女篮球鞋",
-          thumb: "../static/g4.jpg"
+          img: "../static/sportswear-0.jpg"
+        },
+      ],
+      recommend:[
+        {
+          id: 10,
+          img: "../static/sportswear-older-printed-hoodie-0.jpg",
         },
         {
-          id: 5,
-          name: "Nike Blazer Low LE",
-          original_price: 599.00,
-          category: "女子运动鞋",
-          thumb: "../static/g5.jpg"
-        }*/
+          id: 8,
+          img: "../static/sportswear-essentials-backpack-0.jpg",
+        }
       ],
-      vip_center: "../static/3.jpg"
+      accessories:[
+        {
+          id: 9,
+          img: "../static/sportswear-heritage-hip-pack-0.jpg",
+        },
+        {
+          id: 8,
+          img: "../static/sportswear-essentials-backpack-0.jpg",
+        },
+        {
+          id:7,
+          img: "../static/HER_Studio_London_T-Shirt-0.jpg",
+        }
+      ],
+      vip_poster: "../static/vip-poster.jpg"
     }
   },
   /*created() {
@@ -294,9 +320,46 @@ export default {
 </script>
 
 <style>
-.text{
+  div.notification{
+    background-color: rgba(144, 147, 153, 0.2);
+  }
+  p.small{
+    font-size: 14px;
+  }
+
+  div.trending, div.discount, div.new-arrivals, div.recommend, div.vip-center, div.accessories{
+    text-align: left;
+    padding: 10px 60px 10px;
+  }
+p.text, p.view-all{
   font-weight: bold;
-  font-size: 28px;
+  font-size: 26px;
+  display: inline-block;
+}
+p.view-all, p.price, p.pre-price, p.cur-price{
+  float:right;
+}
+p.view-all:hover, p.name:hover, p.price:hover{
+  opacity: 0.5;
+  cursor: pointer;
+}
+p.name, p.price, p.pre-price, p.cur-price{
+  font-weight: bold;
+  font-size: 18px;
+  display: inline-block;
+}
+p.group-style{
+  margin-top: 0px;
+  color: #909399;
+}
+.image{
+  cursor: pointer;
+}
+p.pre-price{
+  color: #909399;
+  text-decoration: line-through;
+  font-size: 15px;
+  padding-left: 5px;
 }
   span.original_price{
     text-decoration: line-through;
@@ -307,5 +370,11 @@ export default {
   div.contact{
     height: 100px;
     padding-top: 20px;
+  }
+  .el-carousel /deep/.el-carousel__arrow{
+    width: 50px;
+    height: 50px;
+    top: 35%;
+    font-size: 24px;
   }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-      <el-header style="height: 120px">
+      <el-header style="height: 95px">
         <NavMenu />
       </el-header>
 
-      <el-main>
+      <el-main style="padding-top: 0px;">
         <router-view></router-view>
       </el-main>
 
