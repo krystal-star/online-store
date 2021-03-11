@@ -242,7 +242,7 @@
     div.nav-menu {
         position: fixed;
         _position: absolute;
-        z-index: 9999;
+        z-index: 999;
         padding-right: 28px;
     }
     div.nav-header{

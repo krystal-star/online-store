@@ -5,6 +5,7 @@
       </el-header>
 
       <el-main style="padding-top: 0px;">
+          <Feedback/>
         <router-view></router-view>
       </el-main>
 
@@ -15,12 +16,14 @@
 </template>
 
 <script>
-  import NavMenu from './views/NavMenu'
+  import NavMenu from './views/NavMenu';
   import Footer from "./views/Footer";
+  import Feedback from "./views/Feedback";
 
 export default {
   name: 'app',
   components:{
+      Feedback,
     NavMenu,
       Footer
   },
