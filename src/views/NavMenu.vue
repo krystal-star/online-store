@@ -1,5 +1,22 @@
 <template>
     <div class="nav-menu">
+        <div class="search">
+            <el-image style="width: 200px; height: 25px;top: 45px; right: 15%;"
+                      src="../static/icons/bestbuyer-logo.png"></el-image>
+            <el-input class="search-box2"
+                      placeholder="请输入内容"
+                      prefix-icon="el-icon-search"
+                      v-model="input"
+                      clearable>
+            </el-input>
+            <i class="el-icon-circle-close" @click="closeSearchBox"></i>
+            <div class="hint">
+                <h4>热门搜索词</h4>
+                <p>Air Jordan</p>
+                <p>Ultraboost</p>
+                <p>Air Force 1</p>
+            </div>
+        </div>
         <div class="nav-header">
             <el-link :underline="false" class="icons" href="https://www.nike.com/cn/">
                 <el-image style="width: 50px; height: 50px"
@@ -29,20 +46,20 @@
                     @mouseover.native="toVisible(index1)"
                     @mouseleave.native="toInvisibile(index1)">
                 {{item.name}}
+            </el-menu-item>
                 <div class="menu-dropdown">
                     <el-row>
-                        <el-col :span="6" v-for="subitem in item.categories">
+                        <el-col :span="6" v-for="subitem in getItem()">
                             <h4 class="cate">{{subitem.name}}</h4>
-                                <li v-for="style in subitem.styles">{{style}}</li>
+                            <li v-for="style in subitem.styles">{{style}}</li>
                         </el-col>
                     </el-row>
                 </div>
-            </el-menu-item>
 
-            <el-input class="search-box"
+            <el-input class="search-box1"
                     placeholder="请输入内容"
                     prefix-icon="el-icon-search"
-                    v-model="input"
+                      @focus="openSearchBox"
                     clearable>
             </el-input>
 
@@ -142,7 +159,8 @@
                     }
                 ],
                 input: '',
-            };
+                temp: '',
+            }
         },
         mounted () {
             window.addEventListener('scroll', this.handleScroll, true);
@@ -150,21 +168,77 @@
         },
         methods: {
             toVisible: function(index){
-                let node = document.getElementsByClassName("menu-dropdown")[index].parentElement;
+                let node = document.getElementsByClassName("el-menu-item")[index+1];
                 node.style = "color: #909399";
+                let menu = document.getElementsByClassName("menu-dropdown")[0];
+                menu.style = "visibility: visible";
+                this.temp = index;
             },
             toInvisibile: function(index){
-                let node = document.getElementsByClassName("menu-dropdown")[index].parentElement;
+                let node = document.getElementsByClassName("el-menu-item")[index+1];
                 node.style = "color:black";
+                let menu = document.getElementsByClassName("menu-dropdown")[0];
+                menu.style = "visibility: hidden";
+                this.temp = '';
             },
             toHomePage(){
                 window.location.href = "/"
+            },
+            closeSearchBox: function () {
+                let node = document.getElementsByClassName("search")[0];
+                node.style = "visibility: hidden";
+            },
+            openSearchBox: function () {
+                let node = document.getElementsByClassName("search")[0];
+                node.style = "visibility: visible";
+            },
+            getItem: function () {
+                return this.classification[Number(this.temp)].categories;
             }
         }
     }
 </script>
 
 <style scoped>
+    div.search{
+        position: absolute;
+        background: white;
+        z-index: 99;
+        left: -20px;
+        width: 100%;
+        height: 300px;
+        visibility: hidden;
+    }
+    div.search i{
+        top: 48px;
+        position: relative;
+        font-size: 35px;
+        left: 15%;
+    }
+    div.search-box2{
+        width: 600px;
+        top: 40px;
+        right: 5%;
+    }
+    div.hint{
+        width: 200px;
+        position: relative;
+        left: 30%;
+        text-align: left;
+        top: 20%;
+    }
+    div.hint h4{
+        color: #909399;
+    }
+    div.hint p{
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 20px;
+    }
+    div.hint p:hover, div.search i:hover, h4.cate:hover{
+        cursor: pointer;
+        color: #909399;
+    }
     div.nav-menu {
         position: fixed;
         _position: absolute;
@@ -226,25 +300,31 @@
         opacity: 0.5;
     }
     .menu-dropdown{
-        width: 1332px;
-        margin: auto;
-        padding-bottom: 40px;
-        overflow: auto;
         max-height: 100vh;
         visibility: hidden;
         position: absolute;
         z-index: 999;
         background-color: white;
-        left: -426px;
+        width: 100%;
+        left: 0;
+        top: 60px;
+        padding-bottom: 40px;
+        text-align: center;
+    }
+    .menu-dropdown .el-row{
+        padding-left: 0;
+        left: 15%;
+    }
+    .menu-dropdown .el-col{
+        width: 25%;
+        text-align: center;
+        line-height: 50px;
     }
     .el-menu-item{
         position: relative;
         font-weight: bold;
         font-size: 16px;
         letter-spacing: 0.1em;
-    }
-    .el-menu-item:hover .menu-dropdown{
-        visibility: visible;
     }
     .el-row{
         padding-left: 60px;
@@ -253,12 +333,14 @@
     }
     li{
         list-style: none;
-        font-weight: normal;
+        font-weight: bold;
         color: #606266;
         line-height: 25px;
+        font-size: 14px;
     }
     li:hover{
         color: black;
+        cursor: pointer;
     }
     h4.cate{
         margin-bottom: 1px;
