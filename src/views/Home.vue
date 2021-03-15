@@ -1,15 +1,6 @@
 <template>
   <div class="home">
-    <div class="notification">
-      <el-carousel height="50px" indicator-position="none" arrow="never">
-        <el-carousel-item>
-          <p class="small">COVID-19导致所有地区都无法送货，敬请谅解！</p>
-        </el-carousel-item>
-        <el-carousel-item>
-          <p class="small">COVID-19导致所有地区都无法送货，敬请谅解！</p>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
+    <Notification />
 
     <div class="poster">
         <el-link :underline="false" class="poster" href="#">
@@ -25,9 +16,9 @@
         <el-row :gutter="20">
           <el-col :span="8" v-for="(item,index) in trending">
             <div class="lunbo" v-if="index < 3">
-              <el-image :src="item.img" class="image"></el-image>
-              <p class="name">{{item.name}}</p>
-              <p class="price">¥{{item.price}}</p>
+              <el-image v-if="item.img" :src="item.img" class="image"></el-image>
+              <p class="name" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">{{item.name}}</p>
+              <p class="price" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">¥{{item.price}}</p>
               <p class="group-style">{{item.group}}{{item.style}}</p>
             </div>
           </el-col>
@@ -38,9 +29,9 @@
           <el-row :gutter="20">
             <el-col :span="8" v-for="(item,index) in trending">
               <div class="lunbo" v-if="index >= 3">
-                <el-image :src="item.img" class="image"></el-image>
-                <p class="name">{{item.name}}</p>
-                <p class="price">¥{{item.price}}</p>
+                <el-image v-if="item.img" :src="item.img" class="image"></el-image>
+                <p class="name" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">{{item.name}}</p>
+                <p class="price" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">¥{{item.price}}</p>
                 <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
@@ -54,11 +45,8 @@
       <p class="text">最新上架</p>
       <p class="view-all" @click="">View all</p>
           <el-row :gutter="20">
-            <el-col :span="12">
-                <el-image :src="new_arrivals[0].img" class="image"></el-image>
-            </el-col>
-            <el-col :span="12" >
-              <el-image :src="new_arrivals[1].img" class="image"></el-image>
+            <el-col :span="12" v-for="item in new_arrivals">
+                <el-image :src="item.img" class="image"></el-image>
             </el-col>
           </el-row>
     </div>
@@ -73,9 +61,9 @@
             <el-col :span="8" v-for="(item,index) in discount">
               <div class="lunbo" v-if="index < 3">
                 <el-image :src="item.img" class="image"></el-image>
-                <p class="name">{{item.name}}</p>
+                <p class="name" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">{{item.name}}</p>
                 <p class="pre-price">¥{{item.previousPrice}}</p>
-                <p class="cur-price">¥{{item.price}}</p>
+                <p class="cur-price" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">¥{{item.price}}</p>
                 <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
@@ -87,9 +75,9 @@
             <el-col :span="8" v-for="(item,index) in discount">
               <div class="lunbo" v-if="index >= 3">
                 <el-image :src="item.img" class="image"></el-image>
-                <p class="name">{{item.name}}</p>
+                <p class="name" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">{{item.name}}</p>
                 <p class="pre-price">¥{{item.previousPrice}}</p>
-                <p class="cur-price">¥{{item.price}}</p>
+                <p class="cur-price" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">¥{{item.price}}</p>
                 <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
             </el-col>
@@ -102,11 +90,8 @@
     <div class="recommend">
       <p class="text">精选</p>
       <el-row :gutter="20">
-        <el-col :span="12">
-          <el-image :src="recommend[0].img" class="image"></el-image>
-        </el-col>
-        <el-col :span="12" >
-          <el-image :src="recommend[1].img" class="image"></el-image>
+        <el-col :span="12" v-for="item in recommend">
+         <el-image :src="item.img" class="image"></el-image>
         </el-col>
       </el-row>
     </div>
@@ -115,14 +100,8 @@
     <div class="accessories">
       <p class="text">更多Buyer</p>
       <el-row :gutter="20">
-        <el-col :span="8">
-          <el-image :src="accessories[0].img" class="image"></el-image>
-        </el-col>
-        <el-col :span="8" >
-          <el-image :src="accessories[1].img" class="image"></el-image>
-        </el-col>
-        <el-col :span="8" >
-          <el-image :src="accessories[2].img" class="image"></el-image>
+        <el-col :span="8" v-for="item in accessories">
+          <el-image :src="item.img" class="image"></el-image>
         </el-col>
       </el-row>
     </div>
@@ -163,10 +142,11 @@
 
 <script>
 // @ is an alias to /src
+import Notification from "./Notification";
 
 export default {
   name: 'Home',
-  components: {},
+  components: {Notification},
   data() {
     return {
       poster: "../static/poster1.jpg",
@@ -216,7 +196,7 @@ export default {
           group: "儿童",
           style: "运动鞋",
         }
-      ], //热卖
+      ], //热卖,
       discount: [
         {
           id: 8,
@@ -277,7 +257,7 @@ export default {
         {
           id: 4,
           img: "../static/sportswear-0.jpg"
-        },
+        }
       ],
       recommend:[
         {
@@ -306,27 +286,55 @@ export default {
       vip_poster: "../static/vip-poster.jpg"
     }
   },
-  /*created() {
-    const _this = this
+  methods:{
+    changeColor: function(e, val) {
+        let target = e.target;
+        let parent_node = target.parentNode;
+        var changeNode;
+      if(target.className.toLowerCase() === "name"){
+        changeNode = parent_node.childNodes[val];
+      }else{
+        changeNode = parent_node.childNodes[1];
+      }
+      target.style = "opacity:0.5";
+      changeNode.style = "opacity:0.5";
+    },
+    recoverColor: function (e,val) {
+      let target = e.target;
+      let parent_node = target.parentNode
+      var changeNode;
+      if(target.className.toLowerCase() === "name"){
+        changeNode = parent_node.childNodes[val];
+      }else{
+        changeNode = parent_node.childNodes[1];
+      }
+      target.style = "opacity:1";
+      changeNode.style = "opacity:1";
+    }
+  },
+  mounted() {
+    //修改箭头的样式
+    var arrows = document.querySelectorAll("button.el-carousel__arrow");
+    for(var i=0; i<arrows.length; i++){
+      arrows[i].style = "width: 50px;height: 50px;top: 35%;font-size: 24px;";
+    }
+  },
+  created() {
+    /*const _this = this
     axios.get('http://localhost:8181/home').then(function (resp) {
-      _this.hot = resp.data.data.trending
-      _this.sales = resp.data.data.discount
+      _this.poster = resp.data.data.poster
+      _this.trending = resp.data.data.trending
+      _this.discount = resp.data.data.discount
       _this.new_arrivals = resp.data.data.new_arrivals
-      _this.posters = resp.data.data.poster
-
-    })
-  }*/
+      _this.recommend = resp.data.data.recommend
+      _this.accessories = resp.data.data.accessories
+      _this.vip_poster = resp.data.data.vip_poster
+    })*/
+  }
 }
 </script>
 
 <style>
-  div.notification{
-    background-color: rgba(144, 147, 153, 0.2);
-  }
-  p.small{
-    font-size: 14px;
-  }
-
   div.trending, div.discount, div.new-arrivals, div.recommend, div.vip-center, div.accessories{
     text-align: left;
     padding: 10px 60px 10px;
@@ -339,7 +347,7 @@ p.text, p.view-all{
 p.view-all, p.price, p.pre-price, p.cur-price{
   float:right;
 }
-p.view-all:hover, p.name:hover, p.price:hover{
+p.view-all:hover{
   opacity: 0.5;
   cursor: pointer;
 }
@@ -352,7 +360,7 @@ p.group-style{
   margin-top: 0px;
   color: #909399;
 }
-.image{
+.image, p.name:hover, p.price:hover, p.cur-price:hover{
   cursor: pointer;
 }
 p.pre-price{
@@ -371,10 +379,12 @@ p.pre-price{
     height: 100px;
     padding-top: 20px;
   }
-  .el-carousel /deep/.el-carousel__arrow{
+
+  div.trending ::v-deep button.el-carousel__arrow--left{
     width: 50px;
     height: 50px;
     top: 35%;
     font-size: 24px;
   }
+
 </style>

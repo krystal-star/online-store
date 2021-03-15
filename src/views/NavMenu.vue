@@ -44,14 +44,15 @@
                     v-for="(item,index1) in classification"
                     :index="index1.toString()"
                     @mouseover.native="toVisible(index1)"
-                    @mouseleave.native="toInvisibile(index1)">
+                    @mouseleave.native="toInvisibile(index1)"
+                    >
                 {{item.name}}
             </el-menu-item>
                 <div class="menu-dropdown">
                     <el-row>
                         <el-col :span="6" v-for="subitem in getItem()">
-                            <h4 class="cate">{{subitem.name}}</h4>
-                            <li v-for="style in subitem.styles">{{style}}</li>
+                            <h4 class="cate" @click="newPage(subitem.url)">{{subitem.name}}</h4>
+                            <li v-for="style in subitem.styles">{{style.name}}</li>
                         </el-col>
                     </el-row>
                 </div>
@@ -82,78 +83,167 @@
                 classification:[
                     {
                         name: "男子",
+                        url: "/findByCategory/men",
                         categories: [
                             {
                                 name: "鞋类",
-                                styles: ["运动鞋","篮球鞋","拖鞋"]
+                                url: "shoes",
+                                styles: [
+                                    {name:"跑鞋", url:"running_shoes"},
+                                    {name:"篮球鞋", url:"basketball_shoes"},
+                                    {name:"足球鞋", url: "football_shoes"},
+                                    {name:"休闲鞋", url: "lifestyle_shoes"},
+                                    {name:"拖鞋", url: "slippers"}
+                                ]
                             },
                             {
                                 name: "服装",
-                                styles: ["卫衣","外套","运动裤"]
+                                url: "clothing",
+                                styles: [
+                                    {name:"卫衣", url:"sweatshirt"},
+                                    {name:"外套", url:"jacket"},
+                                    {name:"运动服", url: "sportswear"},
+                                    {name:"T恤", url: "T-shirt"},
+                                    {name:"休闲裤", url: "trouser"},
+                                    {name:"短裤", url: "shorts"}
+                                ]
                             },
                             {
                                 name: "配件",
-                                styles: ["包","袜子","帽子"]
+                                url:"accessories",
+                                styles: [
+                                    {name:"包", url:"bag"},
+                                    {name:"帽子", url:"hat"},
+                                    {name:"袜子", url: "socks"},
+                                    {name:"其他", url: "others"},
+                                ]
                             }
                         ]
                     },
                     {
                         name: "女子",
+                        url: "/findByCategory/women",
                         categories: [
                             {
                                 name: "鞋类",
-                                styles: ["运动鞋","篮球鞋","拖鞋"]
+                                url: "shoes",
+                                styles: [
+                                    {name:"跑鞋", url:"running_shoes"},
+                                    {name:"篮球鞋", url:"basketball_shoes"},
+                                    {name:"足球鞋", url: "football_shoes"},
+                                    {name:"休闲鞋", url: "lifestyle_shoes"},
+                                    {name:"拖鞋", url: "slippers"}
+                                ]
                             },
                             {
                                 name: "服装",
-                                styles: ["卫衣","外套","运动裤"]
+                                url: "clothing",
+                                styles: [
+                                    {name:"卫衣", url:"sweatshirt"},
+                                    {name:"外套", url:"jacket"},
+                                    {name:"运动服", url: "sportswear"},
+                                    {name:"T恤", url: "T-shirt"},
+                                    {name:"休闲裤", url: "trouser"},
+                                    {name:"短裤", url: "shorts"}
+                                ]
                             },
                             {
                                 name: "配件",
-                                styles: ["包","袜子","帽子"]
+                                url:"accessories",
+                                styles: [
+                                    {name:"包", url:"bag"},
+                                    {name:"帽子", url:"hat"},
+                                    {name:"袜子", url: "socks"},
+                                    {name:"其他", url: "others"},
+                                ]
                             }
                         ]
                     },
                     {
                         name: "儿童",
+                        url:"/findByCategory/kids",
                         categories: [
                             {
                                 name: "鞋类",
-                                styles: ["运动鞋","篮球鞋","拖鞋"]
+                                url: "shoes",
+                                styles: [
+                                    {name:"跑鞋", url:"running_shoes"},
+                                    {name:"篮球鞋", url:"basketball_shoes"},
+                                    {name:"足球鞋", url: "football_shoes"},
+                                    {name:"休闲鞋", url: "lifestyle_shoes"},
+                                    {name:"拖鞋", url: "slippers"}
+                                ]
                             },
                             {
                                 name: "服装",
-                                styles: ["卫衣","外套","运动裤"]
+                                url: "clothing",
+                                styles: [
+                                    {name:"卫衣", url:"sweatshirt"},
+                                    {name:"外套", url:"jacket"},
+                                    {name:"运动服", url: "sportswear"},
+                                    {name:"T恤", url: "T-shirt"},
+                                    {name:"休闲裤", url: "trouser"},
+                                    {name:"短裤", url: "shorts"}
+                                ]
                             },
                             {
                                 name: "配件",
-                                styles: ["包","袜子","帽子"]
+                                url:"accessories",
+                                styles: [
+                                    {name:"包", url:"bag"},
+                                    {name:"帽子", url:"hat"},
+                                    {name:"袜子", url: "socks"},
+                                    {name:"其他", url: "others"},
+                                ]
                             }
                         ]
                     },
                     {
+                        url: "/findByBrand",
                         name: "分类",
                         categories: [
                             {
                                 name: "品牌",
-                                styles: ["Nike","Adidas"]
+                                styles: [
+                                    {name:"Nike",url:"Nike"},
+                                    {name:"Adidas",url:"Nike"},
+                                    {name:"李宁",url: "Lining"},
+                                    {name:"安踏",url: "Anta"},
+                                    {name:"匡威",url: "Converse"}
+                                    ]
                             }
                         ]
                     },
                     {
-                        name: "热卖",
+                        name: "折扣",
+                        url: "/findDiscountByCategory",
                         categories: [
                             {
-                                name: "男子热卖",
-                                styles: ["鞋类","服装","配件"]
+                                name: "男子",
+                                url:"men",
+                                styles: [
+                                    {name: "鞋类", url: "shoes"},
+                                    {name: "服装", url: "clothing"},
+                                    {name: "配件", url:"accessories"}
+                                ]
                             },
                             {
-                                name: "女子热卖",
-                                styles: ["鞋类","服装","配件"]
+                                name: "女子",
+                                url:"women",
+                                styles: [
+                                    {name: "鞋类", url: "shoes"},
+                                    {name: "服装", url: "clothing"},
+                                    {name: "配件", url:"accessories"}
+                                ]
                             },
                             {
-                                name: "儿童热卖",
-                                styles: ["鞋类","服装","配件"]
+                                name: "儿童",
+                                url:"kids",
+                                styles: [
+                                    {name: "鞋类", url: "shoes"},
+                                    {name: "服装", url: "clothing"},
+                                    {name: "配件", url:"accessories"}
+                                ]
                             }
                         ]
                     }
@@ -163,8 +253,6 @@
             }
         },
         mounted () {
-            window.addEventListener('scroll', this.handleScroll, true);
-            // 监听（绑定）滚轮 滚动事件
         },
         methods: {
             toVisible: function(index){
@@ -182,7 +270,7 @@
                 this.temp = '';
             },
             toHomePage(){
-                window.location.href = "/"
+                window.location.href = "/dist"
             },
             closeSearchBox: function () {
                 let node = document.getElementsByClassName("search")[0];
@@ -194,6 +282,9 @@
             },
             getItem: function () {
                 return this.classification[Number(this.temp)].categories;
+            },
+            newPage: function (url) {
+                console.log(url);
             }
         }
     }
@@ -240,10 +331,7 @@
         color: #909399;
     }
     div.nav-menu {
-        position: fixed;
-        _position: absolute;
-        z-index: 999;
-        padding-right: 28px;
+        width: 100%;
     }
     div.nav-header{
         background-color: #E9E9EA;
@@ -252,16 +340,16 @@
     .icons{
         padding-left: 10px;
         padding-right: 10px;
-        right: 450px;
-        bottom: 10px;
+        right: 33%;
+        bottom: 25%;
     }
     .el-link.right{
         padding-left: 20px;
         padding-right: 20px;
-        left: 450px;
+        left: 35%;
         font-size: 14px;
         color: black;
-        bottom: 12px;
+        bottom: 30%;
     }
     .el-link.right:hover{
         color: #909399;
@@ -277,7 +365,7 @@
     }
 
     #logo{
-        right: 38%;
+        right: 35%;
     }
 
 .el-input{
@@ -288,13 +376,13 @@
 }
     #shopping-bag{
         cursor: pointer;
-        right: 20px;
+        right: 60px;
         top: 11px;
     }
     #star{
         cursor: pointer;
-        left: 130px;
-        bottom: 25px;
+        right: 30px;
+        top: 10px;
     }
     #shopping-bag:hover,#star:hover, #logo:hover, .icons:hover{
         opacity: 0.5;

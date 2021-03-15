@@ -4,7 +4,7 @@
         <NavMenu />
       </el-header>
 
-      <el-main style="padding-top: 0px;">
+      <el-main style="padding-top: 95px; padding-right: 12px;">
           <Feedback/>
         <router-view></router-view>
       </el-main>
@@ -61,4 +61,9 @@ export default {
         margin-bottom: 0;
     }
 
+    .el-header{
+        position: fixed;
+
+        z-index: 999;
+    }
 </style>
