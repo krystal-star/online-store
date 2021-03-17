@@ -38,10 +38,22 @@
 
             <!--商品展示-->
         <el-main class="show-products">
-            <el-row :gutter="20" v-for="row in num/3" class="row">
-                <el-col :span="6" v-for="col in 3">
-                    <div class="product-content">
-                        product
+            <el-row :gutter="25" v-for="row in Math.ceil(products.length/3)" class="row">
+                <el-col :span="8" v-for="(item,index) in products">
+                    <div class="product-content" v-if="parseInt(index/3)+1 === Number(row)">
+                        <el-image class="image" :src="item.img"></el-image>
+                        <div @mouseover="showMore(index)" @mouseleave="hiddenMore(index)" class="content">
+                            <p class="name">{{item.name}}</p>
+                            <p class="group-style">{{item.group}}{{item.style}}</p>
+                            <p class="color">{{item.color}}</p>
+                            <p class="cur-price">¥{{item.price}}</p>
+                            <p class="pre-price" v-if="item.previousPrice !== null">¥{{item.previousPrice}}</p>
+
+                            <div class="more">
+                                <el-image class="more-images" v-for="subitem in item.detail"
+                                      :src="subitem.img"></el-image>
+                            </div>
+                        </div>
                     </div>
                 </el-col>
             </el-row>
@@ -58,7 +70,84 @@
         data(){
             return{
                 category:"男子",
-                num: 15
+                num: 15,
+                products:[
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        detail:[
+                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
+                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
+                        ]
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        detail:[
+                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
+                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
+                        ]
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        detail:[
+                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
+                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
+                        ]
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        detail:[
+                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
+                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
+                        ]
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        price: 320,
+                        previousPrice: 400,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        detail:[
+                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
+                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
+                        ]
+                    }
+                ]
             }
         },
         mounted() {
@@ -81,6 +170,16 @@
             },
             handleCommand(command) {
                 console.log('click on item ' + command);
+            },
+            showMore: function (index) {
+                var item = document.getElementsByClassName("product-content")[index];
+                var more = item.querySelectorAll("div.more")[0];
+                more.style = "visibility:visible";
+            },
+            hiddenMore: function (index) {
+                var item = document.getElementsByClassName("product-content")[index];
+                var more = item.querySelectorAll("div.more")[0];
+                more.style = "visibility:hidden";
             }
         }
     }
@@ -91,6 +190,7 @@
         width: 100%;
         margin-bottom: 0.5em;
         background-color: white;
+        position: relative;
     }
     div.left{
         width: 50%;
@@ -132,14 +232,61 @@
     }
 
     .bottom{
-        margin-top: 5.5%;
+        margin-top: 1%;
     }
 
     .show-products{
         padding: 5%;
     }
 
+    .row{
+        margin-top: -5em;
+    }
     .product-content{
-        border-bottom-style: solid;
+        text-align: left;
+    }
+
+    p.name, p.pre-price, p.cur-price{
+        font-weight: bold;
+        font-size: 18px;
+        display: inline-block;
+        margin-bottom: 0;
+        margin-top: 0.5em;
+    }
+    p.group-style,p.color{
+        color: #909399;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    .image:hover, .more-images:hover{
+        cursor: pointer;
+    }
+    p.pre-price{
+        color: #909399;
+        text-decoration: line-through;
+        font-size: 15px;
+        padding-left: 5px;
+    }
+    p.pre-price, p.cur-price{
+        float: left;
+        font-size: 16px;
+        margin-top: 1em;
+    }
+
+    div.more{
+        background-color: white;
+        position: relative;
+        bottom: 6.6em;
+        float: left;
+        visibility: hidden;
+    }
+
+    .more-images{
+        width: 20%;
+        height: 20%;
+        margin-right: 1em;
+    }
+    p.cover{
+        margin: 1.2em;
     }
 </style>
