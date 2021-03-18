@@ -32,12 +32,57 @@
 
         <el-container class="bottom">
             <!--筛选条-->
-        <el-aside class="filter">
-        filter
+            <el-aside class="filter">
+            <el-scrollbar
+                    wrapStyle="color:'#fff';fontSize:'16px';"
+                    viewStyle="color:'#fff';fontSize:'16px';"
+                    :native="false"
+            >
+        <div class="filter-header">
+            <h3 class="topic">筛选条件</h3>
+            <p class="check-all" @click="">重置筛选</p>
+        </div>
+
+            <el-collapse v-model="activeNames">
+                <el-collapse-item title="性别" name="1">
+                    <el-checkbox-group v-model="checkList_group">
+                        <el-checkbox label="男子"></el-checkbox>
+                        <el-checkbox label="女子"></el-checkbox>
+                        <el-checkbox label="儿童"></el-checkbox>
+                    </el-checkbox-group>
+                </el-collapse-item>
+                <el-collapse-item title="产品分类" name="2">
+                    <el-checkbox-group v-model="checkList_style">
+                        <el-checkbox label="鞋类"></el-checkbox>
+                        <el-checkbox label="衣服"></el-checkbox>
+                        <el-checkbox label="配件"></el-checkbox>
+                    </el-checkbox-group>
+                </el-collapse-item>
+                <el-collapse-item title="品牌" name="3">
+                    <el-checkbox-group v-model="checkList_brand">
+                        <el-checkbox label="Adidas"></el-checkbox>
+                        <el-checkbox label="Nike"></el-checkbox>
+                        <el-checkbox label="李宁"></el-checkbox>
+                        <el-checkbox label="安踏"></el-checkbox>
+                        <el-checkbox label="匡威"></el-checkbox>
+                    </el-checkbox-group>
+                </el-collapse-item>
+                <el-collapse-item title="颜色" name="4">
+                    <el-button circle style="background-color: black" class="colors"></el-button>
+                    <el-button circle style="background-color: white" class="colors"></el-button>
+                    <el-button circle style="background-color: red" class="colors"></el-button>
+                    <el-button circle style="background-color: yellow" class="colors"></el-button>
+                    <p></p>
+                    <el-button circle style="background-color: green" class="colors"></el-button>
+                    <el-button circle style="background-color: blue" class="colors"></el-button>
+                    <el-button circle style="background-color: purple" class="colors"></el-button>
+                </el-collapse-item>
+            </el-collapse>
+            </el-scrollbar>
         </el-aside>
 
             <!--商品展示-->
-        <el-main class="show-products">
+            <el-main class="show-products">
             <el-row :gutter="25" v-for="row in Math.ceil(items.length/3)" class="row">
                 <el-col :span="8" v-for="(item,index) in items">
                     <div class="product-content" v-if="parseInt(index/3)+1 === Number(row)">
@@ -58,6 +103,11 @@
                 </el-col>
             </el-row>
         </el-main>
+
+            <el-button type="info" circle class="to-top" @click="toTop">
+                <i class="el-icon-arrow-up"></i>
+                <span class="top">顶部</span>
+            </el-button>
         </el-container>
     </div>
 </template>
@@ -136,27 +186,362 @@
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                    }
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
+                    {
+                        id: 8,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                        price: 320,
+                        previousPrice: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                    },
                 ],
-                temp_src: ''
+                temp_src: '',
+                activeNames: ['1','2','3','4'],
+                checkList_group: ["男子"],
+                checkList_style:["配件"],
+                checkList_brand: ["Nike"],
+                checkList_color:[]
             }
         },
         mounted() {
-            var filter = document.getElementsByClassName("hide-filter")[0];
-            filter.setAttribute("is-hide","false");
+            var btn_filter = document.getElementsByClassName("hide-filter")[0];
+            btn_filter.setAttribute("is-hide","false");
+
+            window.addEventListener('scroll', this.handleScroll, true);
         },
         methods:{
             hideFilter: function () {
-                var filter = document.getElementsByClassName("hide-filter")[0];
-                var text = filter.children[0];
-                if(filter.getAttribute("is-hide") === "false"){
+                var btn_filter = document.getElementsByClassName("hide-filter")[0];
+                var filter = document.getElementsByClassName("filter")[0];
+                var text = btn_filter.children[0];
+                if(btn_filter.getAttribute("is-hide") === "false"){
                     console.log("hide");
-                    filter.setAttribute("is-hide","true");
+                    btn_filter.setAttribute("is-hide","true");
                     text.innerHTML = "显示筛选条件";
-                }else if(filter.getAttribute("is-hide") === "true"){
+                    filter.style = "display:none";
+                }else if(btn_filter.getAttribute("is-hide") === "true"){
                     console.log("display");
-                    filter.setAttribute("is-hide","false");
+                    btn_filter.setAttribute("is-hide","false");
                     text.innerHTML = "隐藏筛选条件";
+                    filter.style = "display: block";
                 }
             },
             handleCommand(command) {
@@ -182,6 +567,38 @@
                 more.style = "visibility:hidden";
                 var img = item.querySelectorAll("div.image")[0];
                 img.children[0].src = this.temp_src;
+            },
+            handleCheckAllChange(val) {
+                //this.checkedCities = val ? cityOptions : [];
+                this.isIndeterminate = false;
+            },
+            handleScroll: function () {
+                var distanceToTop = window.pageYOffset;
+                var filter = document.getElementsByClassName("filter")[0];
+                var content = document.getElementsByClassName("show-products")[0];
+                var btn_filter = document.getElementsByClassName("hide-filter")[0];
+                if(btn_filter.getAttribute("is-hide") === "false"){
+                    if (distanceToTop >= 230 && distanceToTop <= 4661){
+                        filter.style = "position:fixed; bottom:15%";
+                        content.style = "padding-left:25%";
+                    }else if(distanceToTop > 4661){
+                        filter.style = "position:relative; top: 280em;";
+                        content.style = "padding-left:5%";
+                    }else{
+                        filter.style = "position:relative;";
+                        content.style = "padding-left:5%";
+                    }
+                }
+
+                var btn_top = document.getElementsByClassName("to-top")[0];
+                if(distanceToTop >= 750){
+                    btn_top.style = "display:block";
+                }else{
+                    btn_top.style = "display:none";
+                }
+            },
+            toTop: function () {
+                document.documentElement.scrollTop = 0;
             }
         }
     }
@@ -193,6 +610,7 @@
         margin-bottom: 0.5em;
         background-color: white;
         position: relative;
+        z-index: 1;
     }
     div.left{
         width: 50%;
@@ -225,9 +643,6 @@
         top: 0.25em;
         padding-left: 0.5em;
     }
-    ul.el-popper{
-        margin-top: -1.5em;
-    }
     .el-dropdown-menu ::v-deep .el-dropdown-menu__item:hover{
         color: white;
         background-color: #C0C4CC;
@@ -238,12 +653,9 @@
     }
 
     .show-products{
-        padding: 5%;
+        /*padding-left: 25%;*/
     }
 
-    .row{
-        margin-top: -5em;
-    }
     .product-content{
         text-align: left;
     }
@@ -288,7 +700,57 @@
         height: 20%;
         margin-right: 1em;
     }
-    p.cover{
-        margin: 1.2em;
+
+    .filter{
+        padding-left: 2.5em;
+        padding-right: 2.5em;
+        text-align: left;
+        height: 700px;
+        /*position: fixed;*/
+        position: relative;
+        width: 20%;
+    }
+
+    .filter-header{
+        border-bottom: 1px solid #EBEEF5;
+    }
+    p.check-all{
+        margin-left: 3em;
+        bottom: 0.75em;
+        display: inline-block;
+    }
+    p.check-all:hover{
+        cursor: pointer;
+        opacity: 0.5;
+    }
+    h3.topic{
+        display: inline-block;
+    }
+    .el-checkbox{
+        display: block;
+    }
+
+    .el-collapse ::v-deep .el-collapse-item__header, .el-checkbox, .el-checkbox ::v-deep .el-checkbox__label{
+        font-size: 16px;
+    }
+    .el-checkbox ::v-deep .el-checkbox__input.is-checked+.el-checkbox__label{
+        color:#303133;
+        opacity: 0.5;
+    }
+    .el-checkbox ::v-deep .el-checkbox__input.is-checked .el-checkbox__inner{
+        background-color: #303133;
+        border-color: #303133;
+        opacity: 0.5;
+    }
+    .to-top{
+        position: fixed;
+        z-index: 999;
+        right: 1%;
+        top: 85%;
+        display: none;
+    }
+    .top{
+        display: block;
+        margin: 0.3em;
     }
 </style>
