@@ -38,11 +38,11 @@
 
             <!--商品展示-->
         <el-main class="show-products">
-            <el-row :gutter="25" v-for="row in Math.ceil(products.length/3)" class="row">
-                <el-col :span="8" v-for="(item,index) in products">
+            <el-row :gutter="25" v-for="row in Math.ceil(items.length/3)" class="row">
+                <el-col :span="8" v-for="(item,index) in items">
                     <div class="product-content" v-if="parseInt(index/3)+1 === Number(row)">
-                        <el-image class="image" :src="item.img"></el-image>
-                        <div @mouseover="showMore(index)" @mouseleave="hiddenMore(index)" class="content">
+                        <el-image class="image" :src="item.poster_img"></el-image>
+                        <div @mouseover="showMore(index,item.poster_img)" @mouseleave="hiddenMore(index)" class="content">
                             <p class="name">{{item.name}}</p>
                             <p class="group-style">{{item.group}}{{item.style}}</p>
                             <p class="color">{{item.color}}</p>
@@ -50,8 +50,8 @@
                             <p class="pre-price" v-if="item.previousPrice !== null">¥{{item.previousPrice}}</p>
 
                             <div class="more">
-                                <el-image class="more-images" v-for="subitem in item.detail"
-                                      :src="subitem.img"></el-image>
+                                <el-image class="more-images" :src="item.detail_img1"></el-image>
+                                <el-image class="more-images" :src="item.detail_img2"></el-image>
                             </div>
                         </div>
                     </div>
@@ -71,83 +71,74 @@
             return{
                 category:"男子",
                 num: 15,
-                products:[
+                items:[
                     {
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
-                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
                         price: 320,
                         previousPrice: null,
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                        detail:[
-                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
-                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
-                        ]
                     },
                     {
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
-                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
                         price: 320,
                         previousPrice: null,
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                        detail:[
-                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
-                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
-                        ]
                     },
                     {
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
-                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
                         price: 320,
                         previousPrice: null,
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                        detail:[
-                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
-                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
-                        ]
                     },
                     {
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
-                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
                         price: 320,
                         previousPrice: null,
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                        detail:[
-                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
-                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
-                        ]
                     },
                     {
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
-                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        poster_img: "../static/sportswear-essentials-backpack-0.jpg",
+                        detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
+                        detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
                         price: 320,
                         previousPrice: 400,
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                        detail:[
-                            {img:"../static/sportswear-essentials-backpack-1.jpg"},
-                            {img:"../static/sportswear-essentials-backpack-2.jpg"},
-                        ]
                     }
-                ]
+                ],
+                temp_src: ''
             }
         },
         mounted() {
@@ -171,15 +162,26 @@
             handleCommand(command) {
                 console.log('click on item ' + command);
             },
-            showMore: function (index) {
+            showMore: function (index,src) {
                 var item = document.getElementsByClassName("product-content")[index];
                 var more = item.querySelectorAll("div.more")[0];
                 more.style = "visibility:visible";
+
+                var img = item.querySelectorAll("div.image")[0];
+                this.temp_src = src;
+                more.onmouseover = function (event) {
+                    var target = event.target;
+                    if(target.className.toLowerCase() === "el-image__inner"){
+                        img.children[0].src = target.src;
+                    }
+                }
             },
             hiddenMore: function (index) {
                 var item = document.getElementsByClassName("product-content")[index];
                 var more = item.querySelectorAll("div.more")[0];
                 more.style = "visibility:hidden";
+                var img = item.querySelectorAll("div.image")[0];
+                img.children[0].src = this.temp_src;
             }
         }
     }
