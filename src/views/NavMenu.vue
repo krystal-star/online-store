@@ -49,10 +49,10 @@
                 {{item.name}}
             </el-menu-item>
                 <div class="menu-dropdown">
-                    <el-row>
-                        <el-col :span="6" v-for="subitem in getItem()">
-                            <h4 class="cate" @click="newPage(subitem.url)">{{subitem.name}}</h4>
-                            <li v-for="style in subitem.styles">{{style.name}}</li>
+                    <el-row v-if="getItem() !== null">
+                        <el-col :span="6" v-for="subitem in getItem().categories">
+                            <h4 class="cate" @click="newPage(getItem(),subitem)">{{subitem.name}}</h4>
+                            <li v-for="style in subitem.styles" @click="newPage(getItem(), subitem, style)">{{style.name}}</li>
                         </el-col>
                     </el-row>
                 </div>
@@ -206,7 +206,7 @@
                                 name: "品牌",
                                 styles: [
                                     {name:"Nike",url:"Nike"},
-                                    {name:"Adidas",url:"Nike"},
+                                    {name:"Adidas",url:"Adidas"},
                                     {name:"李宁",url: "Lining"},
                                     {name:"安踏",url: "Anta"},
                                     {name:"匡威",url: "Converse"}
@@ -253,21 +253,23 @@
             }
         },
         mounted () {
+            let menu = document.getElementsByClassName("menu-dropdown")[0];
+            menu.onmouseleave = function () {
+                menu.style = "visibility: hidden";
+            }
         },
         methods: {
             toVisible: function(index){
                 let node = document.getElementsByClassName("el-menu-item")[index+1];
                 node.style = "color: #909399";
+                this.temp = index;
                 let menu = document.getElementsByClassName("menu-dropdown")[0];
                 menu.style = "visibility: visible";
-                this.temp = index;
+
             },
             toInvisibile: function(index){
                 let node = document.getElementsByClassName("el-menu-item")[index+1];
                 node.style = "color:black";
-                let menu = document.getElementsByClassName("menu-dropdown")[0];
-                menu.style = "visibility: hidden";
-                this.temp = '';
             },
             toHomePage(){
                 window.location.href = "/dist"
@@ -281,10 +283,42 @@
                 node.style = "visibility: visible";
             },
             getItem: function () {
-                return this.classification[Number(this.temp)].categories;
+                if(this.temp !== ''){
+                    return this.classification[Number(this.temp)];
+                }else {
+                    return null;
+                }
             },
-            newPage: function (url) {
-                console.log(url);
+            newPage: function (i1,i2,i3) {
+                //存储names
+                var url;
+                if(i2 === undefined && i3 === undefined){
+                    this.$store.state.group = i1.name;
+                    this.$store.state.category = null;
+                    this.$store.state.style = null;
+                    url = i1.url;
+                    console.log(url);
+                }else if(i2 !== undefined && i3 === undefined){
+                    this.$store.state.group = i1.name;
+                    this.$store.state.category = i2.name;
+                    this.$store.state.style = null;
+                    url = i1.url + "?category="+i2.url;
+                    console.log(url);
+                }else if(i2 === undefined && i3 !== undefined){  //品牌
+                    this.$store.state.group = i1.name;
+                    this.$store.state.category = null;
+                    this.$store.state.style = i3.name;
+                    url = i1.url+"/"+i3.url;
+                    console.log(url);
+                } else if(i2 !== undefined && i3 !== undefined){
+                    this.$store.state.group = i1.name;
+                    this.$store.state.category = i2.name;
+                    this.$store.state.style = i3.name;
+                    url = i1.url + "?category="+i2.url + "&style="+i3.url;
+                    console.log(url);
+                }
+                this.$router.push('/itemList'+url);
+                //http://localhost:8181/itemList
             }
         }
     }

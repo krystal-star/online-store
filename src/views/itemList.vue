@@ -4,7 +4,9 @@
         <el-container>
         <el-header class="product-header">
             <div class="left">
-            <h2>{{category}} 全部商品（{{num}}）</h2>
+                <h2><span v-if="group!==''">{{group}}</span><span v-else>所有商品</span>
+                    <span v-if="category!==null"> {{category}} </span>
+                    <span v-if="style!==null"> {{style}}</span>（{{num}}）</h2>
             </div>
             <div class="right">
                 <div class="hide-filter" @click="hideFilter">
@@ -40,31 +42,31 @@
             >
         <div class="filter-header">
             <h3 class="topic">筛选条件</h3>
-            <p class="check-all" @click="">重置筛选</p>
+            <p class="check-all" @click="clearFilter">重置筛选</p>
         </div>
 
             <el-collapse v-model="activeNames">
                 <el-collapse-item title="性别" name="1">
-                    <el-checkbox-group v-model="checkList_group">
-                        <el-checkbox label="男子"></el-checkbox>
-                        <el-checkbox label="女子"></el-checkbox>
-                        <el-checkbox label="儿童"></el-checkbox>
+                    <el-checkbox-group v-model="checkList_group" @change="handleChange">
+                        <el-checkbox label="男子" name="men"></el-checkbox>
+                        <el-checkbox label="女子" name="women"></el-checkbox>
+                        <el-checkbox label="儿童" name="kids"></el-checkbox>
                     </el-checkbox-group>
                 </el-collapse-item>
                 <el-collapse-item title="产品分类" name="2">
-                    <el-checkbox-group v-model="checkList_style">
-                        <el-checkbox label="鞋类"></el-checkbox>
-                        <el-checkbox label="衣服"></el-checkbox>
-                        <el-checkbox label="配件"></el-checkbox>
+                    <el-checkbox-group v-model="checkList_category" @change="handleChange">
+                        <el-checkbox label="鞋类" name="shoes"></el-checkbox>
+                        <el-checkbox label="服装" name="clothing"></el-checkbox>
+                        <el-checkbox label="配件" name="accessories"></el-checkbox>
                     </el-checkbox-group>
                 </el-collapse-item>
                 <el-collapse-item title="品牌" name="3">
-                    <el-checkbox-group v-model="checkList_brand">
-                        <el-checkbox label="Adidas"></el-checkbox>
-                        <el-checkbox label="Nike"></el-checkbox>
-                        <el-checkbox label="李宁"></el-checkbox>
-                        <el-checkbox label="安踏"></el-checkbox>
-                        <el-checkbox label="匡威"></el-checkbox>
+                    <el-checkbox-group v-model="checkList_brand" @change="handleChange">
+                        <el-checkbox label="Adidas" name="Adidas"></el-checkbox>
+                        <el-checkbox label="Nike" name="Nike"></el-checkbox>
+                        <el-checkbox label="李宁" name="Lining"></el-checkbox>
+                        <el-checkbox label="安踏" name="Anta"></el-checkbox>
+                        <el-checkbox label="匡威" name="Converse"></el-checkbox>
                     </el-checkbox-group>
                 </el-collapse-item>
                 <el-collapse-item title="颜色" name="4">
@@ -75,7 +77,9 @@
                     <p></p>
                     <el-button circle style="background-color: green" class="colors"></el-button>
                     <el-button circle style="background-color: blue" class="colors"></el-button>
-                    <el-button circle style="background-color: purple" class="colors"></el-button>
+                    <el-button circle style="background-color: pink" class="colors"></el-button>
+                    <el-button circle style="background: linear-gradient(to right, red, orange, yellow, green, yellow, orange, red, orange, yellow, green, yellow, orange, red);
+                -webkit-text-fill-color: transparent; " class="colors"></el-button>
                 </el-collapse-item>
             </el-collapse>
             </el-scrollbar>
@@ -119,7 +123,9 @@
         components: {Notification},
         data(){
             return{
-                category:"男子",
+                group: this.$store.state.group, //'男子,女子'
+                category: this.$store.state.category,
+                style:this.$store.state.style,
                 num: 15,
                 items:[
                     {
@@ -515,19 +521,52 @@
                 ],
                 temp_src: '',
                 activeNames: ['1','2','3','4'],
-                checkList_group: ["男子"],
-                checkList_style:["配件"],
-                checkList_brand: ["Nike"],
+                checkList_group: this.$store.state.group.split(","),
+                checkList_category:this.$store.state.category.split(","),
+                checkList_brand: this.$store.state.style.split(","),
                 checkList_color:[]
             }
+        },
+        created() {
+            this.parseUrl();
         },
         mounted() {
             var btn_filter = document.getElementsByClassName("hide-filter")[0];
             btn_filter.setAttribute("is-hide","false");
 
             window.addEventListener('scroll', this.handleScroll, true);
+            console.log(this.group);
         },
         methods:{
+            parseUrl: function(){
+                var dict = {'men':'男子','women':'女子','kids':"儿童",'shoes':'鞋类','clothing':'服装','accessories':'配饰',
+                            'Lining':'李宁', 'Anta':'安踏','Converse':'匡威'};
+                var url = window.location.href;
+                if(url.indexOf("groups=") !== -1 && this.$store.state.group === ''){
+                    var s = url.split("groups=")[1].split('&')[0];
+                    s = s.replace('men',dict["men"]);
+                    s = s.replace('women',dict["women"]);
+                    s = s.replace('kids',dict["kids"]);
+                    this.group = s;
+                    this.checkList_group = this.group.split(',');
+                }
+                if(url.indexOf("categories=") !== -1 && this.$store.state.category === ''){
+                    var s = url.split("categories=")[1].split('&')[0];
+                    s = s.replace('shoes',dict["shoes"]);
+                    s = s.replace('clothing',dict["clothing"]);
+                    s = s.replace('accessories',dict["accessories"]);
+                    this.category = s;
+                    this.checkList_category = this.category.split(",");
+                }
+                if(url.indexOf("brands=") !== -1 && this.$store.state.style === ''){
+                    var s = url.split("brands=")[1].split('&')[0];
+                    s = s.replace('Lining',dict["Lining"]);
+                    s = s.replace('Anta',dict["Anta"]);
+                    s = s.replace('Converse',dict["Converse"]);
+                    this.style = s;
+                    this.checkList_brand = this.style.split(",");
+                }
+            },
             hideFilter: function () {
                 var btn_filter = document.getElementsByClassName("hide-filter")[0];
                 var filter = document.getElementsByClassName("filter")[0];
@@ -599,6 +638,44 @@
             },
             toTop: function () {
                 document.documentElement.scrollTop = 0;
+            },
+            handleChange: function () {
+                var names = {groups:[], categories: [], brands:[], colors:[]};
+                var checkbox_group = document.getElementsByClassName("el-checkbox-group");
+                for(var i=0; i<checkbox_group.length ;i++){
+                    var checkboxs = checkbox_group[i].childNodes;
+                    for(var j=0; j<checkboxs.length;j++){
+                        if(checkboxs[j].className.indexOf("is-checked") !== -1){
+                            if(i === 0){
+                                names.groups.push(checkboxs[j].querySelectorAll("input")[0].name);
+                            }else if(i === 1){
+                                names.categories.push(checkboxs[j].querySelectorAll("input")[0].name);
+                            }else if(i === 2){
+                                names.brands.push(checkboxs[j].querySelectorAll("input")[0].name);
+                            }
+                        }
+                    }
+                }
+                var url = [];
+                if(names.groups.length !== 0){
+                    url.push("groups=" + names.groups.join());
+                }
+                if(names.categories.length !== 0){
+                    url.push("categories=" + names.categories.join());
+                }
+                if(names.brands.length !== 0){
+                    url.push("brands=" + names.brands.join());
+                }
+                /*this.$store.state.group = names.groups.join();
+                this.$store.state.category = names.categories.join();
+                this.$store.state.style = names.brands.join();*/
+                this.$router.push("/itemListFilter/filterByConditions?"+url.join('&'));
+                console.log(this.$store.state.group);
+                location.reload();
+            },
+            clearFilter: function () {
+                this.$router.push("/itemList");
+                location.reload();
             }
         }
     }
@@ -616,7 +693,7 @@
         width: 50%;
         float: left;
         text-align: left;
-        padding-left: 3%;
+        padding-left: 1.5%;
     }
 
     div.right{

@@ -5,6 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    group:'', //'men,women'
+    category:'', //'shoes, clothing'
+    style:'' //'adidas, nike'
   },
   mutations: {
   },

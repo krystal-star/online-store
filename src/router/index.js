@@ -19,10 +19,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/products',
-    name: 'Products',
-    component: () => import('../views/Products.vue')
+    path: '/itemList',
+    name: 'ItemList',
+    component: () => import('../views/itemList.vue'),
   },
+  {
+    path: '/itemListFilter/filterByConditions',
+    redirect:"/itemList"
+  },
+  {
+    path:'/itemList/*',
+    redirect: "/itemList"
+  }
 ]
 
 const router = new VueRouter({
