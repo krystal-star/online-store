@@ -24,14 +24,6 @@ const routes = [
     component: () => import('../views/itemList.vue'),
   },
   {
-    path: '/itemListFilter/filterByConditions',
-    redirect:"/itemList"
-  },
-  {
-    path:'/itemList/*',
-    redirect: "/itemList"
-  },
-  {
     path:'/blank',
     name: 'PageBlank',
     component: () => import('../views/Blank.vue'),
