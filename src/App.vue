@@ -63,7 +63,6 @@ export default {
 
     .el-header{
         position: fixed;
-
         z-index: 999;
     }
 </style>

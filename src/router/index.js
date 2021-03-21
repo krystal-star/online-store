@@ -19,10 +19,25 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/products',
-    name: 'Products',
-    component: () => import('../views/Filter.vue')
+    path: '/itemList',
+    name: 'ItemList',
+    component: () => import('../views/itemList.vue'),
   },
+  {
+    path: '/itemListFilter/filterByConditions',
+    redirect:"/itemList"
+  },
+  {
+    path:'/itemList/*',
+    redirect: "/itemList"
+  },
+  {
+    path:'/blank',
+    name: 'PageBlank',
+    component: () => import('../views/Blank.vue'),
+    meta: {
+    }
+  }
 ]
 
 const router = new VueRouter({
@@ -30,5 +45,11 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// 解决重复点击路由报错的BUG
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
 
 export default router
