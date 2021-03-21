@@ -45,7 +45,7 @@
                     :index="index1.toString()"
                     @mouseover.native="toVisible(index1)"
                     @mouseleave.native="toInvisibile(index1)"
-                    >
+                    @click="newPage(item)">
                 {{item.name}}
             </el-menu-item>
                 <div class="menu-dropdown">
@@ -83,7 +83,7 @@
                 classification:[
                     {
                         name: "男子",
-                        url: "/findByCategory/men",
+                        url: "men",
                         categories: [
                             {
                                 name: "鞋类",
@@ -122,7 +122,7 @@
                     },
                     {
                         name: "女子",
-                        url: "/findByCategory/women",
+                        url: "women",
                         categories: [
                             {
                                 name: "鞋类",
@@ -161,7 +161,7 @@
                     },
                     {
                         name: "儿童",
-                        url:"/findByCategory/kids",
+                        url:"kids",
                         categories: [
                             {
                                 name: "鞋类",
@@ -199,11 +199,12 @@
                         ]
                     },
                     {
-                        url: "/findByBrand",
+                        url: '',
                         name: "分类",
                         categories: [
                             {
                                 name: "品牌",
+                                url:'',
                                 styles: [
                                     {name:"Nike",url:"Nike"},
                                     {name:"Adidas",url:"Adidas"},
@@ -216,7 +217,7 @@
                     },
                     {
                         name: "折扣",
-                        url: "/findDiscountByCategory",
+                        url: "",
                         categories: [
                             {
                                 name: "男子",
@@ -291,34 +292,46 @@
             },
             newPage: function (i1,i2,i3) {
                 //存储names
-                var url;
-                if(i2 === undefined && i3 === undefined){
-                    this.$store.state.group = i1.name;
-                    this.$store.state.category = null;
-                    this.$store.state.style = null;
-                    url = i1.url;
-                    console.log(url);
-                }else if(i2 !== undefined && i3 === undefined){
-                    this.$store.state.group = i1.name;
-                    this.$store.state.category = i2.name;
-                    this.$store.state.style = null;
-                    url = i1.url + "?category="+i2.url;
-                    console.log(url);
-                }else if(i2 === undefined && i3 !== undefined){  //品牌
-                    this.$store.state.group = i1.name;
-                    this.$store.state.category = null;
-                    this.$store.state.style = i3.name;
-                    url = i1.url+"/"+i3.url;
-                    console.log(url);
-                } else if(i2 !== undefined && i3 !== undefined){
-                    this.$store.state.group = i1.name;
-                    this.$store.state.category = i2.name;
-                    this.$store.state.style = i3.name;
-                    url = i1.url + "?category="+i2.url + "&style="+i3.url;
-                    console.log(url);
+                var url = '';
+                //点击 "男子，女子，儿童"
+                if (i1.name === "男子" || i1.name === "女子" ||i1.name === "儿童"){
+                    this.$store.state.groups = i1.name;
+                    url += "groups="+i1.url;
+                    //鞋类，服装，配件
+                    if(i2 !== undefined){
+                        this.$store.state.categories = i2.name;
+                        url += "&categories="+i2.url;
+                    }
+                    //xx鞋，xx衣服
+                    if(i3 !== undefined){
+                        this.$store.state.styles = i3.name;
+                        url += "&styles="+i3.url;
+                    }
                 }
-                this.$router.push('/itemList'+url);
-                //http://localhost:8181/itemList
+
+                //点击 "品牌"
+                else if (i1.name === "分类" && i3 !== undefined){
+                    url += "brands="+i3.url;
+                }
+
+                //点击 "折扣"
+                else if(i1.name === "折扣") {
+                    this.$store.state.discount = true;
+                    url += "discount=true";
+                    if (i2 !== undefined) {
+                        this.$store.state.groups = i2.name;
+                        url += "&groups=" + i2.url;
+                    }
+                    if (i3 !== undefined) {
+                        this.$store.state.categories = i3.name;
+                        url += "&categories=" + i3.url;
+                    }
+                }
+
+                var path = '/itemList?'+url;
+                this.$store.state.url = path;
+                this.$store.state.brands = '';
+                this.$router.push({ path: '/blank', query: { path: path } });
             }
         }
     }

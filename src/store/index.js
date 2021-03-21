@@ -5,9 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    group:'', //'men,women'
-    category:'', //'shoes, clothing'
-    style:'' //'adidas, nike'
+    groups:'', //'men,women'
+    categories:'', //'shoes, clothing'
+    brands: '', //'adidas, nike'
+    styles:'',
+    colors:'',
+    discount: false,
+    url:''
   },
   mutations: {
   },

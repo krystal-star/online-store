@@ -320,7 +320,7 @@ export default {
     }
   },
   created() {
-    /*const _this = this
+    const _this = this
     axios.get('http://localhost:8181/home').then(function (resp) {
       _this.poster = resp.data.data.poster
       _this.trending = resp.data.data.trending
@@ -329,7 +329,7 @@ export default {
       _this.recommend = resp.data.data.recommend
       _this.accessories = resp.data.data.accessories
       _this.vip_poster = resp.data.data.vip_poster
-    })*/
+    })
   }
 }
 </script>

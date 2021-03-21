@@ -5,8 +5,9 @@
         <el-header class="product-header">
             <div class="left">
                 <h2><span v-if="group!==''">{{group}}</span><span v-else>所有商品</span>
-                    <span v-if="category!==null"> {{category}} </span>
-                    <span v-if="style!==null"> {{style}}</span>（{{num}}）</h2>
+                    <span v-if="category!==''"> {{category}} </span>
+                    <span v-if="style!==''"> {{style}}</span>
+                    <span v-if="discount === true"> Sale</span>（{{num}}）</h2>
             </div>
             <div class="right">
                 <div class="hide-filter" @click="hideFilter">
@@ -72,11 +73,13 @@
                 <el-collapse-item title="颜色" name="4">
                     <el-button circle style="background-color: black" class="colors"></el-button>
                     <el-button circle style="background-color: white" class="colors"></el-button>
-                    <el-button circle style="background-color: red" class="colors"></el-button>
-                    <el-button circle style="background-color: yellow" class="colors"></el-button>
+                    <el-button circle style="background-color: gray" class="colors"></el-button>
                     <p></p>
+                    <el-button circle style="background-color: yellow" class="colors"></el-button>
                     <el-button circle style="background-color: green" class="colors"></el-button>
                     <el-button circle style="background-color: blue" class="colors"></el-button>
+                    <p></p>
+                    <el-button circle style="background-color: red" class="colors"></el-button>
                     <el-button circle style="background-color: pink" class="colors"></el-button>
                     <el-button circle style="background: linear-gradient(to right, red, orange, yellow, green, yellow, orange, red, orange, yellow, green, yellow, orange, red);
                 -webkit-text-fill-color: transparent; " class="colors"></el-button>
@@ -123,9 +126,10 @@
         components: {Notification},
         data(){
             return{
-                group: this.$store.state.group, //'男子,女子'
-                category: this.$store.state.category,
-                style:this.$store.state.style,
+                group: this.$store.state.groups, //'男子,女子'
+                category: this.$store.state.categories,
+                style:this.$store.state.styles,
+                discount: this.$store.state.discount,
                 num: 15,
                 items:[
                     {
@@ -521,66 +525,43 @@
                 ],
                 temp_src: '',
                 activeNames: ['1','2','3','4'],
-                checkList_group: this.$store.state.group.split(","),
-                checkList_category:this.$store.state.category.split(","),
-                checkList_brand: this.$store.state.style.split(","),
+                checkList_group: this.$store.state.groups.split(","),
+                checkList_category:this.$store.state.categories.split(","),
+                checkList_brand: this.$store.state.brands.split(","),
                 checkList_color:[]
             }
         },
         created() {
-            this.parseUrl();
+            const _this = this
+            axios.get('http://localhost:8181'+this.$store.state.url).then(function (resp) {
+                _this.items = resp.data.data.items
+                _this.num = resp.data.data.items_number
+            })
         },
         mounted() {
             var btn_filter = document.getElementsByClassName("hide-filter")[0];
             btn_filter.setAttribute("is-hide","false");
 
             window.addEventListener('scroll', this.handleScroll, true);
-            console.log(this.group);
         },
         methods:{
-            parseUrl: function(){
-                var dict = {'men':'男子','women':'女子','kids':"儿童",'shoes':'鞋类','clothing':'服装','accessories':'配饰',
-                            'Lining':'李宁', 'Anta':'安踏','Converse':'匡威'};
-                var url = window.location.href;
-                if(url.indexOf("groups=") !== -1 && this.$store.state.group === ''){
-                    var s = url.split("groups=")[1].split('&')[0];
-                    s = s.replace('men',dict["men"]);
-                    s = s.replace('women',dict["women"]);
-                    s = s.replace('kids',dict["kids"]);
-                    this.group = s;
-                    this.checkList_group = this.group.split(',');
-                }
-                if(url.indexOf("categories=") !== -1 && this.$store.state.category === ''){
-                    var s = url.split("categories=")[1].split('&')[0];
-                    s = s.replace('shoes',dict["shoes"]);
-                    s = s.replace('clothing',dict["clothing"]);
-                    s = s.replace('accessories',dict["accessories"]);
-                    this.category = s;
-                    this.checkList_category = this.category.split(",");
-                }
-                if(url.indexOf("brands=") !== -1 && this.$store.state.style === ''){
-                    var s = url.split("brands=")[1].split('&')[0];
-                    s = s.replace('Lining',dict["Lining"]);
-                    s = s.replace('Anta',dict["Anta"]);
-                    s = s.replace('Converse',dict["Converse"]);
-                    this.style = s;
-                    this.checkList_brand = this.style.split(",");
-                }
-            },
             hideFilter: function () {
                 var btn_filter = document.getElementsByClassName("hide-filter")[0];
                 var filter = document.getElementsByClassName("filter")[0];
+                var content = document.getElementsByClassName("show-products")[0];
                 var text = btn_filter.children[0];
                 if(btn_filter.getAttribute("is-hide") === "false"){
                     console.log("hide");
                     btn_filter.setAttribute("is-hide","true");
                     text.innerHTML = "显示筛选条件";
                     filter.style = "display:none";
+                    content.style = "padding-left:5%"
                 }else if(btn_filter.getAttribute("is-hide") === "true"){
                     console.log("display");
                     btn_filter.setAttribute("is-hide","false");
                     text.innerHTML = "隐藏筛选条件";
                     filter.style = "display: block";
+                    content.style = "padding-left:3%"
                 }
             },
             handleCommand(command) {
@@ -607,10 +588,6 @@
                 var img = item.querySelectorAll("div.image")[0];
                 img.children[0].src = this.temp_src;
             },
-            handleCheckAllChange(val) {
-                //this.checkedCities = val ? cityOptions : [];
-                this.isIndeterminate = false;
-            },
             handleScroll: function () {
                 var distanceToTop = window.pageYOffset;
                 var filter = document.getElementsByClassName("filter")[0];
@@ -619,13 +596,13 @@
                 if(btn_filter.getAttribute("is-hide") === "false"){
                     if (distanceToTop >= 230 && distanceToTop <= 4661){
                         filter.style = "position:fixed; bottom:15%";
-                        content.style = "padding-left:25%";
+                        content.style = "padding-left:23%";
                     }else if(distanceToTop > 4661){
                         filter.style = "position:relative; top: 280em;";
-                        content.style = "padding-left:5%";
+                        content.style = "padding-left:3%";
                     }else{
                         filter.style = "position:relative;";
-                        content.style = "padding-left:5%";
+                        content.style = "padding-left:3%";
                     }
                 }
 
@@ -641,6 +618,7 @@
             },
             handleChange: function () {
                 var names = {groups:[], categories: [], brands:[], colors:[]};
+                var val = {groups:[], categories: [], brands:[], colors:[]};
                 var checkbox_group = document.getElementsByClassName("el-checkbox-group");
                 for(var i=0; i<checkbox_group.length ;i++){
                     var checkboxs = checkbox_group[i].childNodes;
@@ -648,34 +626,44 @@
                         if(checkboxs[j].className.indexOf("is-checked") !== -1){
                             if(i === 0){
                                 names.groups.push(checkboxs[j].querySelectorAll("input")[0].name);
+                                val.groups.push(checkboxs[j].querySelectorAll("input")[0].value);
                             }else if(i === 1){
                                 names.categories.push(checkboxs[j].querySelectorAll("input")[0].name);
+                                val.categories.push(checkboxs[j].querySelectorAll("input")[0].value);
                             }else if(i === 2){
                                 names.brands.push(checkboxs[j].querySelectorAll("input")[0].name);
+                                val.brands.push(checkboxs[j].querySelectorAll("input")[0].value);
                             }
                         }
                     }
                 }
                 var url = [];
+                console.log(val);
                 if(names.groups.length !== 0){
                     url.push("groups=" + names.groups.join());
+                    this.$store.state.groups = val.groups.join();
                 }
                 if(names.categories.length !== 0){
                     url.push("categories=" + names.categories.join());
+                    this.$store.state.categories = val.categories.join();
                 }
                 if(names.brands.length !== 0){
                     url.push("brands=" + names.brands.join());
+                    this.$store.state.brands = val.brands.join();
                 }
-                /*this.$store.state.group = names.groups.join();
-                this.$store.state.category = names.categories.join();
-                this.$store.state.style = names.brands.join();*/
-                this.$router.push("/itemListFilter/filterByConditions?"+url.join('&'));
-                console.log(this.$store.state.group);
-                location.reload();
+
+                var path = "/itemList?"+url.join('&');
+                this.$store.state.url = path;
+                this.$router.push({ path: '/blank', query: { path: path } });
             },
             clearFilter: function () {
-                this.$router.push("/itemList");
-                location.reload();
+                this.$store.state.groups = '';
+                this.$store.state.categories = '';
+                this.$store.state.styles = '';
+                this.$store.state.brands = '';
+                this.$store.state.discount = false;
+                this.$store.state.url = '/itemList';
+                this.$router.push({ path: '/blank', query: { path: '/itemList' } });
             }
         }
     }
@@ -730,7 +718,7 @@
     }
 
     .show-products{
-        /*padding-left: 25%;*/
+        padding-left:3%;
     }
 
     .product-content{
@@ -829,5 +817,10 @@
     .top{
         display: block;
         margin: 0.3em;
+    }
+    .colors{
+        border-radius: 50%;
+        padding: 14px;
+        margin: 0 5px;
     }
 </style>
