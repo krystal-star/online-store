@@ -29,6 +29,11 @@ const routes = [
     component: () => import('../views/Blank.vue'),
     meta: {
     }
+  },
+  {
+    path: '/itemInfo',
+    name: 'Item',
+    component: () => import('../views/Item')
   }
 ]
 

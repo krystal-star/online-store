@@ -92,7 +92,7 @@
             <el-main class="show-products">
             <el-row :gutter="25" v-for="row in Math.ceil(items.length/3)" class="row">
                 <el-col :span="8" v-for="(item,index) in items">
-                    <div class="product-content" v-if="parseInt(index/3)+1 === Number(row)">
+                    <div class="product-content" v-if="parseInt(index/3)+1 === Number(row)" @click="newPage(item.id)">
                         <el-image class="image" :src="item.poster_img"></el-image>
                         <div @mouseover="showMore(index,item.poster_img)" @mouseleave="hiddenMore(index)" class="content">
                             <p class="name">{{item.name}}</p>
@@ -664,6 +664,10 @@
                 this.$store.state.discount = false;
                 this.$store.state.url = '/itemList';
                 this.$router.push({ path: '/blank', query: { path: '/itemList' } });
+            },
+            newPage: function (id) {
+                this.$store.state.id = id;
+                this.$router.push('/itemInfo');
             }
         }
     }
