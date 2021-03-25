@@ -26,8 +26,56 @@
                     </p>
                 </div>
 
-                <div class="reviews">
+                <div id="reviews" class="reviews">
                     <h2>用户评论 <span class="total-num"> 共158条评论</span></h2>
+
+                    <div class="reviews-container">
+                    <el-avatar :src="avatars.avatar2" :size="60"></el-avatar>
+                    <el-badge :value="2" class="good" type="info">
+                        <svg t="1616596377988" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1237" width="32" height="32"><path d="M415.136 128.48c96.032 4.256 171.616 70.72 171.616 150.656 0 19.968-0.576 39.424-1.76 58.336l-1.408 18.784-1.664 17.216h186.016c72 0 114.72 51.232 111.872 128.064l-0.416 7.296-0.672 7.424-5.024 41.024c-10.944 86.88-22.24 160.48-34.144 222.176-18.272 70.912-77.568 114.048-155.264 116.864l-8.096 0.128H176a32 32 0 0 1-31.776-28.256l-0.224-3.744V405.504a32 32 0 0 1 28.256-31.776l3.744-0.224 110.784-0.032 2.144-2.08c17.952-18.944 41.952-64.96 57.632-114.016l2.88-9.248 7.712-26.88c7.68-25.152 16.704-49.728 27.296-73.696a32 32 0 0 1 30.688-19.072z m18.88 66.464l-4.32 11.264a611.2 611.2 0 0 0-11.328 33.76l-7.616 26.496c-20.704 70.304-56.352 136.864-90.752 162.496v403.456l356.192 0.032c48.96 0 83.52-20.992 97.44-56.256l1.92-5.408 1.6-5.344 4.832-26.176c8.096-45.056 16.032-97.152 23.84-156.16l4.672-36.192 4.64-37.888c5.056-46.944-10.176-69.536-42.656-71.392l-4.544-0.128h-222.496a32 32 0 0 1-31.584-36.992c5.92-37.6 8.896-78.048 8.896-121.376 0-35.296-31.232-69.12-77.76-81.696l-6.4-1.6-4.576-0.896zM208 437.472v394.976H256V437.44H208z" p-id="1238" fill="#909399"></path></svg>
+                    </el-badge>
+                    <div class="fake-reviews">
+                        <p class="username">禺彊 <span class="time"> 一周前</span></p>
+                        <p class="content">这个商品真的不错，大家赶紧来用吧！</p>
+                        <el-image :src="data.detail_img1" style="width: 10%;padding: 10px 10px 0 0;"></el-image>
+                        <el-image :src="data.detail_img2" style="width: 10%;padding: 10px 10px 0 0;"></el-image>
+                    </div>
+                    </div>
+
+                    <div class="reviews-container">
+                        <el-avatar :src="avatars.avatar1" :size="60"></el-avatar>
+                        <el-badge :value="0" class="good" type="info" >
+                            <svg t="1616596377988" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1237" width="32" height="32"><path d="M415.136 128.48c96.032 4.256 171.616 70.72 171.616 150.656 0 19.968-0.576 39.424-1.76 58.336l-1.408 18.784-1.664 17.216h186.016c72 0 114.72 51.232 111.872 128.064l-0.416 7.296-0.672 7.424-5.024 41.024c-10.944 86.88-22.24 160.48-34.144 222.176-18.272 70.912-77.568 114.048-155.264 116.864l-8.096 0.128H176a32 32 0 0 1-31.776-28.256l-0.224-3.744V405.504a32 32 0 0 1 28.256-31.776l3.744-0.224 110.784-0.032 2.144-2.08c17.952-18.944 41.952-64.96 57.632-114.016l2.88-9.248 7.712-26.88c7.68-25.152 16.704-49.728 27.296-73.696a32 32 0 0 1 30.688-19.072z m18.88 66.464l-4.32 11.264a611.2 611.2 0 0 0-11.328 33.76l-7.616 26.496c-20.704 70.304-56.352 136.864-90.752 162.496v403.456l356.192 0.032c48.96 0 83.52-20.992 97.44-56.256l1.92-5.408 1.6-5.344 4.832-26.176c8.096-45.056 16.032-97.152 23.84-156.16l4.672-36.192 4.64-37.888c5.056-46.944-10.176-69.536-42.656-71.392l-4.544-0.128h-222.496a32 32 0 0 1-31.584-36.992c5.92-37.6 8.896-78.048 8.896-121.376 0-35.296-31.232-69.12-77.76-81.696l-6.4-1.6-4.576-0.896zM208 437.472v394.976H256V437.44H208z" p-id="1238" fill="#909399"></path></svg>
+                        </el-badge>
+                        <div class="fake-reviews">
+                            <p class="username">海纳 <span class="time"> 一周前</span></p>
+                            <p class="content">开启评论不要脸模式！这个商品非常棒！5分钟就穿好了！赞</p>
+
+                            <div class="reply">
+                                <el-avatar :src="avatars.avatar3" :size="50"></el-avatar>
+                                <el-badge :value="0" class="good" type="info">
+                                    <svg t="1616596377988" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1237" width="32" height="32"><path d="M415.136 128.48c96.032 4.256 171.616 70.72 171.616 150.656 0 19.968-0.576 39.424-1.76 58.336l-1.408 18.784-1.664 17.216h186.016c72 0 114.72 51.232 111.872 128.064l-0.416 7.296-0.672 7.424-5.024 41.024c-10.944 86.88-22.24 160.48-34.144 222.176-18.272 70.912-77.568 114.048-155.264 116.864l-8.096 0.128H176a32 32 0 0 1-31.776-28.256l-0.224-3.744V405.504a32 32 0 0 1 28.256-31.776l3.744-0.224 110.784-0.032 2.144-2.08c17.952-18.944 41.952-64.96 57.632-114.016l2.88-9.248 7.712-26.88c7.68-25.152 16.704-49.728 27.296-73.696a32 32 0 0 1 30.688-19.072z m18.88 66.464l-4.32 11.264a611.2 611.2 0 0 0-11.328 33.76l-7.616 26.496c-20.704 70.304-56.352 136.864-90.752 162.496v403.456l356.192 0.032c48.96 0 83.52-20.992 97.44-56.256l1.92-5.408 1.6-5.344 4.832-26.176c8.096-45.056 16.032-97.152 23.84-156.16l4.672-36.192 4.64-37.888c5.056-46.944-10.176-69.536-42.656-71.392l-4.544-0.128h-222.496a32 32 0 0 1-31.584-36.992c5.92-37.6 8.896-78.048 8.896-121.376 0-35.296-31.232-69.12-77.76-81.696l-6.4-1.6-4.576-0.896zM208 437.472v394.976H256V437.44H208z" p-id="1238" fill="#909399"></path></svg>
+                                </el-badge>
+                                <div class="reply-content">
+                                    <p class="username">路离<span class="time">回复</span>海纳 <span class="time"> 一周前</span></p>
+                                    <p class="content">不仅支持跑步还支持登山，真贴心 <el-link type="primary">@海纳</el-link></p>
+                                </div>
+                            </div>
+
+                            <div class="reply">
+                                <el-avatar :src="avatars.avatar1" :size="50"></el-avatar>
+                                <el-badge :value="0" class="good" type="info">
+                                    <svg t="1616596377988" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1237" width="32" height="32"><path d="M415.136 128.48c96.032 4.256 171.616 70.72 171.616 150.656 0 19.968-0.576 39.424-1.76 58.336l-1.408 18.784-1.664 17.216h186.016c72 0 114.72 51.232 111.872 128.064l-0.416 7.296-0.672 7.424-5.024 41.024c-10.944 86.88-22.24 160.48-34.144 222.176-18.272 70.912-77.568 114.048-155.264 116.864l-8.096 0.128H176a32 32 0 0 1-31.776-28.256l-0.224-3.744V405.504a32 32 0 0 1 28.256-31.776l3.744-0.224 110.784-0.032 2.144-2.08c17.952-18.944 41.952-64.96 57.632-114.016l2.88-9.248 7.712-26.88c7.68-25.152 16.704-49.728 27.296-73.696a32 32 0 0 1 30.688-19.072z m18.88 66.464l-4.32 11.264a611.2 611.2 0 0 0-11.328 33.76l-7.616 26.496c-20.704 70.304-56.352 136.864-90.752 162.496v403.456l356.192 0.032c48.96 0 83.52-20.992 97.44-56.256l1.92-5.408 1.6-5.344 4.832-26.176c8.096-45.056 16.032-97.152 23.84-156.16l4.672-36.192 4.64-37.888c5.056-46.944-10.176-69.536-42.656-71.392l-4.544-0.128h-222.496a32 32 0 0 1-31.584-36.992c5.92-37.6 8.896-78.048 8.896-121.376 0-35.296-31.232-69.12-77.76-81.696l-6.4-1.6-4.576-0.896zM208 437.472v394.976H256V437.44H208z" p-id="1238" fill="#909399"></path></svg>
+                                </el-badge>
+                                <div class="reply-content">
+                                    <p class="username">海纳<span class="time">回复</span>路离 <span class="time"> 三分钟前</span></p>
+                                    <p class="content">托儿得太明显</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <div class="recommend">
@@ -64,8 +112,60 @@
                 </div>
             </el-main>
 
-            <el-aside>
-                111
+            <el-aside style="width: 350px">
+                <div class="first-line">
+                    <h1>{{data.name}}</h1>
+                    <el-image class="star" src="../static/icons/heart-on.png" style="width: 10%" @click="handleStar"></el-image>
+                </div>
+
+                <div class="second-line">
+                    <el-rate
+                        v-model="4.5"
+                        disabled
+                        show-score
+                        :colors="rate_color"
+                        text-color="#2c3e50"
+                        score-template="4.5">
+                    </el-rate>
+                    <el-link class="num" href="#reviews">共158条评价</el-link>
+                </div>
+
+                <div class="third-line">
+                    <h2 class="price">¥{{data.price}}</h2>
+                    <h3 class="pre-price" v-if="data.previousPrice !== null">¥{{data.previousPrice}}</h3>
+                </div>
+
+                <div class="four-line">
+                    <el-tag type="info" size="medium">{{data.brand}}</el-tag>
+                    <el-tag type="info" size="medium">{{data.color}}</el-tag>
+                    <el-tag type="info" size="medium">{{data.group}}</el-tag>
+                    <el-tag type="info" size="medium">{{data.style}}</el-tag>
+                </div>
+
+                <div class="choose-size">
+                    <div class="size-header">
+                        <h4 class="choose">选择尺码</h4>
+                        <h4 class="table">尺码表</h4>
+                    </div>
+                    <el-row :gutter="30" v-for="item in 3" type="flex" justify="left">
+                        <el-col :span="5" v-for="subitem in 4">
+                            <el-button @click="chooseSize">{{item*4+subitem+30}}</el-button>
+                        </el-col>
+                    </el-row>
+                    <p class="stock">库存剩余{{data.stock}}件</p>
+                </div>
+
+                <div class="chart">
+                    <el-button round>加入购物车</el-button>
+                    <p class="delivery">商品金额高于300元免费配送</p>
+                </div>
+
+                <div class="share">
+                    <p>分享有礼</p>
+                    <el-image src="../static/icons/wechat2.png" style="width: 12%;padding: 0.5em"></el-image>
+                    <el-image src="../static/icons/weibo2.png" style="width: 12%;padding: 0.5em"></el-image>
+                    <el-image src="../static/icons/QQ.png" style="width: 12%;padding: 0.5em"></el-image>
+                </div>
             </el-aside>
         </el-container>
     </div>
@@ -92,7 +192,9 @@
                     color: "黑色",
                     size: "42",
                     price: 1499,
-                    previousPrice: null,
+                    previousPrice: 1799,
+                    stock: 30,
+                    sale: 5,
                     brand: "Nike"
                 },
                 discount: [
@@ -147,6 +249,29 @@
                         style: "运动鞋",
                     }
                 ],
+                avatars:{
+                    avatar1:"../static/icons/avatar1.jpeg",
+                    avatar2:"../static/icons/avatar2.jpeg",
+                    avatar3:"../static/icons/avatar3.jpeg",
+                },
+                rate_color:["#909399"],
+            }
+        },
+        mounted() {
+            var badges = document.getElementsByClassName("el-badge");
+            for(var i=0; i<badges.length;i++) badges[i].addEventListener("click",this.addValue);
+
+            var star = document.getElementsByClassName("star")[0];
+            star.setAttribute("is-on","false");
+
+            var sizes = document.querySelectorAll("div.choose-size>div.el-row>div.el-col>button.el-button");
+            for(var j=0; j<sizes.length;j++){
+                if (sizes[j].innerText !== this.data.size){
+                    sizes[j].classList.add("is-disabled");
+                    sizes[j].setAttribute("disabled","disabled");
+                }else{
+                    sizes[j].setAttribute("is-click","false");
+                }
             }
         },
         methods:{
@@ -190,6 +315,55 @@
                 }
                 target.style = "opacity:1";
                 changeNode.style = "opacity:1";
+            },
+            addValue: function (e) {
+                var target = e.target;
+                var val = Number(target.parentNode.children[1].innerHTML);
+                target.parentNode.children[1].innerHTML = val+1;
+            },
+            handleStar: function (e) {
+                var target = e.target;
+                console.log(target);
+                if(target.nodeName.toLowerCase() === "img"){
+                    var state = target.parentNode.getAttribute("is-on");
+                    if(state === "false"){
+                        target.src = '../static/icons/heart-off.png';
+                        target.parentNode.setAttribute("is-on","true");
+                        this.$store.state.star += 1;
+                    }else{
+                        target.src = '../static/icons/heart-on.png';
+                        target.parentNode.setAttribute("is-on","false");
+                        this.$store.state.star -= 1;
+                    }
+                }
+            },
+            chooseSize: function (e) {
+                var target = e.target;
+                var stock = document.getElementsByClassName("stock")[0];
+                if(target.nodeName.toLowerCase() === "button"){
+                    var state = target.getAttribute("is-click");
+                    if(state === "false"){
+                        target.style = "border-width:2px; font-weight:bold; color:#606266; border-color:#606266;background-color:white";
+                        target.setAttribute("is-click","true");
+                        stock.style = "visibility: visible";
+                    }else{
+                        target.style = "border-width:1px; font-weight:normal; color:#606266; border-color:#DCDFE6;background-color:white";
+                        target.setAttribute("is-click","false");
+                        stock.style = "visibility: hidden";
+                    }
+                }else if(target.nodeName.toLowerCase() === "span"){
+                    var state = target.parentNode.getAttribute("is-click");
+                    if(state === "false"){
+                        target.parentNode.style = "border-width:2px; font-weight:bold; color:#606266; border-color:#606266;background-color:white";
+                        target.parentNode.setAttribute("is-click","true");
+                        stock.style = "visibility: visible";
+                    }else{
+                        target.parentNode.style = "border-width:1px; font-weight:normal; color:#606266; border-color:#DCDFE6;background-color:white";
+                        target.parentNode.setAttribute("is-click","false");
+                        stock.style = "visibility: hidden";
+                    }
+                }
+
             }
         }
     }
@@ -287,4 +461,118 @@
     div.lunbo{
         text-align: left;
     }
+    div.reviews .el-avatar{
+        float: left;
+    }
+    div.fake-reviews, .reply-content{
+        padding-left: 90px;
+        padding-right: 90px;
+        text-align: left;
+        font-size: 14px;
+        line-height: 2em;
+    }
+    div.fake-reviews .username, .time{
+        color: #909399;
+        font-weight: bold;
+    }
+    .time{
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        font-weight: normal;
+        font-size: 13px;
+    }
+    .good{
+        float: right;
+    }
+    .good:hover, div.star:hover, h4.table:hover, div.share .el-image:hover{
+        cursor: pointer;
+        opacity: 0.5;
+    }
+
+    div.reviews-container{
+        margin-top: 3em;
+    }
+
+    div.reply{
+        margin-top: 3em;
+    }
+    div.reply .good{
+        left: 12.3%;
+    }
+
+    .el-aside{
+        /*border-style: solid;*/
+        border-width: 1px;
+        padding: 20px 20px 20px 0;
+    }
+    .el-aside h1, h4.choose{
+        float: left;
+    }
+    div.star{
+        float: right;
+        position: relative;
+        top: 1em;
+    }
+    .el-rate{
+        float: left;
+        margin-bottom: 1em;
+    }
+    .el-rate ::v-deep .el-rate__text{
+        font-size: 16px;
+    }
+    .num{
+        float: left;
+        font-size: 14px;
+        margin: 0 0 1em 1em;
+    }
+    div.first-line,div.second-line, div.third-line, div.four-line, div.choose-size, div.size-header{
+        overflow: auto;
+    }
+    h2.price,h3.pre-price{
+        float: left;
+    }
+    h3.pre-price{
+        margin-left: 1em;
+        color: #909399;
+        text-decoration: line-through;
+    }
+    .el-tag{
+        float: left;
+        margin-right: 1em;
+    }
+    h4.table{
+        float: right;
+        text-decoration: underline;
+    }
+    div.choose-size .el-col{
+        padding: 0.5em;
+    }
+    div.choose-size .el-button{
+        padding: 10px 20px;
+    }
+    p.stock{
+        color: #909399;
+        font-size: 14px;
+        visibility: hidden;
+    }
+    p.delivery{
+        font-size: 12px;
+    }
+    div.share{
+        border-top-style: solid;
+        border-bottom-style: solid;
+        border-width: 1px;
+        margin:30px;
+        height: 3em;
+        overflow: auto;
+        float: left;
+    }
+    div.share p{
+        display: inline-block;
+        margin: 0;
+        position: relative;
+        bottom: 1.2em;
+        padding-right: 0.5em;
+    }
+
 </style>

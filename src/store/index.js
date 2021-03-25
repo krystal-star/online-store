@@ -12,7 +12,8 @@ export default new Vuex.Store({
     colors:'',
     discount: false,
     url:'',
-    id: ''    //进入商品页
+    id: '',   //进入商品页
+    star:0,   //收藏数
   },
   mutations: {
   },

@@ -67,9 +67,12 @@
             <el-link :underline="false" id="shopping-bag" href="#">
                 <el-image style="width: 25px; height: 25px"
                           src="../static/icons/shopping-bag.png"></el-image></el-link>
+
             <el-link :underline="false" id="star" href="#">
+                <el-badge :value="this.$store.state.star">
                 <el-image style="width: 30px; height: 30px"
-                          src="../static/icons/heart-off.png"></el-image></el-link>
+                          src="../static/icons/heart-off.png"></el-image></el-badge>
+            </el-link>
         </el-menu>
 
     </div>
