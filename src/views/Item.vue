@@ -145,7 +145,10 @@
                 <div class="choose-size">
                     <div class="size-header">
                         <h4 class="choose">选择尺码</h4>
-                        <h4 class="table">尺码表</h4>
+                        <h4 class="table" @click="dialogVisible = true">尺码表</h4>
+                        <el-dialog title="尺码表" :visible.sync="dialogVisible">
+                            <el-image :src="sizeTable"></el-image>
+                        </el-dialog>
                     </div>
                     <el-row :gutter="30" v-for="item in 3" type="flex" justify="left">
                         <el-col :span="5" v-for="subitem in 4">
@@ -255,7 +258,16 @@
                     avatar3:"../static/icons/avatar3.jpeg",
                 },
                 rate_color:["#909399"],
+                dialogVisible:false,
+                sizeTable: '../static/icons/size.png'
             }
+        },
+        created() {
+            const _this = this
+            axios.get('http://localhost:8181/itemInfo/'+this.$store.state.id).then(function (resp) {
+                _this.data = resp.data.data.data
+                _this.discount = resp.data.data.discount
+            })
         },
         mounted() {
             var badges = document.getElementsByClassName("el-badge");
@@ -364,7 +376,7 @@
                     }
                 }
 
-            }
+            },
         }
     }
 </script>
