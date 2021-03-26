@@ -7,12 +7,12 @@
             <el-main>
                 <div class="show-imgs">
                     <div class="three-imgs">
-                        <el-image :src="data.poster_img" @click="changeImg($event,0)" class="border"></el-image>
-                        <el-image :src="data.detail_img1" @click="changeImg($event, 1)"></el-image>
-                        <el-image :src="data.detail_img2" @click="changeImg($event, 2)"></el-image>
+                        <el-image :src="item.poster_img" @click="changeImg($event,0)" class="border"></el-image>
+                        <el-image :src="item.detail_img1" @click="changeImg($event, 1)"></el-image>
+                        <el-image :src="item.detail_img2" @click="changeImg($event, 2)"></el-image>
                     </div>
                     <div class="one-img">
-                        <el-image :src="data.poster_img"></el-image>
+                        <el-image :src="item.poster_img"></el-image>
                     </div>
                 </div>
 
@@ -114,7 +114,7 @@
 
             <el-aside style="width: 350px">
                 <div class="first-line">
-                    <h1>{{data.name}}</h1>
+                    <h1>{{item.name}}</h1>
                     <el-image class="star" src="../static/icons/heart-on.png" style="width: 10%" @click="handleStar"></el-image>
                 </div>
 
@@ -131,15 +131,15 @@
                 </div>
 
                 <div class="third-line">
-                    <h2 class="price">¥{{data.price}}</h2>
-                    <h3 class="pre-price" v-if="data.previousPrice !== null">¥{{data.previousPrice}}</h3>
+                    <h2 class="price">¥{{item.price}}</h2>
+                    <h3 class="pre-price" v-if="item.previousPrice !== null">¥{{item.previousPrice}}</h3>
                 </div>
 
                 <div class="four-line">
-                    <el-tag type="info" size="medium">{{data.brand}}</el-tag>
-                    <el-tag type="info" size="medium">{{data.color}}</el-tag>
-                    <el-tag type="info" size="medium">{{data.group}}</el-tag>
-                    <el-tag type="info" size="medium">{{data.style}}</el-tag>
+                    <el-tag type="info" size="medium">{{item.brand}}</el-tag>
+                    <el-tag type="info" size="medium">{{item.color}}</el-tag>
+                    <el-tag type="info" size="medium">{{item.group}}</el-tag>
+                    <el-tag type="info" size="medium">{{item.style}}</el-tag>
                 </div>
 
                 <div class="choose-size">
@@ -155,7 +155,7 @@
                             <el-button @click="chooseSize">{{item*4+subitem+30}}</el-button>
                         </el-col>
                     </el-row>
-                    <p class="stock">库存剩余{{data.stock}}件</p>
+                    <p class="stock">库存剩余{{item.stock}}件</p>
                 </div>
 
                 <div class="chart">
@@ -183,7 +183,7 @@
         },
         data(){
             return{
-                data:{
+                item:{
                     id: 1,
                     name:"Air VaporMax EVO NRG",
                     poster_img: "../static/air-vapormax-evo-nrg-0.jpg",
@@ -198,7 +198,8 @@
                     previousPrice: 1799,
                     stock: 30,
                     sale: 5,
-                    brand: "Nike"
+                    brand: "Nike",
+                    rating:3.8
                 },
                 discount: [
                     {
@@ -265,8 +266,8 @@
         created() {
             const _this = this
             axios.get('http://localhost:8181/itemInfo/'+this.$store.state.id).then(function (resp) {
-                _this.data = resp.data.data.data
-                _this.discount = resp.data.data.discount
+                _this.item = resp.data.data
+                _this.discount = resp.data.data.related_items
             })
         },
         mounted() {
