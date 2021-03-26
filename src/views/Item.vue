@@ -37,8 +37,8 @@
                     <div class="fake-reviews">
                         <p class="username">禺彊 <span class="time"> 一周前</span></p>
                         <p class="content">这个商品真的不错，大家赶紧来用吧！</p>
-                        <el-image :src="data.detail_img1" style="width: 10%;padding: 10px 10px 0 0;"></el-image>
-                        <el-image :src="data.detail_img2" style="width: 10%;padding: 10px 10px 0 0;"></el-image>
+                        <el-image :src="item.detail_img1" style="width: 10%;padding: 10px 10px 0 0;"></el-image>
+                        <el-image :src="item.detail_img2" style="width: 10%;padding: 10px 10px 0 0;"></el-image>
                     </div>
                     </div>
 
@@ -112,7 +112,7 @@
                 </div>
             </el-main>
 
-            <el-aside style="width: 350px">
+            <el-aside>
                 <div class="first-line">
                     <h1>{{item.name}}</h1>
                     <el-image class="star" src="../static/icons/heart-on.png" style="width: 10%" @click="handleStar"></el-image>
@@ -146,9 +146,6 @@
                     <div class="size-header">
                         <h4 class="choose">选择尺码</h4>
                         <h4 class="table" @click="dialogVisible = true">尺码表</h4>
-                        <el-dialog title="尺码表" :visible.sync="dialogVisible">
-                            <el-image :src="sizeTable"></el-image>
-                        </el-dialog>
                     </div>
                     <el-row :gutter="30" v-for="item in 3" type="flex" justify="left">
                         <el-col :span="5" v-for="subitem in 4">
@@ -171,6 +168,10 @@
                 </div>
             </el-aside>
         </el-container>
+
+        <el-dialog title="尺码表" :visible.sync="dialogVisible" >
+            <el-image :src="sizeTable"></el-image>
+        </el-dialog>
     </div>
 </template>
 
@@ -279,7 +280,7 @@
 
             var sizes = document.querySelectorAll("div.choose-size>div.el-row>div.el-col>button.el-button");
             for(var j=0; j<sizes.length;j++){
-                if (sizes[j].innerText !== this.data.size){
+                if (sizes[j].innerText !== this.item.size){
                     sizes[j].classList.add("is-disabled");
                     sizes[j].setAttribute("disabled","disabled");
                 }else{
@@ -516,7 +517,11 @@
     .el-aside{
         /*border-style: solid;*/
         border-width: 1px;
-        padding: 20px 20px 20px 0;
+        padding: 20px 30px 20px 0;
+        width: 380px;
+        position: fixed;
+        right: 20px;
+        background-color: white;
     }
     .el-aside h1, h4.choose{
         float: left;
@@ -576,7 +581,7 @@
         border-bottom-style: solid;
         border-width: 1px;
         margin:30px;
-        height: 3em;
+        height: 2.5em;
         overflow: auto;
         float: left;
     }
@@ -584,8 +589,10 @@
         display: inline-block;
         margin: 0;
         position: relative;
-        bottom: 1.2em;
+        bottom: 1em;
         padding-right: 0.5em;
     }
-
+    .el-main{
+        margin-right: 300px;
+    }
 </style>

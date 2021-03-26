@@ -475,7 +475,7 @@
         max-height: 100vh;
         visibility: hidden;
         position: absolute;
-        z-index: 999;
+        z-index: 99;
         background-color: white;
         width: 100%;
         left: 0;
