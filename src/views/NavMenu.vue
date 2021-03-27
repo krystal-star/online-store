@@ -328,6 +328,12 @@
             newPage: function (i1,i2,i3) {
                 //存储names
                 var url = '';
+                this.$store.state.groups = '';
+                this.$store.state.categories = '';
+                this.$store.state.styles = '';
+                this.$store.state.discount = false;
+                this.$store.state.brands = '';
+
                 //点击 "男子，女子，儿童"
                 if (i1.name === "男子" || i1.name === "女子" ||i1.name === "儿童"){
                     this.$store.state.groups = i1.name;
@@ -346,6 +352,7 @@
 
                 //点击 "品牌"
                 else if (i1.name === "分类" && i3 !== undefined){
+                    this.$store.state.brands = i3.name;
                     url += "brands="+i3.url;
                 }
 
@@ -365,7 +372,6 @@
 
                 var path = '/itemList?'+url;
                 this.$store.state.url = path;
-                this.$store.state.brands = '';
                 this.$router.push({ path: '/blank', query: { path: path } });
             },
             onSubmit: function () {
