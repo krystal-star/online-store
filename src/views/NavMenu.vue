@@ -24,12 +24,39 @@
             <el-link :underline="false" class="icons" href="https://www.adidas.com.cn/">
                 <el-image style="width: 40px; height: 40px"
                           src="../static/icons/adidas-logo-black.png"></el-image></el-link>
-            <el-link :underline="false" class="right" href="#" target="_blank">
-                帮助<i class="el-icon-question"></i></el-link>
-            <el-link :underline="false" class="right" href="#" target="_blank">
-                加入我们<i class="el-icon-phone"></i></el-link>
-            <el-link :underline="false" class="right" href="#" target="_blank">
-                登陆<i class="el-icon-user-solid"></i></el-link>
+            <el-button class="right" @click="dialogLoginVisible = true">
+                登陆<i class="el-icon-user-solid"></i></el-button>
+            <el-button class="right">
+                加入我们<i class="el-icon-phone"></i></el-button>
+            <el-button class="right">
+                帮助<i class="el-icon-question"></i></el-button>
+
+
+            <el-dialog :visible.sync="dialogLoginVisible" :modal-append-to-body='false' width="40%">
+                <el-image style="width: 200px; height: 25px"
+                          src="../static/icons/bestbuyer-logo.png"></el-image>
+                <h1>您的会员账户从此开启</h1>
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item>
+                        <el-input v-model="form.phoneNumber" placeholder="手机号码" class="number">
+                            <template slot="prepend">+86</template>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="form.password" placeholder="密码"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-radio label="保持登陆状态"></el-radio>
+                        <el-link type="info">忘记密码</el-link>
+                    </el-form-item>
+                    <p>一旦登陆，即表示你同意BESTBUYER的 <span>隐私政策</span> 和 <span>用户条款</span>。</p>
+                    <el-form-item>
+                        <el-button type="info" @click="onSubmit">登陆</el-button>
+                    </el-form-item>
+                    <el-link>还不是会员? 加入我们</el-link>
+                </el-form>
+            </el-dialog>
+
         </div>
 
 
@@ -67,9 +94,12 @@
             <el-link :underline="false" id="shopping-bag" href="#">
                 <el-image style="width: 25px; height: 25px"
                           src="../static/icons/shopping-bag.png"></el-image></el-link>
+
             <el-link :underline="false" id="star" href="#">
+                <el-badge :value="this.$store.state.star">
                 <el-image style="width: 30px; height: 30px"
-                          src="../static/icons/heart-off.png"></el-image></el-link>
+                          src="../static/icons/heart-off.png"></el-image></el-badge>
+            </el-link>
         </el-menu>
 
     </div>
@@ -251,6 +281,11 @@
                 ],
                 input: '',
                 temp: '',
+                dialogLoginVisible: false,
+                form:{
+                    phoneNumber:'',
+                    password:'',
+                }
             }
         },
         mounted () {
@@ -293,6 +328,12 @@
             newPage: function (i1,i2,i3) {
                 //存储names
                 var url = '';
+                this.$store.state.groups = '';
+                this.$store.state.categories = '';
+                this.$store.state.styles = '';
+                this.$store.state.discount = false;
+                this.$store.state.brands = '';
+
                 //点击 "男子，女子，儿童"
                 if (i1.name === "男子" || i1.name === "女子" ||i1.name === "儿童"){
                     this.$store.state.groups = i1.name;
@@ -311,6 +352,7 @@
 
                 //点击 "品牌"
                 else if (i1.name === "分类" && i3 !== undefined){
+                    this.$store.state.brands = i3.name;
                     url += "brands="+i3.url;
                 }
 
@@ -330,8 +372,10 @@
 
                 var path = '/itemList?'+url;
                 this.$store.state.url = path;
-                this.$store.state.brands = '';
                 this.$router.push({ path: '/blank', query: { path: path } });
+            },
+            onSubmit: function () {
+                console.log("submit");
             }
         }
     }
@@ -390,15 +434,14 @@
         right: 33%;
         bottom: 25%;
     }
-    .el-link.right{
-        padding-left: 20px;
-        padding-right: 20px;
-        left: 35%;
+    .el-button.right{
+        float: right;
         font-size: 14px;
         color: black;
-        bottom: 30%;
+        background-color:#E9E9EA ;
+        border-style: none;
     }
-    .el-link.right:hover{
+    .el-button.right:hover{
         color: #909399;
     }
     .el-menu-item{
@@ -438,7 +481,7 @@
         max-height: 100vh;
         visibility: hidden;
         position: absolute;
-        z-index: 999;
+        z-index: 99;
         background-color: white;
         width: 100%;
         left: 0;
@@ -480,4 +523,8 @@
     h4.cate{
         margin-bottom: 1px;
     }
+    .el-dialog .el-input{
+        width: 250px;
+    }
+
 </style>

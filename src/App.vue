@@ -63,6 +63,9 @@ export default {
 
     .el-header{
         position: fixed;
-        z-index: 999;
+        z-index: 99;
+    }
+    .el-footer{
+        position: relative;
     }
 </style>

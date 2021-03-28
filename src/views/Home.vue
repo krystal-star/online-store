@@ -3,8 +3,7 @@
     <Notification />
 
     <div class="poster">
-        <el-link :underline="false" class="poster" href="#">
-          <el-image :src="poster" fit="scale-down"></el-image></el-link>
+          <el-image :src="poster" fit="scale-down"></el-image>
       </div>
 
     <!--一周热卖-->
@@ -15,7 +14,7 @@
         <el-carousel-item :key="1">
         <el-row :gutter="20">
           <el-col :span="8" v-for="(item,index) in trending">
-            <div class="lunbo" v-if="index < 3">
+            <div class="lunbo" v-if="index < 3" @click="newPage(item.id)">
               <el-image v-if="item.img" :src="item.img" class="image"></el-image>
               <p class="name" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">{{item.name}}</p>
               <p class="price" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">¥{{item.price}}</p>
@@ -28,7 +27,7 @@
         <el-carousel-item :key="2">
           <el-row :gutter="20">
             <el-col :span="8" v-for="(item,index) in trending">
-              <div class="lunbo" v-if="index >= 3">
+              <div class="lunbo" v-if="index >= 3" @click="newPage(item.id)">
                 <el-image v-if="item.img" :src="item.img" class="image"></el-image>
                 <p class="name" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">{{item.name}}</p>
                 <p class="price" @mouseover="changeColor($event,2)" @mouseleave="recoverColor($event,2)">¥{{item.price}}</p>
@@ -46,7 +45,7 @@
       <p class="view-all" @click="">View all</p>
           <el-row :gutter="20">
             <el-col :span="12" v-for="item in new_arrivals">
-                <el-image :src="item.img" class="image"></el-image>
+                <el-image :src="item.img" class="image" @click="newPage(item.id)"></el-image>
             </el-col>
           </el-row>
     </div>
@@ -59,10 +58,10 @@
         <el-carousel-item :key="1">
           <el-row :gutter="20">
             <el-col :span="8" v-for="(item,index) in discount">
-              <div class="lunbo" v-if="index < 3">
+              <div class="lunbo" v-if="index < 3" @click="newPage(item.id)">
                 <el-image :src="item.img" class="image"></el-image>
                 <p class="name" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">{{item.name}}</p>
-                <p class="pre-price">¥{{item.previousPrice}}</p>
+                <p class="pre-price">¥{{item.previous_price}}</p>
                 <p class="cur-price" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">¥{{item.price}}</p>
                 <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
@@ -73,10 +72,10 @@
         <el-carousel-item :key="2">
           <el-row :gutter="20">
             <el-col :span="8" v-for="(item,index) in discount">
-              <div class="lunbo" v-if="index >= 3">
+              <div class="lunbo" v-if="index >= 3" @click="newPage(item.id)">
                 <el-image :src="item.img" class="image"></el-image>
                 <p class="name" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">{{item.name}}</p>
-                <p class="pre-price">¥{{item.previousPrice}}</p>
+                <p class="pre-price">¥{{item.previous_price}}</p>
                 <p class="cur-price" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">¥{{item.price}}</p>
                 <p class="group-style">{{item.group}}{{item.style}}</p>
               </div>
@@ -91,7 +90,7 @@
       <p class="text">精选</p>
       <el-row :gutter="20">
         <el-col :span="12" v-for="item in recommend">
-         <el-image :src="item.img" class="image"></el-image>
+         <el-image :src="item.img" class="image" @click="newPage(item.id)"></el-image>
         </el-col>
       </el-row>
     </div>
@@ -101,7 +100,7 @@
       <p class="text">更多Buyer</p>
       <el-row :gutter="20">
         <el-col :span="8" v-for="item in accessories">
-          <el-image :src="item.img" class="image"></el-image>
+          <el-image :src="item.img" class="image" @click="newPage(item.id)"></el-image>
         </el-col>
       </el-row>
     </div>
@@ -204,7 +203,7 @@ export default {
           name: "Sportswear Essentials",
           img: "../static/sportswear-essentials-backpack-0.jpg",
           price: 320,
-          previousPrice: 499,
+          previous_price: 499,
           group: "男子",
           style: "背包",
         },
@@ -214,7 +213,7 @@ export default {
           name: "Tensaur",
           img: "../static/Tensaur_Shoes_Black-0.jpg",
           price: 210,
-          previousPrice: 240,
+          previous_price: 240,
           group: "儿童",
           style: "运动鞋",
         },
@@ -224,7 +223,7 @@ export default {
           name: "HER Studio London",
           img: "../static/HER_Studio_London_T-Shirt-0.jpg",
           price: 200,
-          previousPrice: 290,
+          previous_price: 290,
           group: "女子",
           style: "T恤",
         },
@@ -234,7 +233,7 @@ export default {
           name: "Air Max 90",
           img: "../static/air-max-90-eoi-0.jpg",
           price: 390,
-          previousPrice: 490,
+          previous_price: 490,
           group: "男子",
           style: "运动鞋",
         },
@@ -244,7 +243,7 @@ export default {
           name: "Tensaur",
           img: "../static/Tensaur_Shoes_Black-0.jpg",
           price: 210,
-          previousPrice: 240,
+          previous_price: 240,
           group: "儿童",
           style: "运动鞋",
         }
@@ -310,6 +309,10 @@ export default {
       }
       target.style = "opacity:1";
       changeNode.style = "opacity:1";
+    },
+    newPage: function (id) {
+      this.$store.state.id = id;
+      this.$router.push('/itemInfo');
     }
   },
   mounted() {
