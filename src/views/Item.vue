@@ -87,7 +87,7 @@
                                     <div class="lunbo" v-if="index < 3">
                                         <el-image :src="item.img" class="image"></el-image>
                                         <p class="name" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">{{item.name}}</p>
-                                        <p class="pre-price">¥{{item.previousPrice}}</p>
+                                        <p class="pre-price">¥{{item.previous_price}}</p>
                                         <p class="cur-price" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">¥{{item.price}}</p>
                                         <p class="group-style">{{item.group}}{{item.style}}</p>
                                     </div>
@@ -101,7 +101,7 @@
                                     <div class="lunbo" v-if="index >= 3">
                                         <el-image :src="item.img" class="image"></el-image>
                                         <p class="name" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">{{item.name}}</p>
-                                        <p class="pre-price">¥{{item.previousPrice}}</p>
+                                        <p class="pre-price">¥{{item.previous_price}}</p>
                                         <p class="cur-price" @mouseover="changeColor($event,3)" @mouseleave="recoverColor($event,3)">¥{{item.price}}</p>
                                         <p class="group-style">{{item.group}}{{item.style}}</p>
                                     </div>
@@ -132,7 +132,7 @@
 
                 <div class="third-line">
                     <h2 class="price">¥{{item.price}}</h2>
-                    <h3 class="pre-price" v-if="item.previousPrice !== null">¥{{item.previousPrice}}</h3>
+                    <h3 class="pre-price" v-if="item.previous_price !== null">¥{{item.previous_price}}</h3>
                 </div>
 
                 <div class="four-line">
@@ -194,9 +194,9 @@
                     category:"鞋类",
                     style: "休闲鞋",
                     color: "黑色",
-                    size: "42",
+                    size: "40",
                     price: 1499,
-                    previousPrice: 1799,
+                    previous_price: null,
                     stock: 30,
                     sale: 5,
                     brand: "Nike",
@@ -209,7 +209,7 @@
                         name: "Sportswear Essentials",
                         img: "../static/sportswear-essentials-backpack-0.jpg",
                         price: 320,
-                        previousPrice: 499,
+                        previous_price: 499,
                         group: "男子",
                         style: "背包",
                     },
@@ -219,7 +219,7 @@
                         name: "Tensaur",
                         img: "../static/Tensaur_Shoes_Black-0.jpg",
                         price: 210,
-                        previousPrice: 240,
+                        previous_price: 240,
                         group: "儿童",
                         style: "运动鞋",
                     },
@@ -229,7 +229,7 @@
                         name: "HER Studio London",
                         img: "../static/HER_Studio_London_T-Shirt-0.jpg",
                         price: 200,
-                        previousPrice: 290,
+                        previous_price: 290,
                         group: "女子",
                         style: "T恤",
                     },
@@ -239,7 +239,7 @@
                         name: "Air Max 90",
                         img: "../static/air-max-90-eoi-0.jpg",
                         price: 390,
-                        previousPrice: 490,
+                        previous_price: 490,
                         group: "男子",
                         style: "运动鞋",
                     },
@@ -249,7 +249,7 @@
                         name: "Tensaur",
                         img: "../static/Tensaur_Shoes_Black-0.jpg",
                         price: 210,
-                        previousPrice: 240,
+                        previous_price: 240,
                         group: "儿童",
                         style: "运动鞋",
                     }
@@ -269,6 +269,7 @@
             axios.get('http://localhost:8181/itemInfo/'+this.$store.state.id).then(function (resp) {
                 _this.item = resp.data.data
                 _this.discount = resp.data.data.related_items
+                _this.item.size = resp.data.data.size   //？？？？
             })
         },
         mounted() {
@@ -422,6 +423,7 @@
         background-color: rgba(144, 147, 153, 0.2);
         margin: 30px;
         padding: 120px;
+        padding-top: 50px;
     }
 
     div.description p{
