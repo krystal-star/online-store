@@ -1,14 +1,14 @@
 <template>
     <div class="footer">
         <el-row>
-            <el-col :span="4" >
+            <el-col :span="4">
                 <p>产品</p>
                 <el-divider class="one"></el-divider>
-                <li><a href="#">鞋</a></li>
-                <li><a href="#">衣服</a></li>
-                <li><a href="#">配件</a></li>
-                <li><a href="#">儿童</a></li>
-                <li><a href="#">特价</a></li>
+                <li><a @click="newPage(0)">鞋</a></li>
+                <li><a @click="newPage(1)">衣服</a></li>
+                <li><a @click="newPage(2)">配件</a></li>
+                <li><a @click="newPage(3)">儿童</a></li>
+                <li><a @click="newPage(4)">特价</a></li>
 
             </el-col>
             <el-col :span="4" >
@@ -60,7 +60,49 @@
 
 <script>
     export default {
-        name: "Footer"
+        name: "Footer",
+        methods:{
+            newPage:function (index) {
+                var path;
+                this.$store.state.categories = '';
+                this.$store.state.groups = '';
+                this.$store.state.discount = false;
+
+                switch (index) {
+                    case 0:{
+                        path = '/itemList?categories=shoes';
+                        this.$store.state.url = path;
+                        this.$store.state.categories = '鞋类';
+                        this.$router.push({ path: '/blank', query: { path: path } });break
+                    }
+                    case 1:{
+                        path = '/itemList?categories=clothing';
+                        this.$store.state.url = path;
+                        this.$store.state.categories = '服装';
+                        this.$router.push({ path: '/blank', query: { path: path } });break
+                    }
+                    case 2:{
+                        path = '/itemList?categories=accessories';
+                        this.$store.state.url = path;
+                        this.$store.state.categories = '配件';
+                        this.$router.push({ path: '/blank', query: { path: path } });break
+                    }
+                    case 3:{
+                        path = '/itemList?groups=kids';
+                        this.$store.state.url = path;
+                        this.$store.state.groups = '儿童';
+                        this.$router.push({ path: '/blank', query: { path: path } });break
+                    }
+                    case 4:{
+                        path = '/itemList?discount=true';
+                        this.$store.state.url = path;
+                        this.$store.state.discount = true;
+                        this.$router.push({ path: '/blank', query: { path: path } });break
+                    }
+                }
+                
+            }
+        }
     }
 </script>
 
@@ -80,6 +122,7 @@
     }
     a:hover{
         color: #606266;
+        cursor: pointer;
     }
     .footer{
         background-color: #303133;

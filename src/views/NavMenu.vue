@@ -527,4 +527,7 @@
         width: 250px;
     }
 
+    .el-menu ::v-deep .el-menu-item.is-active{
+        border-style: none;
+    }
 </style>
