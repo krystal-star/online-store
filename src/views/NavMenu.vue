@@ -24,7 +24,7 @@
             <el-link :underline="false" class="icons" href="https://www.adidas.com.cn/">
                 <el-image style="width: 40px; height: 40px"
                           src="../static/icons/adidas-logo-black.png"></el-image></el-link>
-            <el-button class="right" @click="dialogLoginVisible = true">
+            <el-button class="right" @click="dialogLoginVisible = true" id="username">
                 登陆<i class="el-icon-user-solid"></i></el-button>
             <el-button class="right">
                 加入我们<i class="el-icon-phone"></i></el-button>
@@ -36,24 +36,25 @@
                 <el-image style="width: 200px; height: 25px"
                           src="../static/icons/bestbuyer-logo.png"></el-image>
                 <h1>您的会员账户从此开启</h1>
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item>
-                        <el-input v-model="form.phoneNumber" placeholder="手机号码" class="number">
+
+                <el-form :model="loginForm" :rules="rules" ref="loginForm">
+                    <el-form-item prop="phoneNumber">
+                        <el-input v-model="loginForm.phoneNumber" placeholder="手机号码" class="number" style="width: 325px;display:inline-table">
                             <template slot="prepend">+86</template>
                         </el-input>
                     </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="form.password" placeholder="密码"></el-input>
+                    <el-form-item prop="password">
+                        <el-input v-model="loginForm.password" placeholder="密码" class="psw" style="width: 325px;" show-password></el-input>
                     </el-form-item>
-                    <el-form-item>
-                        <el-radio label="保持登陆状态"></el-radio>
-                        <el-link type="info">忘记密码</el-link>
+                    <el-form-item class="one-line">
+                        <el-checkbox v-model="loginForm.radio" label="true" class="keep-login">保持登陆状态</el-checkbox>
+                        <el-link type="info" class="forget-psw">忘记密码</el-link>
                     </el-form-item>
-                    <p>一旦登陆，即表示你同意BESTBUYER的 <span>隐私政策</span> 和 <span>用户条款</span>。</p>
+                    <p>一旦登陆，即表示你同意BESTBUYER的隐私政策和用户条款。</p>
                     <el-form-item>
-                        <el-button type="info" @click="onSubmit">登陆</el-button>
+                        <el-button type="info" @click="onSubmit('loginForm')" style="width: 325px;">登陆</el-button>
                     </el-form-item>
-                    <el-link>还不是会员? 加入我们</el-link>
+                    <p>还不是会员? <el-link type="info" style="margin-block-end:0.2em">加入我们</el-link></p>
                 </el-form>
             </el-dialog>
 
@@ -282,9 +283,19 @@
                 input: '',
                 temp: '',
                 dialogLoginVisible: false,
-                form:{
+                loginForm:{
                     phoneNumber:'',
                     password:'',
+                    radio: 'false',
+                },
+                rules:{
+                    phoneNumber: [
+                        {required:true, message: "请输入电话号码", trigger:'blur'},
+                        { min: 11, max: 11,message: '请输入正确的电话号码', trigger: 'blur' },
+                    ],
+                    password:[
+                        {required:true, message: "请输入密码", trigger:'blur'},
+                    ]
                 }
             }
         },
@@ -374,9 +385,21 @@
                 this.$store.state.url = path;
                 this.$router.push({ path: '/blank', query: { path: path } });
             },
-            onSubmit: function () {
-                console.log("submit");
-            }
+            onSubmit: function (formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        var gotName = '俊俊';
+                        var namespace = document.getElementById('username');
+                        namespace.children[0].innerText = gotName;
+                        var icon = document.createElement('i');
+                        icon.className = 'el-icon-user-solid';
+                        namespace.children[0].appendChild(icon);
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
         }
     }
 </script>
@@ -529,5 +552,26 @@
 
     .el-menu ::v-deep .el-menu-item.is-active{
         border-style: none;
+    }
+    .keep-login{
+        float: left;
+        display: inline-block;
+        line-height:30px;
+    }
+    .forget-psw{
+        float: right;
+        padding-bottom: 0;
+        line-height:30px;
+    }
+    .one-line{
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+    .number, .psw {
+        margin-left: 20%;
+    }
+    div.is-error ::v-deep .el-form-item__error{
+        left: 20%;
+        top: 4em;
     }
 </style>
