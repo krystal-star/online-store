@@ -42,6 +42,7 @@
                 <li class="dropdown-item" @click="logout">注销登录</li>
             </ul>
 
+            <!--登陆-->
             <el-dialog :visible.sync="dialogLoginVisible" :modal-append-to-body='false' width="40%">
                 <el-image style="width: 200px; height: 25px"
                           src="../static/icons/bestbuyer-logo.png"></el-image>
@@ -49,23 +50,67 @@
 
                 <el-form :model="loginForm" :rules="rules" ref="loginForm">
                     <p class="login-fail">账号或密码错误，请重新输入</p>
-                    <el-form-item prop="phoneNumber">
-                        <el-input v-model="loginForm.phoneNumber" placeholder="手机号码" class="number" style="width: 325px;display:inline-table">
-                            <template slot="prepend">+86</template>
+                    <el-form-item prop="username">
+                        <el-input v-model="loginForm.username" placeholder="用户名/手机号" class="number" style="width: 315px;">
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input v-model="loginForm.password" placeholder="密码" class="psw" style="width: 325px;" show-password></el-input>
+                        <el-input v-model="loginForm.password" placeholder="密码" class="psw" style="width: 315px;" show-password></el-input>
                     </el-form-item>
+                    <p class="login-phone">用手机号登陆</p>
                     <el-form-item class="one-line">
                         <el-checkbox v-model="loginForm.radio" label="true" class="keep-login">保持登陆状态</el-checkbox>
                         <el-link type="info" class="forget-psw">忘记密码</el-link>
                     </el-form-item>
                     <p>一旦登陆，即表示你同意BESTBUYER的隐私政策和用户条款。</p>
                     <el-form-item>
-                        <el-button type="info" @click="onSubmit('loginForm')" style="width: 325px;">登陆</el-button>
+                        <el-button type="info" @click="onSubmit('loginForm')" style="width: 315px;">登陆</el-button>
                     </el-form-item>
-                    <p>还不是会员? <el-link type="info" style="margin-block-end:0.2em">加入我们</el-link></p>
+                    <p>还不是会员? <el-link type="info" style="margin-block-end:0.2em" @click="moveToSignIn">加入我们</el-link></p>
+                </el-form>
+            </el-dialog>
+
+
+            <!--注册-->
+            <el-dialog :visible.sync="dialogSigninVisible" :modal-append-to-body='false' width="40%">
+                <el-image style="width: 200px; height: 25px"
+                          src="../static/icons/bestbuyer-logo.png"></el-image>
+                <h1>完成创建您的BESTBUYER账户</h1>
+
+                <el-form :model="signinForm" :rules="rulesSign" ref="signinForm">
+                    <label class="labels">设置自己喜欢的昵称</label>
+                    <el-form-item prop="username">
+                        <el-input v-model="signinForm.username" placeholder="输入昵称" class="number" style="width: 315px;">
+                        </el-input>
+                    </el-form-item>
+
+                    <label class="labels">绑定手机号</label>
+                    <el-form-item prop="user_tel">
+                        <el-input v-model="signinForm.user_tel" placeholder="输入手机号" class="number" style="width: 315px;">
+                        </el-input>
+                    </el-form-item>
+
+                    <label class="labels">设置密码</label>
+                    <el-form-item prop="password1">
+                        <el-input v-model="signinForm.password1" placeholder="输入密码" class="psw" style="width: 315px;" show-password></el-input>
+                    </el-form-item>
+
+                    <label class="labels">确认密码</label>
+                    <el-form-item prop="password2">
+                        <el-input v-model="signinForm.password2" placeholder="输入密码" class="psw" style="width: 315px;" show-password></el-input>
+                    </el-form-item>
+
+                    <el-form-item class="one-line">
+                        <el-checkbox v-model="signinForm.radio" label="true" class="keep-login">注册接收通讯内容，以获取 Bestbuyer 最新动态</el-checkbox>
+                    </el-form-item>
+
+                    <p>一旦登陆，即表示你同意BESTBUYER的隐私政策和用户条款。</p>
+                    <el-form-item>
+                        <el-button type="info" @click="onSubmit('signinForm')" style="width: 315px;">加入我们</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button @click="moveToLogIn" style="width: 315px;">返回登陆</el-button>
+                    </el-form-item>
                 </el-form>
             </el-dialog>
 
@@ -121,6 +166,25 @@
     export default {
         name: "NavMenu",
         data() {
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.signinForm.password2 !== '') {
+                        this.$refs.signinForm.validateField('password2');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.signinForm.password1) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 classification:[
                     {
@@ -294,18 +358,41 @@
                 input: '',
                 temp: '',
                 dialogLoginVisible: false,
+                dialogSigninVisible:false,
                 loginForm:{
-                    phoneNumber:'',
+                    username:'',
                     password:'',
-                    radio: 'false',
+                    radio: false,
+                },
+                signinForm:{
+                    username:'',
+                    user_tel:'',
+                    password1:'',
+                    password2:'',
+                    radio:false
                 },
                 rules:{
-                    phoneNumber: [
-                        {required:true, message: "请输入电话号码", trigger:'blur'},
-                        { min: 11, max: 11,message: '请输入正确的电话号码', trigger: 'blur' },
+                    username: [
+                        {required:true, message: "请输入手机号码或者用户名", trigger:'blur'},
                     ],
                     password:[
                         {required:true, message: "请输入密码", trigger:'blur'},
+                    ]
+                },
+
+                rulesSign:{
+                    username: [
+                        {required:true, message: "请输入用户名", trigger:'blur'},
+                    ],
+                    user_tel: [
+                        {required:true, message: "请输入手机号", trigger:'blur'},
+                        {min:11, max:11, message: "请输入正确的手机号", trigger:'blur'}
+                    ],
+                    password1: [
+                        { validator: validatePass, trigger: 'blur' }
+                    ],
+                    password2: [
+                        { validator: validatePass2, trigger: 'blur' }
                     ]
                 },
                 user:{
@@ -407,18 +494,33 @@
             onSubmit: function (formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        /*const _this = this;
-                        axios.post('http://localhost:8181/login', this.loginForm).then(function (resp) {
+                        if (formName === 'loginForm') {
+                            /*var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
+                        const _this = this;
+                        axios.post('http://localhost:8181/login?'+path).then(function (resp) {
                             if(resp.data.code === 0){
-                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.username));
+                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
                                 _this.$router.go(0);
                             }else{
                                 var failMsg = document.getElementsByClassName("login-fail")[0];
                                 failMsg.style.visibility = "visible";
                             }
                         })*/
-                        window.sessionStorage.setItem("username",JSON.stringify("俊俊"));
-                        this.$router.go(0);
+                            window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                            this.$router.go(0);
+                        }
+
+                        if(formName === 'signinForm'){
+                            /*const _this = this;
+                            axios.post('http://localhost:8181/register' + this.signinForm).then(function (resp) {
+                            if(resp.data.code === 0){
+                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
+                                _this.$router.go(0);
+                                }
+                            })*/
+                            window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                            this.$router.go(0);
+                        }
                     } else {
                         return false;
                     }
@@ -435,6 +537,14 @@
             logout:function () {
                 window.sessionStorage.removeItem('username');
                 this.$router.go(0);
+            },
+            moveToSignIn: function () {
+                this.dialogLoginVisible = false;
+                this.dialogSigninVisible = true;
+            },
+            moveToLogIn: function () {
+                this.dialogSigninVisible = false;
+                this.dialogLoginVisible = true;
             }
         }
     }
@@ -582,8 +692,9 @@
     h4.cate{
         margin-bottom: 1px;
     }
-    .el-dialog .el-input{
+    .el-dialog{
         width: 250px;
+        padding: 0 40px 40px;
     }
 
     .el-menu ::v-deep .el-menu-item.is-active{
@@ -600,7 +711,7 @@
         line-height:30px;
     }
     .one-line{
-        margin-left: 20%;
+        margin-left: 21.5%;
         margin-right: 20%;
     }
     .number, .psw {
@@ -614,6 +725,14 @@
         margin: 0;
         color: #F56C6C;
         visibility: hidden;
+    }
+    .login-phone{
+        position: relative;
+        right: 8em;
+    }
+    .login-phone:hover{
+        cursor: pointer;
+        opacity: 0.5;
     }
     .dropdown{
         position: absolute;
@@ -642,5 +761,9 @@
     .dropdown-item:hover{
         color: white;
         background-color: #C0C4CC;
+    }
+    .labels{
+        float: left;
+        margin-left: 21%;
     }
 </style>
