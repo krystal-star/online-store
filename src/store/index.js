@@ -14,6 +14,7 @@ export default new Vuex.Store({
     url:'',
     id: '',   //进入商品页
     star:0,   //收藏数
+    username:null
   },
   mutations: {
   },

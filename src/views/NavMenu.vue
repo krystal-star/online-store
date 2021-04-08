@@ -24,13 +24,23 @@
             <el-link :underline="false" class="icons" href="https://www.adidas.com.cn/">
                 <el-image style="width: 40px; height: 40px"
                           src="../static/icons/adidas-logo-black.png"></el-image></el-link>
-            <el-button class="right" @click="dialogLoginVisible = true" id="username">
+            <el-button class="right" @click="dialogLoginVisible = true" v-if="user.id === null">
                 登陆<i class="el-icon-user-solid"></i></el-button>
+            <el-button class="right" v-else @click="dropdownVisible">
+                {{user.id}}<i class="el-icon-user-solid"></i></el-button>
             <el-button class="right">
                 加入我们<i class="el-icon-phone"></i></el-button>
             <el-button class="right">
                 帮助<i class="el-icon-question"></i></el-button>
 
+            <ul class="dropdown">
+                <li class="dropdown-item">收藏</li>
+                <li class="dropdown-item">购物车</li>
+                <li class="dropdown-item">已购买</li>
+                <li class="dropdown-item">待评价</li>
+                <li class="dropdown-item">账户管理</li>
+                <li class="dropdown-item" @click="logout">注销登录</li>
+            </ul>
 
             <el-dialog :visible.sync="dialogLoginVisible" :modal-append-to-body='false' width="40%">
                 <el-image style="width: 200px; height: 25px"
@@ -38,6 +48,7 @@
                 <h1>您的会员账户从此开启</h1>
 
                 <el-form :model="loginForm" :rules="rules" ref="loginForm">
+                    <p class="login-fail">账号或密码错误，请重新输入</p>
                     <el-form-item prop="phoneNumber">
                         <el-input v-model="loginForm.phoneNumber" placeholder="手机号码" class="number" style="width: 325px;display:inline-table">
                             <template slot="prepend">+86</template>
@@ -296,6 +307,9 @@
                     password:[
                         {required:true, message: "请输入密码", trigger:'blur'},
                     ]
+                },
+                user:{
+                    id: null,
                 }
             }
         },
@@ -303,6 +317,11 @@
             let menu = document.getElementsByClassName("menu-dropdown")[0];
             menu.onmouseleave = function () {
                 menu.style = "visibility: hidden";
+            }
+
+            let id = window.sessionStorage.getItem('username');
+            if(id){
+                this.user.id = JSON.parse(id);
             }
         },
         methods: {
@@ -388,18 +407,35 @@
             onSubmit: function (formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        var gotName = '俊俊';
-                        var namespace = document.getElementById('username');
-                        namespace.children[0].innerText = gotName;
-                        var icon = document.createElement('i');
-                        icon.className = 'el-icon-user-solid';
-                        namespace.children[0].appendChild(icon);
+                        /*const _this = this;
+                        axios.post('http://localhost:8181/login', this.loginForm).then(function (resp) {
+                            if(resp.data.code === 0){
+                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.username));
+                                _this.$router.go(0);
+                            }else{
+                                var failMsg = document.getElementsByClassName("login-fail")[0];
+                                failMsg.style.visibility = "visible";
+                            }
+                        })*/
+                        window.sessionStorage.setItem("username",JSON.stringify("俊俊"));
+                        this.$router.go(0);
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
             },
+            dropdownVisible: function () {
+                var dropdown = document.getElementsByClassName("dropdown")[0];
+                if(dropdown.style.display === "none"){
+                    dropdown.style.display = "block";
+                }else{
+                    dropdown.style.display = "none";
+                }
+            },
+            logout:function () {
+                window.sessionStorage.removeItem('username');
+                this.$router.go(0);
+            }
         }
     }
 </script>
@@ -573,5 +609,38 @@
     div.is-error ::v-deep .el-form-item__error{
         left: 20%;
         top: 4em;
+    }
+    .login-fail{
+        margin: 0;
+        color: #F56C6C;
+        visibility: hidden;
+    }
+    .dropdown{
+        position: absolute;
+        top: 30px;
+        right: 0;
+        padding: 10px 0;
+        margin: 5px 0;
+        background-color: #FFF;
+        border: 1px solid #EBEEF5;
+        border-radius: 4px;
+        box-shadow: 0 2px 12px 0 rgba(0 0 0 0.1);
+        transform-origin: center top;
+        z-index: 2003;
+        display: none;
+    }
+    .dropdown-item{
+        list-style: none;
+        line-height: 36px;
+        padding: 0 20px;
+        margin: 0;
+        font-size: 14px;
+        color: #606266;
+        cursor: pointer;
+        outline: 0;
+    }
+    .dropdown-item:hover{
+        color: white;
+        background-color: #C0C4CC;
     }
 </style>
