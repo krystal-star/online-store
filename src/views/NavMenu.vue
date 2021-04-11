@@ -49,7 +49,6 @@
                 <h1>您的会员账户从此开启</h1>
 
                 <el-form :model="loginForm" :rules="rules" ref="loginForm">
-                    <p class="login-fail">账号或密码错误，请重新输入</p>
                     <el-form-item prop="username">
                         <el-input v-model="loginForm.username" placeholder="用户名/手机号" class="number" style="width: 315px;">
                         </el-input>
@@ -57,7 +56,10 @@
                     <el-form-item prop="password">
                         <el-input v-model="loginForm.password" placeholder="密码" class="psw" style="width: 315px;" show-password></el-input>
                     </el-form-item>
-                    <p class="login-phone">用手机号登陆</p>
+                    <p class="login-fail">账号或密码错误，请重新输入</p>
+                    <div>
+                        <p class="login-phone">用手机号登陆</p>
+                    </div>
                     <el-form-item class="one-line">
                         <el-checkbox v-model="loginForm.radio" label="true" class="keep-login">保持登陆状态</el-checkbox>
                         <el-link type="info" class="forget-psw">忘记密码</el-link>
@@ -99,6 +101,8 @@
                     <el-form-item prop="password2">
                         <el-input v-model="signinForm.password2" placeholder="输入密码" class="psw" style="width: 315px;" show-password></el-input>
                     </el-form-item>
+
+                    <p class="signin-fail">{{this.error_msg}}</p>
 
                     <el-form-item class="one-line">
                         <el-checkbox v-model="signinForm.radio" label="true" class="keep-login">注册接收通讯内容，以获取 Bestbuyer 最新动态</el-checkbox>
@@ -397,7 +401,8 @@
                 },
                 user:{
                     id: null,
-                }
+                },
+                error_msg:'',
             }
         },
         mounted () {
@@ -495,31 +500,48 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (formName === 'loginForm') {
-                            /*var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
-                        const _this = this;
-                        axios.post('http://localhost:8181/login?'+path).then(function (resp) {
+                            var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
+                            const _this = this;
+                            axios.post('http://localhost:8181/login?'+path).then(function (resp) {
+                                if(resp.data.code === 0){
+                                    window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
+                                    _this.$router.go(0);
+                                }else{
+                                    var failMsg = document.getElementsByClassName("login-fail")[0];
+                                    failMsg.style.visibility = "visible";
+                                }
+                            })
+
+                            /*if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
+                                window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                                this.$router.go(0);
+                            }else {
+                                var failMsg = document.getElementsByClassName("login-fail")[0];
+                                failMsg.style.visibility = "visible";
+                            }*/
+                        }
+
+                        if(formName === 'signinForm'){
+                            let infoForm = {
+                                userName: this.signinForm.username,
+                                userTel: this.signinForm.user_tel,
+                                passcode: this.signinForm.password1
+                            }
+                            console.log(infoForm);
+                            const _this = this;
+                            axios.post('http://localhost:8181/register', infoForm).then(function (resp) {
                             if(resp.data.code === 0){
                                 window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
                                 _this.$router.go(0);
                             }else{
-                                var failMsg = document.getElementsByClassName("login-fail")[0];
-                                failMsg.style.visibility = "visible";
+                                    _this.error_msg = resp.data.data;
+                                    var failMsg = document.getElementsByClassName('signin-fail')[0];
+                                    failMsg.style.visibility = 'visible';
                             }
-                        })*/
-                            window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
-                            this.$router.go(0);
-                        }
+                            })
 
-                        if(formName === 'signinForm'){
-                            /*const _this = this;
-                            axios.post('http://localhost:8181/register' + this.signinForm).then(function (resp) {
-                            if(resp.data.code === 0){
-                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
-                                _this.$router.go(0);
-                                }
-                            })*/
-                            window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
-                            this.$router.go(0);
+                            /*window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                            this.$router.go(0);*/
                         }
                     } else {
                         return false;
@@ -721,14 +743,15 @@
         left: 20%;
         top: 4em;
     }
-    .login-fail{
+    .login-fail, .signin-fail{
         margin: 0;
         color: #F56C6C;
         visibility: hidden;
+        float: left;
+        margin-left: 21%;
     }
     .login-phone{
-        position: relative;
-        right: 8em;
+        margin-right: 10%;
     }
     .login-phone:hover{
         cursor: pointer;
@@ -766,4 +789,18 @@
         float: left;
         margin-left: 21%;
     }
+    .keep-login ::v-deep .el-checkbox__input.is-checked+.el-checkbox__label{
+        color: #606278;
+        opacity: 0.5;
+    }
+    .keep-login ::v-deep .el-checkbox__input.is-focus .el-checkbox__inner, .keep-login ::v-deep .el-checkbox__inner:hover{
+        border-color: #606278;
+        opacity: 0.5;
+    }
+    .keep-login ::v-deep .el-checkbox__input.is-checked .el-checkbox__inner, .myRedCheckBox .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+        background-color: #606278;
+        border-color: #606278;
+        opacity: 0.5;
+    }
+
 </style>
