@@ -537,6 +537,7 @@
                 _this.items = resp.data.data.items
                 _this.num = resp.data.data.items_number
             })
+            window.scrollTo(0,0);
         },
         mounted() {
             var btn_filter = document.getElementsByClassName("hide-filter")[0];

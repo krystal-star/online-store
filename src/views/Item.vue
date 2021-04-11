@@ -73,6 +73,7 @@
                                 </div>
                             </div>
                         </div>
+                        <el-link style="font-size: 14px">查看所有评论</el-link>
                     </div>
 
 
@@ -127,7 +128,7 @@
                         text-color="#2c3e50"
                         score-template="4.5">
                     </el-rate>
-                    <el-link class="num" href="#reviews">共158条评价</el-link>
+                    <span class="total-num">共158条评价</span>
                 </div>
 
                 <div class="third-line">
@@ -162,7 +163,17 @@
 
                 <div class="share">
                     <p>分享有礼</p>
-                    <el-image src="../static/icons/wechat2.png" style="width: 12%;padding: 0.5em"></el-image>
+                    <el-popover
+                            placement="bottom"
+                            title="关注 获取俊俊的第一手资料"
+                            width="200"
+                            trigger="hover"
+                    >
+                        <el-image style="width: 150px; height:150px;"
+                                  src="../static/icons/qr-code.png"></el-image>
+                    <el-image src="../static/icons/wechat2.png" style="width: 12%;padding: 0.5em" slot="reference">
+                    </el-image>
+                    </el-popover>
                     <el-image src="../static/icons/weibo2.png" style="width: 12%;padding: 0.5em"></el-image>
                     <el-image src="../static/icons/QQ.png" style="width: 12%;padding: 0.5em"></el-image>
                 </div>
@@ -271,6 +282,7 @@
                 _this.discount = resp.data.data.related_items
                 _this.item.size = resp.data.data.size   //？？？？
             })
+            window.scrollTo(0,0);
         },
         mounted() {
             var badges = document.getElementsByClassName("el-badge");
@@ -596,5 +608,12 @@
     }
     .el-main{
         margin-right: 300px;
+    }
+
+    div.recommend ::v-deep button.el-carousel__arrow{
+        width: 50px;
+        height: 50px;
+        top: 35%;
+        font-size: 24px;
     }
 </style>

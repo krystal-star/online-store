@@ -24,36 +24,97 @@
             <el-link :underline="false" class="icons" href="https://www.adidas.com.cn/">
                 <el-image style="width: 40px; height: 40px"
                           src="../static/icons/adidas-logo-black.png"></el-image></el-link>
-            <el-button class="right" @click="dialogLoginVisible = true">
+            <el-button class="right" @click="dialogLoginVisible = true" v-if="user.id === null">
                 登陆<i class="el-icon-user-solid"></i></el-button>
+            <el-button class="right" v-else @click="dropdownVisible">
+                {{user.id}}<i class="el-icon-user-solid"></i></el-button>
             <el-button class="right">
                 加入我们<i class="el-icon-phone"></i></el-button>
             <el-button class="right">
                 帮助<i class="el-icon-question"></i></el-button>
 
+            <ul class="dropdown">
+                <li class="dropdown-item">收藏</li>
+                <li class="dropdown-item">购物车</li>
+                <li class="dropdown-item">已购买</li>
+                <li class="dropdown-item">待评价</li>
+                <li class="dropdown-item">账户管理</li>
+                <li class="dropdown-item" @click="logout">注销登录</li>
+            </ul>
 
+            <!--登陆-->
             <el-dialog :visible.sync="dialogLoginVisible" :modal-append-to-body='false' width="40%">
                 <el-image style="width: 200px; height: 25px"
                           src="../static/icons/bestbuyer-logo.png"></el-image>
                 <h1>您的会员账户从此开启</h1>
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item>
-                        <el-input v-model="form.phoneNumber" placeholder="手机号码" class="number">
-                            <template slot="prepend">+86</template>
+
+                <el-form :model="loginForm" :rules="rules" ref="loginForm">
+                    <el-form-item prop="username">
+                        <el-input v-model="loginForm.username" placeholder="用户名/手机号" class="number" style="width: 315px;">
                         </el-input>
                     </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="loginForm.password" placeholder="密码" class="psw" style="width: 315px;" show-password></el-input>
+                    </el-form-item>
+                    <p class="login-fail">账号或密码错误，请重新输入</p>
+                    <div>
+                        <p class="login-phone">用手机号登陆</p>
+                    </div>
+                    <el-form-item class="one-line">
+                        <el-checkbox v-model="loginForm.radio" label="true" class="keep-login">保持登陆状态</el-checkbox>
+                        <el-link type="info" class="forget-psw">忘记密码</el-link>
+                    </el-form-item>
+                    <p>一旦登陆，即表示你同意BESTBUYER的隐私政策和用户条款。</p>
                     <el-form-item>
-                        <el-input v-model="form.password" placeholder="密码"></el-input>
+                        <el-button type="info" @click="onSubmit('loginForm')" style="width: 315px;">登陆</el-button>
+                    </el-form-item>
+                    <p>还不是会员? <el-link type="info" style="margin-block-end:0.2em" @click="moveToSignIn">加入我们</el-link></p>
+                </el-form>
+            </el-dialog>
+
+
+            <!--注册-->
+            <el-dialog :visible.sync="dialogSigninVisible" :modal-append-to-body='false' width="40%">
+                <el-image style="width: 200px; height: 25px"
+                          src="../static/icons/bestbuyer-logo.png"></el-image>
+                <h1>完成创建您的BESTBUYER账户</h1>
+
+                <el-form :model="signinForm" :rules="rulesSign" ref="signinForm">
+                    <label class="labels">设置自己喜欢的昵称</label>
+                    <el-form-item prop="username">
+                        <el-input v-model="signinForm.username" placeholder="输入昵称" class="number" style="width: 315px;">
+                        </el-input>
+                    </el-form-item>
+
+                    <label class="labels">绑定手机号</label>
+                    <el-form-item prop="user_tel">
+                        <el-input v-model="signinForm.user_tel" placeholder="输入手机号" class="number" style="width: 315px;">
+                        </el-input>
+                    </el-form-item>
+
+                    <label class="labels">设置密码</label>
+                    <el-form-item prop="password1">
+                        <el-input v-model="signinForm.password1" placeholder="输入密码" class="psw" style="width: 315px;" show-password></el-input>
+                    </el-form-item>
+
+                    <label class="labels">确认密码</label>
+                    <el-form-item prop="password2">
+                        <el-input v-model="signinForm.password2" placeholder="输入密码" class="psw" style="width: 315px;" show-password></el-input>
+                    </el-form-item>
+
+                    <p class="signin-fail">{{this.error_msg}}</p>
+
+                    <el-form-item class="one-line">
+                        <el-checkbox v-model="signinForm.radio" label="true" class="keep-login">注册接收通讯内容，以获取 Bestbuyer 最新动态</el-checkbox>
+                    </el-form-item>
+
+                    <p>一旦登陆，即表示你同意BESTBUYER的隐私政策和用户条款。</p>
+                    <el-form-item>
+                        <el-button type="info" @click="onSubmit('signinForm')" style="width: 315px;">加入我们</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-radio label="保持登陆状态"></el-radio>
-                        <el-link type="info">忘记密码</el-link>
+                        <el-button @click="moveToLogIn" style="width: 315px;">返回登陆</el-button>
                     </el-form-item>
-                    <p>一旦登陆，即表示你同意BESTBUYER的 <span>隐私政策</span> 和 <span>用户条款</span>。</p>
-                    <el-form-item>
-                        <el-button type="info" @click="onSubmit">登陆</el-button>
-                    </el-form-item>
-                    <el-link>还不是会员? 加入我们</el-link>
                 </el-form>
             </el-dialog>
 
@@ -109,6 +170,25 @@
     export default {
         name: "NavMenu",
         data() {
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.signinForm.password2 !== '') {
+                        this.$refs.signinForm.validateField('password2');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.signinForm.password1) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 classification:[
                     {
@@ -282,16 +362,58 @@
                 input: '',
                 temp: '',
                 dialogLoginVisible: false,
-                form:{
-                    phoneNumber:'',
+                dialogSigninVisible:false,
+                loginForm:{
+                    username:'',
                     password:'',
-                }
+                    radio: false,
+                },
+                signinForm:{
+                    username:'',
+                    user_tel:'',
+                    password1:'',
+                    password2:'',
+                    radio:false
+                },
+                rules:{
+                    username: [
+                        {required:true, message: "请输入手机号码或者用户名", trigger:'blur'},
+                    ],
+                    password:[
+                        {required:true, message: "请输入密码", trigger:'blur'},
+                    ]
+                },
+
+                rulesSign:{
+                    username: [
+                        {required:true, message: "请输入用户名", trigger:'blur'},
+                    ],
+                    user_tel: [
+                        {required:true, message: "请输入手机号", trigger:'blur'},
+                        {min:11, max:11, message: "请输入正确的手机号", trigger:'blur'}
+                    ],
+                    password1: [
+                        { validator: validatePass, trigger: 'blur' }
+                    ],
+                    password2: [
+                        { validator: validatePass2, trigger: 'blur' }
+                    ]
+                },
+                user:{
+                    id: null,
+                },
+                error_msg:'',
             }
         },
         mounted () {
             let menu = document.getElementsByClassName("menu-dropdown")[0];
             menu.onmouseleave = function () {
                 menu.style = "visibility: hidden";
+            }
+
+            let id = window.sessionStorage.getItem('username');
+            if(id){
+                this.user.id = JSON.parse(id);
             }
         },
         methods: {
@@ -374,8 +496,77 @@
                 this.$store.state.url = path;
                 this.$router.push({ path: '/blank', query: { path: path } });
             },
-            onSubmit: function () {
-                console.log("submit");
+            onSubmit: function (formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (formName === 'loginForm') {
+                            var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
+                            const _this = this;
+                            axios.post('http://localhost:8181/login?'+path).then(function (resp) {
+                                if(resp.data.code === 0){
+                                    window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
+                                    _this.$router.go(0);
+                                }else{
+                                    var failMsg = document.getElementsByClassName("login-fail")[0];
+                                    failMsg.style.visibility = "visible";
+                                }
+                            })
+
+                            /*if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
+                                window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                                this.$router.go(0);
+                            }else {
+                                var failMsg = document.getElementsByClassName("login-fail")[0];
+                                failMsg.style.visibility = "visible";
+                            }*/
+                        }
+
+                        if(formName === 'signinForm'){
+                            let infoForm = {
+                                userName: this.signinForm.username,
+                                userTel: this.signinForm.user_tel,
+                                passcode: this.signinForm.password1
+                            }
+                            console.log(infoForm);
+                            const _this = this;
+                            axios.post('http://localhost:8181/register', infoForm).then(function (resp) {
+                            if(resp.data.code === 0){
+                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
+                                _this.$router.go(0);
+                            }else{
+                                    _this.error_msg = resp.data.data;
+                                    var failMsg = document.getElementsByClassName('signin-fail')[0];
+                                    failMsg.style.visibility = 'visible';
+                            }
+                            })
+
+                            /*window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                            this.$router.go(0);*/
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            dropdownVisible: function () {
+                var dropdown = document.getElementsByClassName("dropdown")[0];
+                if(dropdown.style.display === "none"){
+                    dropdown.style.display = "block";
+                }else{
+                    dropdown.style.display = "none";
+                }
+            },
+            logout:function () {
+                window.sessionStorage.removeItem('username');
+                this.$router.go(0);
+            },
+            moveToSignIn: function () {
+                this.dialogLoginVisible = false;
+                this.dialogSigninVisible = true;
+            },
+            moveToLogIn: function () {
+                this.dialogSigninVisible = false;
+                this.dialogLoginVisible = true;
             }
         }
     }
@@ -523,8 +714,93 @@
     h4.cate{
         margin-bottom: 1px;
     }
-    .el-dialog .el-input{
+    .el-dialog{
         width: 250px;
+        padding: 0 40px 40px;
+    }
+
+    .el-menu ::v-deep .el-menu-item.is-active{
+        border-style: none;
+    }
+    .keep-login{
+        float: left;
+        display: inline-block;
+        line-height:30px;
+    }
+    .forget-psw{
+        float: right;
+        padding-bottom: 0;
+        line-height:30px;
+    }
+    .one-line{
+        margin-left: 21.5%;
+        margin-right: 20%;
+    }
+    .number, .psw {
+        margin-left: 20%;
+    }
+    div.is-error ::v-deep .el-form-item__error{
+        left: 20%;
+        top: 4em;
+    }
+    .login-fail, .signin-fail{
+        margin: 0;
+        color: #F56C6C;
+        visibility: hidden;
+        float: left;
+        margin-left: 21%;
+    }
+    .login-phone{
+        margin-right: 10%;
+    }
+    .login-phone:hover{
+        cursor: pointer;
+        opacity: 0.5;
+    }
+    .dropdown{
+        position: absolute;
+        top: 30px;
+        right: 0;
+        padding: 10px 0;
+        margin: 5px 0;
+        background-color: #FFF;
+        border: 1px solid #EBEEF5;
+        border-radius: 4px;
+        box-shadow: 0 2px 12px 0 rgba(0 0 0 0.1);
+        transform-origin: center top;
+        z-index: 2003;
+        display: none;
+    }
+    .dropdown-item{
+        list-style: none;
+        line-height: 36px;
+        padding: 0 20px;
+        margin: 0;
+        font-size: 14px;
+        color: #606266;
+        cursor: pointer;
+        outline: 0;
+    }
+    .dropdown-item:hover{
+        color: white;
+        background-color: #C0C4CC;
+    }
+    .labels{
+        float: left;
+        margin-left: 21%;
+    }
+    .keep-login ::v-deep .el-checkbox__input.is-checked+.el-checkbox__label{
+        color: #606278;
+        opacity: 0.5;
+    }
+    .keep-login ::v-deep .el-checkbox__input.is-focus .el-checkbox__inner, .keep-login ::v-deep .el-checkbox__inner:hover{
+        border-color: #606278;
+        opacity: 0.5;
+    }
+    .keep-login ::v-deep .el-checkbox__input.is-checked .el-checkbox__inner, .myRedCheckBox .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+        background-color: #606278;
+        border-color: #606278;
+        opacity: 0.5;
     }
 
 </style>

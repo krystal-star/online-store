@@ -9,7 +9,7 @@
     <!--一周热卖-->
     <div class="trending">
       <p class="text">一周热卖</p>
-      <p class="view-all" @click="">View all</p>
+      <p class="view-all" @click="viewAll">View all</p>
       <el-carousel height="550px" indicator-position="outside">
         <el-carousel-item :key="1">
         <el-row :gutter="20">
@@ -42,7 +42,7 @@
     <!--最新上架-->
     <div class="new-arrivals">
       <p class="text">最新上架</p>
-      <p class="view-all" @click="">View all</p>
+      <p class="view-all" @click="viewAll">View all</p>
           <el-row :gutter="20">
             <el-col :span="12" v-for="item in new_arrivals">
                 <el-image :src="item.img" class="image" @click="newPage(item.id)"></el-image>
@@ -53,7 +53,7 @@
     <!--特价商品-->
     <div class="discount">
       <p class="text">特价商品</p>
-      <p class="view-all" @click="">View all</p>
+      <p class="view-all" @click="viewAll">View all</p>
       <el-carousel height="550px" indicator-position="outside">
         <el-carousel-item :key="1">
           <el-row :gutter="20">
@@ -313,6 +313,9 @@ export default {
     newPage: function (id) {
       this.$store.state.id = id;
       this.$router.push('/itemInfo');
+    },
+    viewAll: function () {
+      this.$router.push('/itemList')
     }
   },
   mounted() {
@@ -333,6 +336,8 @@ export default {
       _this.accessories = resp.data.data.accessories
       _this.vip_poster = resp.data.data.vip_poster
     })
+
+    window.scrollTo(0,0);
   }
 }
 </script>
