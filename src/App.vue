@@ -4,7 +4,7 @@
         <NavMenu />
       </el-header>
 
-      <el-main style="padding-top: 95px; padding-right: 12px;">
+      <el-main style="overflow: inherit">
           <Feedback/>
         <router-view></router-view>
       </el-main>
@@ -62,8 +62,9 @@ export default {
     }
 
     .el-header{
-        position: fixed;
-        z-index: 99;
+        position: sticky;
+        top: 0;
+        z-index: 999;
     }
     .el-footer{
         position: relative;
