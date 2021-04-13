@@ -152,7 +152,7 @@
                     clearable>
             </el-input>
 
-            <el-link :underline="false" id="shopping-bag" href="#">
+            <el-link :underline="false" id="shopping-bag" href="#/basket">
                 <el-image style="width: 25px; height: 25px"
                           src="../static/icons/shopping-bag.png"></el-image></el-link>
 
@@ -167,8 +167,10 @@
 </template>
 
 <script>
+    import Notification from "./Notification";
     export default {
         name: "NavMenu",
+        components: {Notification},
         data() {
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
