@@ -342,7 +342,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   div.trending, div.discount, div.new-arrivals, div.recommend, div.vip-center, div.accessories{
     text-align: left;
     padding: 10px 60px 10px;
