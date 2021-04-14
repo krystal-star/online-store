@@ -17,6 +17,7 @@
                 <p>Air Force 1</p>
             </div>
         </div>
+         <!--第一行-->
         <div class="nav-header">
             <el-link :underline="false" class="icons" href="https://www.nike.com/cn/">
                 <el-image style="width: 50px; height: 50px"
@@ -120,7 +121,7 @@
 
         </div>
 
-
+        <!--第二行-->
         <el-menu mode="horizontal" text-color="black" style="height: 60px;" >
 
             <el-menu-item id="logo" @click="toHomePage">
@@ -152,7 +153,7 @@
                     clearable>
             </el-input>
 
-            <el-link :underline="false" id="shopping-bag" href="#/basket">
+            <el-link :underline="false" id="shopping-bag" @click="toBasket">
                 <el-image style="width: 25px; height: 25px"
                           src="../static/icons/shopping-bag.png"></el-image></el-link>
 
@@ -167,10 +168,9 @@
 </template>
 
 <script>
-    import Notification from "./Notification";
     export default {
         name: "NavMenu",
-        components: {Notification},
+        components: {},
         data() {
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
@@ -452,50 +452,50 @@
             newPage: function (i1,i2,i3) {
                 //存储names
                 var url = '';
-                this.$store.state.groups = '';
-                this.$store.state.categories = '';
-                this.$store.state.styles = '';
-                this.$store.state.discount = false;
-                this.$store.state.brands = '';
+                window.sessionStorage.setItem("groups",JSON.stringify(''));
+                window.sessionStorage.setItem("categories",JSON.stringify(''));
+                window.sessionStorage.setItem("styles",JSON.stringify(''));
+                window.sessionStorage.setItem("brands",JSON.stringify(''));
+                window.sessionStorage.setItem("discount",JSON.stringify(false));
 
                 //点击 "男子，女子，儿童"
                 if (i1.name === "男子" || i1.name === "女子" ||i1.name === "儿童"){
-                    this.$store.state.groups = i1.name;
+                    window.sessionStorage.setItem("groups",JSON.stringify(i1.name));
                     url += "groups="+i1.url;
                     //鞋类，服装，配件
                     if(i2 !== undefined){
-                        this.$store.state.categories = i2.name;
+                        window.sessionStorage.setItem("categories",JSON.stringify(i2.name));
                         url += "&categories="+i2.url;
                     }
                     //xx鞋，xx衣服
                     if(i3 !== undefined){
-                        this.$store.state.styles = i3.name;
+                        window.sessionStorage.setItem("styles",JSON.stringify(i3.name));
                         url += "&styles="+i3.url;
                     }
                 }
 
                 //点击 "品牌"
                 else if (i1.name === "分类" && i3 !== undefined){
-                    this.$store.state.brands = i3.name;
+                    window.sessionStorage.setItem("brands",JSON.stringify(i3.name));
                     url += "brands="+i3.url;
                 }
 
                 //点击 "折扣"
                 else if(i1.name === "折扣") {
-                    this.$store.state.discount = true;
+                    window.sessionStorage.setItem("discount",JSON.stringify(true));
                     url += "discount=true";
                     if (i2 !== undefined) {
-                        this.$store.state.groups = i2.name;
+                        window.sessionStorage.setItem("groups",JSON.stringify(i2.name));
                         url += "&groups=" + i2.url;
                     }
                     if (i3 !== undefined) {
-                        this.$store.state.categories = i3.name;
+                        window.sessionStorage.setItem("categories",JSON.stringify(i3.name));
                         url += "&categories=" + i3.url;
                     }
                 }
 
                 var path = '/itemList?'+url;
-                this.$store.state.url = path;
+                window.sessionStorage.setItem("url",JSON.stringify(path));
                 this.$router.push({ path: '/blank', query: { path: path } });
             },
             onSubmit: function (formName) {
@@ -569,6 +569,13 @@
             moveToLogIn: function () {
                 this.dialogSigninVisible = false;
                 this.dialogLoginVisible = true;
+            },
+            toBasket(){
+                if(this.user.id === null){
+                    this.dialogLoginVisible = true;
+                }else{
+                    this.$router.push('/basket');
+                }
             }
         }
     }

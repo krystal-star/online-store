@@ -153,7 +153,8 @@
                             <el-button @click="chooseSize">{{item*4+subitem+30}}</el-button>
                         </el-col>
                     </el-row>
-                    <p class="stock">库存剩余{{item.stock}}件</p>
+                    <p class="stock" v-if="sizeChoosed">库存剩余{{item.stock}}件</p>
+                    <p class="stock" v-else>请选择尺码</p>
                 </div>
 
                 <div class="chart">
@@ -277,8 +278,9 @@
             }
         },
         created() {
+            let id = window.sessionStorage.getItem('id');
             const _this = this
-            axios.get('http://localhost:8181/itemInfo/'+this.$store.state.id).then(function (resp) {
+            axios.get('http://localhost:8181/itemInfo/'+JSON.parse(id)).then(function (resp) {
                 _this.item = resp.data.data
                 _this.discount = resp.data.data.related_items
                 _this.item.size = resp.data.data.size   //？？？？
@@ -373,12 +375,10 @@
                     if(state === "false"){
                         target.style = "border-width:2px; font-weight:bold; color:#606266; border-color:#606266;background-color:white";
                         target.setAttribute("is-click","true");
-                        stock.style = "visibility: visible";
                         this.sizeChoosed = true;
                     }else{
                         target.style = "border-width:1px; font-weight:normal; color:#606266; border-color:#DCDFE6;background-color:white";
                         target.setAttribute("is-click","false");
-                        stock.style = "visibility: hidden";
                         this.sizeChoosed = false;
                     }
                 }else if(target.nodeName.toLowerCase() === "span"){
@@ -386,33 +386,30 @@
                     if(state === "false"){
                         target.parentNode.style = "border-width:2px; font-weight:bold; color:#606266; border-color:#606266;background-color:white";
                         target.parentNode.setAttribute("is-click","true");
-                        stock.style = "visibility: visible";
                         this.sizeChoosed = true;
                     }else{
                         target.parentNode.style = "border-width:1px; font-weight:normal; color:#606266; border-color:#DCDFE6;background-color:white";
                         target.parentNode.setAttribute("is-click","false");
-                        stock.style = "visibility: hidden";
                         this.sizeChoosed = false;
                     }
                 }
             },
             addToBasket(){
-                if(this.sizeChoosed === false){
-                    this.$notify.error({
-                        title: '错误',
-                        message: '请选择尺码'
-                    });
-                }else{
+                if(this.sizeChoosed === true){
+                    var id = this.item.id;
                     const _this = this;
-                    axios.post('http://localhost:8181/').then(function (resp) {
+                    axios.post('localhost:8181/cart/add?itemId='+id).then(function (resp) {
                         if (resp.data.code === 0) {
-                            this.$notify({
+                            _this.$notify({
                                 title: '成功',
                                 message: '加入购物车！',
                                 type: 'success'
                             });
                         } else {
-                            alert("加入失败");
+                            _this.$notify.error({
+                                message: resp.data.data,
+                                type: 'error'
+                            });
                         }
                     })
                 }
@@ -613,7 +610,6 @@
     p.stock{
         color: #909399;
         font-size: 14px;
-        visibility: hidden;
     }
     p.delivery{
         font-size: 12px;

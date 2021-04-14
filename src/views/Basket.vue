@@ -9,20 +9,21 @@
             <div style="margin: 15px 0;border-bottom-style: solid;border-bottom-width: 0.1em;border-bottom-color: #E9E9EA"></div>
             <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
                 <div class="items" v-for="(item,index) in items">
-                    <el-checkbox :label="item.id" :key="item.id"></el-checkbox>
+                    <el-checkbox :label="item.cart_id" :key="item.cart_id"></el-checkbox>
                     <el-image
                             style="width: 150px; height: 150px; margin-left: 2%; margin-right: 5%"
-                            :src="item.poster_img"
+                            :src="item.img"
                             fit="cover"></el-image>
 
                     <div class="detail">
                         <p class="name">{{item.name}}</p>
                         <p class="pre-price" v-if="item.previous_price !== null">¥{{item.previous_price}}</p>
+                        <p class="hide" v-else>¥null</p>
                         <p class="price">¥{{item.price}}</p>
                         <p class="style">{{item.brand}} {{item.group}}{{item.style}}</p>
                         <p class="style">{{item.color}}</p>
                         <p class="style">尺码（{{item.size}}）<span> 数量 </span>
-                        <el-select v-model="item.num" :placeholder="String(item.num)" size="mini" class="select" @change="changeNum(item.id,item.num)">
+                        <el-select v-model="item.num" :placeholder="String(item.num)" size="mini" class="select" @change="changeNum(item.cart_id,item.num)">
                             <el-option
                                     v-for="i in 10"
                                     :key="i"
@@ -34,7 +35,7 @@
 
                         <el-popconfirm
                                 title="确定删除这件商品吗？"
-                                @confirm="removeItem(index)"
+                                @confirm="removeItem(item.cart_id)"
                         >
                             <el-link slot="reference" type="info" class="remove">删除</el-link>
                         </el-popconfirm>
@@ -45,7 +46,7 @@
             </el-checkbox-group>
 
             <div class="total">
-                <el-button round class="checkout"> 结算 </el-button>
+                <el-button round class="checkout" @click="toCheckout"> 结算 </el-button>
                 <p class="price">商品总价: {{totalPrice}} 元</p>
             </div>
         </div>
@@ -96,25 +97,26 @@
                 checkedCities: [],
                 items:[
                 {
-                    id: 8,
+                    cart_id: 3,
+                    item_id: 1,
                     brand: "Nike",
                     name: "Sportswear Essentials",
-                    poster_img: "../static/sportswear-essentials-backpack-0.jpg",
-                    detail_img1:"../static/sportswear-essentials-backpack-1.jpg",
-                    detail_img2:"../static/sportswear-essentials-backpack-2.jpg",
+                    img: "../static/sportswear-essentials-backpack-0.jpg",
                     price: 320,
                     previous_price: null,
                     group: "男子",
                     style: "背包",
                     color: "黑色",
                     size: '均码',
-                    num:1,
+                    num:10,
+                    valid:true,
                 },
                     {
-                        id: 6,
+                        cart_id: 5,
+                        item_id: 4,
                         brand: "Adidas",
                         name: "Tensaur",
-                        poster_img: "../static/Tensaur_Shoes_Black-0.jpg",
+                        img: "../static/Tensaur_Shoes_Black-0.jpg",
                         price: 210,
                         group: "儿童",
                         style: "运动鞋",
@@ -122,6 +124,7 @@
                         previous_price: 300,
                         size: "40",
                         num:1,
+                        valid: true
                     }
                 ],
                 totalPrice:'',
@@ -179,6 +182,16 @@
                 ]
             };
         },
+        created() {
+            const _this = this;
+            axios.get('http://localhost:8181/cart').then(function (resp) {
+                if (resp.data.code === 0) {
+                    _this.items = resp.data.items;
+                } else {
+                    _this.$router.push('/');
+                }
+            })
+        },
         methods: {
             handleCheckAllChange(val) {
                 var ids = [];
@@ -196,45 +209,46 @@
             changeNum(id,val){
                 //后端修改
                 console.log(id+' '+val);
-                /*const _this = this;
-                axios.post('http://localhost:8181/',id).then(function (resp) {
+                const _this = this;
+                axios.put('localhost:8181/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
                     if (resp.data.code === 0) {
-                        _this.items = resp.data.items;
                         _this.$router.go(0);
                     } else {
-                        alert("修改失败");
+                        alert("库存不足");
                     }
-                })*/
+                })
             },
             removeItem(id){
                 //后端删除
                 console.log(id);
-                /*const _this = this;
-                axios.post('http://localhost:8181/',id).then(function (resp) {
+                const _this = this;
+                axios.put('localhost:8181/cart/delete?cartId='+id).then(function (resp) {
                     if (resp.data.code === 0) {
-                        _this.items = resp.data.items;
                         _this.$router.go(0);
                     } else {
                         alert("删除失败");
                     }
-                })*/
+                })
             },
             calculatePrice(){
                 var total_price = 0;
                 //['8','6']
                 for(var i=0; i<this.items.length;i++){
-                    if(this.checkedCities.indexOf(this.items[i].id) !== -1){
+                    if(this.checkedCities.indexOf(this.items[i].cart_id) !== -1){
                         total_price += this.items[i].price * this.items[i].num;
                     }
                 }
                 return total_price;
+            },
+            toCheckout(){
+                this.$router.push('/checkout');
             }
         },
         mounted(){
             //全选
             var ids = [];
             for(var i=0; i<this.items.length;i++){
-                ids.push(this.items[i].id);
+                ids.push(this.items[i].cart_id);
             }
             this.checkedCities = ids;
             //隐藏label
@@ -288,13 +302,13 @@
         margin-left: 10px;
         width: 11%;
     }
-    .price, .pre-price{
+    .price, .pre-price, .hide{
         margin-top: -1.8em;
         float:right;
         font-weight: bold;
         display: inline-block;
     }
-    .pre-price{
+    .pre-price, .hide{
         margin-top: -2.2em;
         color: #909399;
         text-decoration: line-through;
@@ -353,5 +367,8 @@
         height: 50px;
         top: 40%;
         font-size: 24px;
+    }
+    .hide{
+        visibility: hidden;
     }
 </style>

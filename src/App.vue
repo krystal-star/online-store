@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <el-header style="height: 95px">
+      <el-header style="height: 95px" class="initial">
         <NavMenu />
       </el-header>
 

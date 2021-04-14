@@ -39,6 +39,11 @@ const routes = [
     path: '/basket',
     name: 'Basket',
     component: () =>import('../views/Basket')
+  },
+  {
+    path:'/checkout',
+    name: 'Checkout',
+    component: ()=> import('../views/Checkout')
   }
 ]
 

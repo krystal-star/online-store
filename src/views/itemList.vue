@@ -126,10 +126,10 @@
         components: {Notification},
         data(){
             return{
-                group: this.$store.state.groups, //'男子,女子'
-                category: this.$store.state.categories,
-                style:this.$store.state.styles,
-                discount: this.$store.state.discount,
+                group: JSON.parse(window.sessionStorage.getItem('groups')), //'男子,女子'
+                category: JSON.parse(window.sessionStorage.getItem('categories')),
+                style:JSON.parse(window.sessionStorage.getItem('styles')),
+                discount: JSON.parse(window.sessionStorage.getItem('discount')),
                 num: 15,
                 items:[
                     {
@@ -525,15 +525,16 @@
                 ],
                 temp_src: '',
                 activeNames: ['1','2','3','4'],
-                checkList_group: this.$store.state.groups.split(","),
-                checkList_category:this.$store.state.categories.split(","),
-                checkList_brand: this.$store.state.brands.split(","),
+                checkList_group: JSON.parse(window.sessionStorage.getItem('groups')).split(","),
+                checkList_category:JSON.parse(window.sessionStorage.getItem('categories')).split(","),
+                checkList_brand: JSON.parse(window.sessionStorage.getItem('brands')).split(","),
                 checkList_color:[]
             }
         },
         created() {
+            let url = window.sessionStorage.getItem('url');
             const _this = this
-            axios.get('http://localhost:8181'+this.$store.state.url).then(function (resp) {
+            axios.get('http://localhost:8181'+JSON.parse(url)).then(function (resp) {
                 _this.items = resp.data.data.items
                 _this.num = resp.data.data.items_number
             })
@@ -642,33 +643,33 @@
                 console.log(val);
                 if(names.groups.length !== 0){
                     url.push("groups=" + names.groups.join());
-                    this.$store.state.groups = val.groups.join();
+                    window.sessionStorage.setItem("groups",JSON.stringify(val.groups.join()));
                 }
                 if(names.categories.length !== 0){
                     url.push("categories=" + names.categories.join());
-                    this.$store.state.categories = val.categories.join();
+                    window.sessionStorage.setItem("categories",JSON.stringify(val.categories.join()));
                 }
                 if(names.brands.length !== 0){
                     url.push("brands=" + names.brands.join());
-                    this.$store.state.brands = val.brands.join();
+                    window.sessionStorage.setItem("brands",JSON.stringify(val.brands.join()));
                 }
 
                 var path = "/itemList?"+url.join('&');
-                this.$store.state.url = path;
+                window.sessionStorage.setItem("url",JSON.stringify(path));
                 this.$router.push({ path: '/blank', query: { path: path } });
             },
             clearFilter: function () {
-                this.$store.state.groups = '';
-                this.$store.state.categories = '';
-                this.$store.state.styles = '';
-                this.$store.state.brands = '';
-                this.$store.state.discount = false;
-                this.$store.state.url = '/itemList';
+                window.sessionStorage.setItem("groups",JSON.stringify(''));
+                window.sessionStorage.setItem("categories",JSON.stringify(''));
+                window.sessionStorage.setItem("styles",JSON.stringify(''));
+                window.sessionStorage.setItem("brands",JSON.stringify(''));
+                window.sessionStorage.setItem("discount",JSON.stringify(false));
+                window.sessionStorage.setItem("url",JSON.stringify('/itemList'));
                 this.$router.push({ path: '/blank', query: { path: '/itemList' } });
             },
             newPage: function (id) {
-                this.$store.state.id = id;
-                this.$router.push('/itemInfo');
+                window.sessionStorage.setItem("id", JSON.stringify(id));
+                this.$router.push({ path: '/itemInfo', query: { id: id } });
             }
         }
     }
