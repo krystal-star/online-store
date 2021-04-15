@@ -47,7 +47,7 @@
 
             <div class="total">
                 <el-button round class="checkout" @click="toCheckout"> 结算 </el-button>
-                <p class="price">商品总价: {{totalPrice}} 元</p>
+                <p class="price">商品总价: {{calculatePrice}} 元</p>
             </div>
         </div>
 
@@ -127,7 +127,7 @@
                         valid: true
                     }
                 ],
-                totalPrice:'',
+
                 discount: [
                     {
                         id: 8,
@@ -196,15 +196,13 @@
             handleCheckAllChange(val) {
                 var ids = [];
                 for(var i=0; i<this.items.length;i++){
-                    ids.push(this.items[i].id);
+                    ids.push(this.items[i].cart_id);
                 }
                 this.checkedCities = val ? ids : [];
-                this.totalPrice = this.calculatePrice()
             },
             handleCheckedCitiesChange(value) {
                 let checkedCount = value.length;
                 this.checkAll = checkedCount === this.items.length;
-                this.totalPrice = this.calculatePrice()
             },
             changeNum(id,val){
                 //后端修改
@@ -230,16 +228,6 @@
                     }
                 })
             },
-            calculatePrice(){
-                var total_price = 0;
-                //['8','6']
-                for(var i=0; i<this.items.length;i++){
-                    if(this.checkedCities.indexOf(this.items[i].cart_id) !== -1){
-                        total_price += this.items[i].price * this.items[i].num;
-                    }
-                }
-                return total_price;
-            },
             toCheckout(){
                 this.$router.push('/checkout');
             }
@@ -256,8 +244,19 @@
             for(var j=1; j<labels.length; j++){
                 labels[j].style.visibility = 'hidden';
             }
+        },
+        computed:{
             //计算总价
-            this.totalPrice = this.calculatePrice();
+            calculatePrice(){
+                var total_price = 0;
+                //['8','6']
+                for(var i=0; i<this.items.length;i++){
+                    if(this.checkedCities.indexOf(this.items[i].cart_id) !== -1){
+                        total_price += this.items[i].price * this.items[i].num;
+                    }
+                }
+                return total_price;
+            }
         }
     }
 </script>

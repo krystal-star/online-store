@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-      <el-header style="height: 95px" class="initial">
+      <el-header style="height: 95px" class="initial" v-if="!checkout">
         <NavMenu />
       </el-header>
 
       <el-main style="overflow: inherit;padding-top: 3px;">
           <Feedback/>
-        <router-view></router-view>
+        <router-view :key="url"></router-view>
       </el-main>
 
       <el-footer>
@@ -27,21 +27,34 @@ export default {
     NavMenu,
       Footer
   },
+    data(){
+      return{
+          checkout:false
+      }
+    },
     mounted () {
-        window.addEventListener('scroll', this.handleScroll, true);
-        // 监听（绑定）滚轮 滚动事件
+          // 监听（绑定）滚轮 滚动事件
+          window.addEventListener('scroll', this.handleScroll, true);
     },
     methods:{
       handleScroll(){
-          var distanceToTop = window.pageYOffset;
-          var scroll = distanceToTop - this.i;
-          this.i = distanceToTop;
-          let nav = document.getElementsByClassName("nav-menu")[0];
-          if (scroll > 0 && distanceToTop >= 90){
-              nav.style = "visibility: hidden;"
-          }else{
-              nav.style = "visibility: visible;"
+          if(this.checkout === false){
+              var distanceToTop = window.pageYOffset;
+              var scroll = distanceToTop - this.i;
+              this.i = distanceToTop;
+              let nav = document.getElementsByClassName("nav-menu")[0];
+              if (scroll > 0 && distanceToTop >= 90){
+                  nav.style = "visibility: hidden;"
+              }else{
+                  nav.style = "visibility: visible;"
+              }
           }
+      }
+    },
+    computed:{
+      url(){
+          this.checkout = this.$route.path === '/checkout';
+          return this.$route.path;
       }
     }
 }
