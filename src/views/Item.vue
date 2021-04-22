@@ -148,11 +148,7 @@
                         <h4 class="choose">选择尺码</h4>
                         <h4 class="table" @click="dialogVisible = true">尺码表</h4>
                     </div>
-                    <el-row :gutter="30" v-for="item in 3" type="flex" justify="left">
-                        <el-col :span="5" v-for="subitem in 4">
-                            <el-button @click="chooseSize">{{item*4+subitem+30}}</el-button>
-                        </el-col>
-                    </el-row>
+                    <el-button @click="chooseSize">{{item.size}}</el-button>
                     <p class="stock" v-if="sizeChoosed">库存剩余{{item.stock}}件</p>
                     <p class="stock" v-else>请选择尺码</p>
                 </div>
@@ -398,7 +394,7 @@
                 if(this.sizeChoosed === true){
                     var id = this.item.id;
                     const _this = this;
-                    axios.post('localhost:8181/cart/add?itemId='+id).then(function (resp) {
+                    axios.post('http://localhost:8181/cart/add?itemId='+id).then(function (resp) {
                         if (resp.data.code === 0) {
                             _this.$notify({
                                 title: '成功',
@@ -411,6 +407,8 @@
                                 type: 'error'
                             });
                         }
+
+                        _this.$router.go(0);
                     })
                 }
             }

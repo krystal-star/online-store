@@ -311,7 +311,7 @@ export default {
       changeNode.style = "opacity:1";
     },
     newPage: function (id) {
-      this.$store.state.id = id;
+      window.sessionStorage.setItem('id',JSON.stringify(id));
       this.$router.push('/itemInfo');
     },
     viewAll: function () {

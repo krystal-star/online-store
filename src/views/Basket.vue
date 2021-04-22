@@ -7,9 +7,9 @@
             <el-checkbox  v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
             <span class="num">（已选择{{checkedCities.length}}件）</span>
             <div style="margin: 15px 0;border-bottom-style: solid;border-bottom-width: 0.1em;border-bottom-color: #E9E9EA"></div>
-            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange" v-if="">
                 <div class="items" v-for="(item,index) in items">
-                    <el-checkbox :label="item.cart_id" :key="item.cart_id"></el-checkbox>
+                    <el-checkbox :label="item.cart_id" :key="item.cart_id" :disabled="!item.valid"></el-checkbox>
                     <el-image
                             style="width: 150px; height: 150px; margin-left: 2%; margin-right: 5%"
                             :src="item.img"
@@ -19,7 +19,7 @@
                         <p class="name">{{item.name}}</p>
                         <p class="pre-price" v-if="item.previous_price !== null">¥{{item.previous_price}}</p>
                         <p class="hide" v-else>¥null</p>
-                        <p class="price">¥{{item.price}}</p>
+                        <p class="price">¥{{item.current_price}}</p>
                         <p class="style">{{item.brand}} {{item.group}}{{item.style}}</p>
                         <p class="style">{{item.color}}</p>
                         <p class="style">尺码（{{item.size}}）<span> 数量 </span>
@@ -39,6 +39,8 @@
                         >
                             <el-link slot="reference" type="info" class="remove">删除</el-link>
                         </el-popconfirm>
+
+                        <p style="color: #F56C6C; margin: 0" v-if="!item.valid">Not Available Now!</p>
 
                     </div>
                     <el-divider></el-divider>
@@ -102,14 +104,14 @@
                     brand: "Nike",
                     name: "Sportswear Essentials",
                     img: "../static/sportswear-essentials-backpack-0.jpg",
-                    price: 320,
+                    current_price: 320,
                     previous_price: null,
                     group: "男子",
                     style: "背包",
                     color: "黑色",
                     size: '均码',
                     num:10,
-                    valid:true,
+                    valid:false,
                 },
                     {
                         cart_id: 5,
@@ -117,7 +119,7 @@
                         brand: "Adidas",
                         name: "Tensaur",
                         img: "../static/Tensaur_Shoes_Black-0.jpg",
-                        price: 210,
+                        current_price: 210,
                         group: "儿童",
                         style: "运动鞋",
                         color: "黑色",
@@ -127,9 +129,8 @@
                         valid: true
                     }
                 ],
-
                 discount: [
-                    {
+                    /*{
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
@@ -178,19 +179,25 @@
                         previous_price: 240,
                         group: "儿童",
                         style: "运动鞋",
-                    }
+                    }*/
                 ]
             };
         },
         created() {
+            var ids = [];
             const _this = this;
             axios.get('http://localhost:8181/cart').then(function (resp) {
-                if (resp.data.code === 0) {
-                    _this.items = resp.data.items;
-                } else {
-                    _this.$router.push('/');
+                _this.items = resp.data.data.items;
+                _this.discount = resp.data.data.recommend;
+
+                for(var i=0; i<_this.items.length;i++){
+                    if (_this.items.valid){
+                        ids.push(_this.items[i].cart_id);
+                    }
                 }
+                _this.checkedCities = ids;
             })
+
         },
         methods: {
             handleCheckAllChange(val) {
@@ -208,7 +215,7 @@
                 //后端修改
                 console.log(id+' '+val);
                 const _this = this;
-                axios.put('localhost:8181/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
+                axios.put('http://localhost:8181/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
                     if (resp.data.code === 0) {
                         _this.$router.go(0);
                     } else {
@@ -220,7 +227,7 @@
                 //后端删除
                 console.log(id);
                 const _this = this;
-                axios.put('localhost:8181/cart/delete?cartId='+id).then(function (resp) {
+                axios.put('http://localhost:8181/cart/delete?cartId='+id).then(function (resp) {
                     if (resp.data.code === 0) {
                         _this.$router.go(0);
                     } else {
@@ -233,14 +240,9 @@
             }
         },
         mounted(){
-            //全选
-            var ids = [];
-            for(var i=0; i<this.items.length;i++){
-                ids.push(this.items[i].cart_id);
-            }
-            this.checkedCities = ids;
             //隐藏label
             var labels = document.getElementsByClassName('el-checkbox__label');
+            console.log("hidden!");
             for(var j=1; j<labels.length; j++){
                 labels[j].style.visibility = 'hidden';
             }
@@ -252,7 +254,7 @@
                 //['8','6']
                 for(var i=0; i<this.items.length;i++){
                     if(this.checkedCities.indexOf(this.items[i].cart_id) !== -1){
-                        total_price += this.items[i].price * this.items[i].num;
+                        total_price += this.items[i].current_price * this.items[i].num;
                     }
                 }
                 return total_price;
