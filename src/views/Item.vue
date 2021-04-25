@@ -81,7 +81,7 @@
 
                 <div class="recommend">
                     <p class="text">猜你喜欢</p>
-                    <el-carousel height="400px" indicator-position="outside">
+                    <el-carousel height="420px" indicator-position="outside">
                         <el-carousel-item :key="1">
                             <el-row :gutter="20">
                                 <el-col :span="8" v-for="(item,index) in discount">
@@ -148,16 +148,13 @@
                         <h4 class="choose">选择尺码</h4>
                         <h4 class="table" @click="dialogVisible = true">尺码表</h4>
                     </div>
-                    <el-row :gutter="30" v-for="item in 3" type="flex" justify="left">
-                        <el-col :span="5" v-for="subitem in 4">
-                            <el-button @click="chooseSize">{{item*4+subitem+30}}</el-button>
-                        </el-col>
-                    </el-row>
-                    <p class="stock">库存剩余{{item.stock}}件</p>
+                    <el-button @click="chooseSize">{{item.size}}</el-button>
+                    <p class="stock" v-if="sizeChoosed">库存剩余{{item.stock}}件</p>
+                    <p class="stock" v-else>请选择尺码</p>
                 </div>
 
                 <div class="chart">
-                    <el-button round>加入购物车</el-button>
+                    <el-button round @click="addToBasket">加入购物车</el-button>
                     <p class="delivery">商品金额高于300元免费配送</p>
                 </div>
 
@@ -272,12 +269,14 @@
                 },
                 rate_color:["#909399"],
                 dialogVisible:false,
-                sizeTable: '../static/icons/size.png'
+                sizeTable: '../static/icons/size.png',
+                sizeChoosed:false,
             }
         },
         created() {
+            let id = window.sessionStorage.getItem('id');
             const _this = this
-            axios.get('http://localhost:8181/itemInfo/'+this.$store.state.id).then(function (resp) {
+            axios.get('http://localhost:8181/itemInfo/'+JSON.parse(id)).then(function (resp) {
                 _this.item = resp.data.data
                 _this.discount = resp.data.data.related_items
                 _this.item.size = resp.data.data.size   //？？？？
@@ -372,26 +371,47 @@
                     if(state === "false"){
                         target.style = "border-width:2px; font-weight:bold; color:#606266; border-color:#606266;background-color:white";
                         target.setAttribute("is-click","true");
-                        stock.style = "visibility: visible";
+                        this.sizeChoosed = true;
                     }else{
                         target.style = "border-width:1px; font-weight:normal; color:#606266; border-color:#DCDFE6;background-color:white";
                         target.setAttribute("is-click","false");
-                        stock.style = "visibility: hidden";
+                        this.sizeChoosed = false;
                     }
                 }else if(target.nodeName.toLowerCase() === "span"){
                     var state = target.parentNode.getAttribute("is-click");
                     if(state === "false"){
                         target.parentNode.style = "border-width:2px; font-weight:bold; color:#606266; border-color:#606266;background-color:white";
                         target.parentNode.setAttribute("is-click","true");
-                        stock.style = "visibility: visible";
+                        this.sizeChoosed = true;
                     }else{
                         target.parentNode.style = "border-width:1px; font-weight:normal; color:#606266; border-color:#DCDFE6;background-color:white";
                         target.parentNode.setAttribute("is-click","false");
-                        stock.style = "visibility: hidden";
+                        this.sizeChoosed = false;
                     }
                 }
-
             },
+            addToBasket(){
+                if(this.sizeChoosed === true){
+                    var id = this.item.id;
+                    const _this = this;
+                    axios.post('http://localhost:8181/cart/add?itemId='+id).then(function (resp) {
+                        if (resp.data.code === 0) {
+                            _this.$notify({
+                                title: '成功',
+                                message: '加入购物车！',
+                                type: 'success'
+                            });
+                        } else {
+                            _this.$notify.error({
+                                message: resp.data.data,
+                                type: 'error'
+                            });
+                        }
+
+                        _this.$router.go(0);
+                    })
+                }
+            }
         }
     }
 </script>
@@ -458,10 +478,13 @@
         padding: 10px;
         color: #909399;
     }
-
+    .recommend{
+        text-align: left;
+        margin: 3%;
+    }
     p.text{
         font-weight: bold;
-        font-size: 26px;
+        font-size: 24px;
         display: inline-block;
     }
     p.pre-price, p.cur-price{
@@ -585,7 +608,6 @@
     p.stock{
         color: #909399;
         font-size: 14px;
-        visibility: hidden;
     }
     p.delivery{
         font-size: 12px;

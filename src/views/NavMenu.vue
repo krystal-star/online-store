@@ -17,6 +17,7 @@
                 <p>Air Force 1</p>
             </div>
         </div>
+         <!--第一行-->
         <div class="nav-header">
             <el-link :underline="false" class="icons" href="https://www.nike.com/cn/">
                 <el-image style="width: 50px; height: 50px"
@@ -80,7 +81,7 @@
                 <h1>完成创建您的BESTBUYER账户</h1>
 
                 <el-form :model="signinForm" :rules="rulesSign" ref="signinForm">
-                    <label class="labels">设置自己喜欢的昵称</label>
+                    <label class="labels">设置自己喜欢的昵称 (仅支持数字，字母，下划线)</label>
                     <el-form-item prop="username">
                         <el-input v-model="signinForm.username" placeholder="输入昵称" class="number" style="width: 315px;">
                         </el-input>
@@ -120,7 +121,7 @@
 
         </div>
 
-
+        <!--第二行-->
         <el-menu mode="horizontal" text-color="black" style="height: 60px;" >
 
             <el-menu-item id="logo" @click="toHomePage">
@@ -152,9 +153,39 @@
                     clearable>
             </el-input>
 
-            <el-link :underline="false" id="shopping-bag" href="#">
-                <el-image style="width: 25px; height: 25px"
-                          src="../static/icons/shopping-bag.png"></el-image></el-link>
+            <el-popover
+                    placement="bottom"
+                    width="350"
+                    trigger="hover"
+                    :disabled="user.id === null"
+                    >
+                <h3>购物车</h3>
+                <div style="height: 250px; overflow: scroll">
+                <div class="items" v-for="(item,index) in basket" v-if="basket.length!== 0">
+                    <el-image
+                            style="width: 100px; height: 100px; margin-left: 2%; margin-right: 5%"
+                            :src="item.img"
+                            fit="cover"></el-image>
+
+                    <div class="detail">
+                        <p class="name">{{item.name}}</p>
+                        <p class="style">{{item.brand}} {{item.group}}{{item.style}}</p>
+                        <p class="style">{{item.color}}</p>
+                        <p class="style">尺码（{{item.size}}）<span> 数量 {{item.num}}</span></p>
+                        <p class="price">¥{{item.current_price}}</p>
+                    </div>
+                </div>
+                <div v-if="basket.length ===0">
+                    <p style="text-align: center;">购物车没有东西哦～</p>
+                </div>
+                </div>
+                <h3 style="text-align: right" v-if="basket.length!==0">商品金额：{{total_price}}元</h3>
+                <el-button type="info" @click="$router.push('/basket')" style="width: 300px; margin: 0 2em">查看购物车</el-button>
+
+                <el-link :underline="false" id="shopping-bag" @click="toBasket" slot="reference">
+                    <el-image style="width: 25px; height: 25px"
+                              src="../static/icons/shopping-bag.png"></el-image></el-link>
+            </el-popover>
 
             <el-link :underline="false" id="star" href="#">
                 <el-badge :value="this.$store.state.star">
@@ -169,6 +200,7 @@
 <script>
     export default {
         name: "NavMenu",
+        components: {},
         data() {
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
@@ -387,6 +419,7 @@
                 rulesSign:{
                     username: [
                         {required:true, message: "请输入用户名", trigger:'blur'},
+                        {pattern:'^\\w+$',message: "仅支持数字，字母，下划线"}
                     ],
                     user_tel: [
                         {required:true, message: "请输入手机号", trigger:'blur'},
@@ -403,6 +436,69 @@
                     id: null,
                 },
                 error_msg:'',
+                basket:[
+                    /*{
+                        cart_id: 3,
+                        item_id: 1,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        current_price: 320,
+                        previous_price: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        size: '均码',
+                        num:10,
+                        valid:true,
+                    },
+                    {
+                        cart_id: 5,
+                        item_id: 4,
+                        brand: "Adidas",
+                        name: "Tensaur",
+                        img: "../static/Tensaur_Shoes_Black-0.jpg",
+                        current_price: 210,
+                        group: "儿童",
+                        style: "运动鞋",
+                        color: "黑色",
+                        previous_price: 300,
+                        size: "40",
+                        num:1,
+                        valid: true
+                    },
+                    {
+                        cart_id: 3,
+                        item_id: 1,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        current_price: 320,
+                        previous_price: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        size: '均码',
+                        num:10,
+                        valid:true,
+                    },
+                    {
+                        cart_id: 5,
+                        item_id: 4,
+                        brand: "Adidas",
+                        name: "Tensaur",
+                        img: "../static/Tensaur_Shoes_Black-0.jpg",
+                        current_price: 210,
+                        group: "儿童",
+                        style: "运动鞋",
+                        color: "黑色",
+                        previous_price: 300,
+                        size: "40",
+                        num:1,
+                        valid: true
+                    }*/
+                ],
+                total_price:'',
             }
         },
         mounted () {
@@ -410,10 +506,16 @@
             menu.onmouseleave = function () {
                 menu.style = "visibility: hidden";
             }
-
+        },
+        created() {
             let id = window.sessionStorage.getItem('username');
             if(id){
                 this.user.id = JSON.parse(id);
+                const _this=this;
+                axios.get('http://localhost:8181/cart').then(function (resp) {
+                    _this.basket = resp.data.data.items;
+                    _this.total_price = resp.data.data.total_price;
+                })
             }
         },
         methods: {
@@ -450,50 +552,50 @@
             newPage: function (i1,i2,i3) {
                 //存储names
                 var url = '';
-                this.$store.state.groups = '';
-                this.$store.state.categories = '';
-                this.$store.state.styles = '';
-                this.$store.state.discount = false;
-                this.$store.state.brands = '';
+                window.sessionStorage.setItem("groups",JSON.stringify(''));
+                window.sessionStorage.setItem("categories",JSON.stringify(''));
+                window.sessionStorage.setItem("styles",JSON.stringify(''));
+                window.sessionStorage.setItem("brands",JSON.stringify(''));
+                window.sessionStorage.setItem("discount",JSON.stringify(false));
 
                 //点击 "男子，女子，儿童"
                 if (i1.name === "男子" || i1.name === "女子" ||i1.name === "儿童"){
-                    this.$store.state.groups = i1.name;
+                    window.sessionStorage.setItem("groups",JSON.stringify(i1.name));
                     url += "groups="+i1.url;
                     //鞋类，服装，配件
                     if(i2 !== undefined){
-                        this.$store.state.categories = i2.name;
+                        window.sessionStorage.setItem("categories",JSON.stringify(i2.name));
                         url += "&categories="+i2.url;
                     }
                     //xx鞋，xx衣服
                     if(i3 !== undefined){
-                        this.$store.state.styles = i3.name;
+                        window.sessionStorage.setItem("styles",JSON.stringify(i3.name));
                         url += "&styles="+i3.url;
                     }
                 }
 
                 //点击 "品牌"
                 else if (i1.name === "分类" && i3 !== undefined){
-                    this.$store.state.brands = i3.name;
+                    window.sessionStorage.setItem("brands",JSON.stringify(i3.name));
                     url += "brands="+i3.url;
                 }
 
                 //点击 "折扣"
                 else if(i1.name === "折扣") {
-                    this.$store.state.discount = true;
+                    window.sessionStorage.setItem("discount",JSON.stringify(true));
                     url += "discount=true";
                     if (i2 !== undefined) {
-                        this.$store.state.groups = i2.name;
+                        window.sessionStorage.setItem("groups",JSON.stringify(i2.name));
                         url += "&groups=" + i2.url;
                     }
                     if (i3 !== undefined) {
-                        this.$store.state.categories = i3.name;
+                        window.sessionStorage.setItem("categories",JSON.stringify(i3.name));
                         url += "&categories=" + i3.url;
                     }
                 }
 
                 var path = '/itemList?'+url;
-                this.$store.state.url = path;
+                window.sessionStorage.setItem("url",JSON.stringify(path));
                 this.$router.push({ path: '/blank', query: { path: path } });
             },
             onSubmit: function (formName) {
@@ -513,7 +615,7 @@
                             })
 
                             /*if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
-                                window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                                window.sessionStorage.setItem("username", JSON.stringify("junjun"));
                                 this.$router.go(0);
                             }else {
                                 var failMsg = document.getElementsByClassName("login-fail")[0];
@@ -528,11 +630,16 @@
                                 passcode: this.signinForm.password1
                             }
                             console.log(infoForm);
+                            var path = 'username='+infoForm.username+'&password='+infoForm.password;
                             const _this = this;
                             axios.post('http://localhost:8181/register', infoForm).then(function (resp) {
-                            if(resp.data.code === 0){
-                                window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
-                                _this.$router.go(0);
+                                if (resp.data.code === 0){
+                                    axios.post('http://localhost:8181/login?'+path).then(function (resp) {
+                                        if (resp.data.code === 0) {
+                                            window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
+                                            _this.$router.go(0);
+                                        }
+                                    })
                             }else{
                                     _this.error_msg = resp.data.data;
                                     var failMsg = document.getElementsByClassName('signin-fail')[0];
@@ -558,7 +665,10 @@
             },
             logout:function () {
                 window.sessionStorage.removeItem('username');
-                this.$router.go(0);
+                const _this = this;
+                axios.post('http://localhost:8181/logout').then(function (resp) {
+                    _this.$router.go(0);
+                })
             },
             moveToSignIn: function () {
                 this.dialogLoginVisible = false;
@@ -567,6 +677,13 @@
             moveToLogIn: function () {
                 this.dialogSigninVisible = false;
                 this.dialogLoginVisible = true;
+            },
+            toBasket(){
+                if(this.user.id === null){
+                    this.dialogLoginVisible = true;
+                }else{
+                    this.$router.push('/basket');
+                }
             }
         }
     }
@@ -657,13 +774,15 @@
 }
     #shopping-bag{
         cursor: pointer;
-        right: 60px;
-        top: 11px;
+        float: right;
+        top: 25%;
+        right: 5%;
     }
     #star{
         cursor: pointer;
-        right: 30px;
-        top: 10px;
+        float: right;
+        right: 10%;
+        top: 25%;
     }
     #shopping-bag:hover,#star:hover, #logo:hover, .icons:hover{
         opacity: 0.5;
@@ -801,6 +920,34 @@
         background-color: #606278;
         border-color: #606278;
         opacity: 0.5;
+    }
+    .items{
+        /*border-bottom-style: solid;
+        border-bottom-width: 0.1em;
+        border-bottom-color: #E9E9EA;*/
+        margin-bottom: 5%;
+        display: flex;
+    }
+    .detail{
+        font-size: 16px;
+        vertical-align: top;
+        display: inline-block;
+        width: 70%;
+    }
+    .name{
+        margin-top: 0;
+        margin-bottom: 0.5em;
+        font-weight: bold;
+    }
+    .style{
+        margin-top: 0;
+        margin-bottom: 0.5em;
+        font-size: 14px;
+        color: #909399;
+    }
+    .price{
+        margin: 0;
+        font-weight: bold;
     }
 
 </style>
