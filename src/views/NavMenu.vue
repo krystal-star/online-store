@@ -160,6 +160,7 @@
                     :disabled="user.id === null"
                     >
                 <h3>购物车</h3>
+                <div style="height: 250px; overflow: scroll">
                 <div class="items" v-for="(item,index) in basket" v-if="basket.length!== 0">
                     <el-image
                             style="width: 100px; height: 100px; margin-left: 2%; margin-right: 5%"
@@ -176,6 +177,7 @@
                 </div>
                 <div v-if="basket.length ===0">
                     <p style="text-align: center;">购物车没有东西哦～</p>
+                </div>
                 </div>
                 <h3 style="text-align: right" v-if="basket.length!==0">商品金额：{{total_price}}元</h3>
                 <el-button type="info" @click="$router.push('/basket')" style="width: 300px; margin: 0 2em">查看购物车</el-button>
@@ -436,6 +438,36 @@
                 error_msg:'',
                 basket:[
                     /*{
+                        cart_id: 3,
+                        item_id: 1,
+                        brand: "Nike",
+                        name: "Sportswear Essentials",
+                        img: "../static/sportswear-essentials-backpack-0.jpg",
+                        current_price: 320,
+                        previous_price: null,
+                        group: "男子",
+                        style: "背包",
+                        color: "黑色",
+                        size: '均码',
+                        num:10,
+                        valid:true,
+                    },
+                    {
+                        cart_id: 5,
+                        item_id: 4,
+                        brand: "Adidas",
+                        name: "Tensaur",
+                        img: "../static/Tensaur_Shoes_Black-0.jpg",
+                        current_price: 210,
+                        group: "儿童",
+                        style: "运动鞋",
+                        color: "黑色",
+                        previous_price: 300,
+                        size: "40",
+                        num:1,
+                        valid: true
+                    },
+                    {
                         cart_id: 3,
                         item_id: 1,
                         brand: "Nike",

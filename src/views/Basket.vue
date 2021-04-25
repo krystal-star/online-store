@@ -98,7 +98,7 @@
                 checkAll: true,
                 checkedCities: [],
                 items:[
-                {
+                /*{
                     cart_id: 3,
                     item_id: 1,
                     brand: "Nike",
@@ -127,7 +127,7 @@
                         size: "40",
                         num:1,
                         valid: true
-                    }
+                    }*/
                 ],
                 discount: [
                     /*{
@@ -184,20 +184,11 @@
             };
         },
         created() {
-            var ids = [];
             const _this = this;
             axios.get('http://localhost:8181/cart').then(function (resp) {
                 _this.items = resp.data.data.items;
                 _this.discount = resp.data.data.recommend;
-
-                for(var i=0; i<_this.items.length;i++){
-                    if (_this.items.valid){
-                        ids.push(_this.items[i].cart_id);
-                    }
-                }
-                _this.checkedCities = ids;
             })
-
         },
         methods: {
             handleCheckAllChange(val) {
@@ -242,10 +233,20 @@
         mounted(){
             //隐藏label
             var labels = document.getElementsByClassName('el-checkbox__label');
-            console.log("hidden!");
             for(var j=1; j<labels.length; j++){
-                labels[j].style.visibility = 'hidden';
+                console.log("hidden!");
+                labels[j].style = 'visibility:hidden';
             }
+
+            //全选
+            var ids = [];
+            for(var i=0; i<this.items.length;i++){
+                if (this.items[i].valid){
+                    ids.push(this.items[i].cart_id);
+                }
+            }
+            this.checkedCities = ids;
+            console.log(this.checkedCities);
         },
         computed:{
             //计算总价

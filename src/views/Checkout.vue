@@ -193,10 +193,10 @@
                         <div class="total-price" style="font-weight: bold">
                             <span >商品金额</span><span style="float: right">{{total_price}}元</span><br/>
                             <span>运费</span>
-                            <span style="float: right" v-if="deliveryVal === '普通达'">0元</span>
+                            <span style="float: right" v-if="deliveryVal === '免费'">0元</span>
                             <span style="float: right" v-else>30元</span><br/>
                             <span>商品总价</span>
-                            <span style="float: right" v-if="deliveryVal === '普通达'">{{total_price}}元</span>
+                            <span style="float: right" v-if="deliveryVal === '免费'">{{total_price}}元</span>
                             <span style="float: right" v-else>{{total_price +30 }}元</span><br/>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
         name: "Checkout",
         data(){
             return{
-                username:'俊俊',
+                username:'',
                 addressForm:{
                     lastName:'',
                     firstName:'',
@@ -260,7 +260,7 @@
                         time:'',
                     }
                 ],
-                deliveryVal:'普通达',
+                deliveryVal:'免费',
                 addressComplete:false,
                 showForm:'',
                 rules:{
@@ -334,6 +334,11 @@
                 _this.basket = resp.data.data.items;
                 _this.total_price = resp.data.data.total_price;
             })
+
+            let username = window.sessionStorage.getItem('username');
+            if(username) {
+                this.username = JSON.parse(username);
+            }
         },
         mounted() {
             //计算预计到达时间
@@ -439,6 +444,7 @@
             },
             editAddress(id){
                 const _this = this;
+                axios.put('http://localhost:8181/payment/delete?paymentId='+id).then(function (resp) {});
                 axios.get('http://localhost:8181/payment/choose?paymentId='+id).then(function (resp) {
                     _this.addressForm.lastName = resp.data.data.familyName;
                     _this.addressForm.firstName = resp.data.data.givenName;
@@ -448,7 +454,7 @@
                     _this.addressForm.address = resp.data.data.address;
                     _this.addressForm.tel = resp.data.data.tel;
                     _this.showForm = true;
-                })
+                });
 
                 /*this.addressForm.lastName = "fassdf";
                 this.addressForm.firstName = "ffff";
@@ -458,7 +464,7 @@
                 this.addressForm.address = 'dsadafsada';
                 this.addressForm.tel = "2323";
                 this.showForm = true;*/
-            }
+            },
         }
     }
 </script>
