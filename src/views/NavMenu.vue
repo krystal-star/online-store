@@ -358,7 +358,7 @@
                         ]
                     },
                     {
-                        name: "折扣",
+                        name:"折扣",
                         url: "",
                         categories: [
                             {
@@ -602,7 +602,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (formName === 'loginForm') {
-                            var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
+                            /*var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
                             const _this = this;
                             axios.post('http://localhost:8181/login?'+path).then(function (resp) {
                                 if(resp.data.code === 0){
@@ -612,15 +612,15 @@
                                     var failMsg = document.getElementsByClassName("login-fail")[0];
                                     failMsg.style.visibility = "visible";
                                 }
-                            })
+                            })*/
 
-                            /*if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
+                            if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
                                 window.sessionStorage.setItem("username", JSON.stringify("junjun"));
                                 this.$router.go(0);
                             }else {
                                 var failMsg = document.getElementsByClassName("login-fail")[0];
                                 failMsg.style.visibility = "visible";
-                            }*/
+                            }
                         }
 
                         if(formName === 'signinForm'){
