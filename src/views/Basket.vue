@@ -6,6 +6,7 @@
             <h2>购物车</h2>
             <el-checkbox  v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
             <span class="num">（已选择{{checkedCities.length}}件）</span>
+            <el-link style="float: right; font-size: 16px; margin-right: 6%" @click="clearBasket">清空购物车</el-link>
             <div style="margin: 15px 0;border-bottom-style: solid;border-bottom-width: 0.1em;border-bottom-color: #E9E9EA"></div>
             <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange" v-if="">
                 <div class="items" v-for="(item,index) in items">
@@ -98,7 +99,7 @@
                 checkAll: true,
                 checkedCities: [],
                 items:[
-                /*{
+                {
                     cart_id: 3,
                     item_id: 1,
                     brand: "Nike",
@@ -127,7 +128,7 @@
                         size: "40",
                         num:1,
                         valid: true
-                    }*/
+                    }
                 ],
                 discount: [
                     /*{
@@ -228,6 +229,9 @@
             },
             toCheckout(){
                 this.$router.push('/checkout');
+            },
+            clearBasket(){
+                //清空购物车
             }
         },
         mounted(){

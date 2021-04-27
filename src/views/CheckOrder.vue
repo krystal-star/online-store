@@ -194,6 +194,9 @@
                 ]
             }
         },
+        created() {
+            window.scrollTo(0,0);
+        },
         methods:{
             newPage(group, item){
                 //存储names
