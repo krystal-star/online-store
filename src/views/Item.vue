@@ -193,7 +193,7 @@
         data(){
             return{
                 item:{
-                    id: 1,
+                    /*id: 1,
                     name:"Air VaporMax EVO NRG",
                     poster_img: "../static/air-vapormax-evo-nrg-0.jpg",
                     detail_img1: "../static/air-vapormax-evo-nrg-1.jpg",
@@ -208,10 +208,10 @@
                     stock: 30,
                     sale: 5,
                     brand: "Nike",
-                    rating:3.8
+                    rating:3.8*/
                 },
                 discount: [
-                    {
+                    /*{
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
@@ -260,7 +260,7 @@
                         previous_price: 240,
                         group: "儿童",
                         style: "运动鞋",
-                    }
+                    }*/
                 ],
                 avatars:{
                     avatar1:"../static/icons/avatar1.jpeg",
@@ -401,14 +401,15 @@
                                 message: '加入购物车！',
                                 type: 'success'
                             });
+                            setTimeout(() => {
+                                _this.$router.go(0);
+                            }, 3000);
                         } else {
                             _this.$notify.error({
                                 message: resp.data.data,
                                 type: 'error'
                             });
                         }
-
-                        _this.$router.go(0);
                     })
                 }
             }

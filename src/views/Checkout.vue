@@ -326,6 +326,7 @@
                 ],
                 total_price:2333,
                 fullscreenLoading:false,
+                paying_items: JSON.parse(window.sessionStorage.getItem('paying_items')),
             }
         },
         created() {
@@ -335,7 +336,8 @@
                 _this.showForm = resp.data.data.info.length === 0;
             })
 
-            axios.get('http://localhost:8181/cart').then(function (resp) {
+            axios.get('http://localhost:8181/payment/payingItems?cartIds='+this.paying_items.toString())
+                .then(function (resp) {
                 _this.basket = resp.data.data.items;
                 _this.total_price = resp.data.data.total_price;
             })
@@ -474,6 +476,20 @@
                 this.showForm = true;*/
             },
             confirmOrder(){
+                /*orderDTO:
+                    private Integer[] cartIds;
+                    private Integer paymentId;
+                    private String deliveryType;
+                    private String paymentMethod;*/
+                let orderDTO = {
+                    cartIds: this.paying_items,
+                    paymentId: this.existedAddress[this.chosenAddressIndex].payment_id,
+                    deliveryType: this.deliveryVal === '免费'? '普通达' : '超级快递达',
+                    paymentMethod: this.radioPay === 1? '支付宝':'微信支付'
+                }
+
+                window.sessionStorage.setItem('orderDTO', JSON.stringify(orderDTO));
+
                 const loading = this.$loading({
                     lock: true,
                     text: '支付中',

@@ -132,7 +132,7 @@
                 discount: JSON.parse(window.sessionStorage.getItem('discount')),
                 num: 15,
                 items:[
-                    {
+                    /*{
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
@@ -521,7 +521,7 @@
                         group: "男子",
                         style: "背包",
                         color: "黑色",
-                    },
+                    },*/
                 ],
                 temp_src: '',
                 activeNames: ['1','2','3','4'],

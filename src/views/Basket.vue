@@ -99,7 +99,7 @@
                 checkAll: true,
                 checkedCities: [],
                 items:[
-                {
+                /*{
                     cart_id: 3,
                     item_id: 1,
                     brand: "Nike",
@@ -112,7 +112,7 @@
                     color: "黑色",
                     size: '均码',
                     num:10,
-                    valid:false,
+                    valid:true,
                 },
                     {
                         cart_id: 5,
@@ -128,7 +128,7 @@
                         size: "40",
                         num:1,
                         valid: true
-                    }
+                    }*/
                 ],
                 discount: [
                     /*{
@@ -212,6 +212,7 @@
                         _this.$router.go(0);
                     } else {
                         alert("库存不足");
+                        _this.$router.go(0);
                     }
                 })
             },
@@ -228,10 +229,15 @@
                 })
             },
             toCheckout(){
+                window.sessionStorage.setItem('paying_items', JSON.stringify(this.checkedCities));
                 this.$router.push('/checkout');
             },
             clearBasket(){
                 //清空购物车
+                const _this = this;
+                axios.put('http://localhost:8181/cart/deleteAll').then(function (resp) {
+                        _this.$router.go(0);
+                });
             }
         },
         mounted(){

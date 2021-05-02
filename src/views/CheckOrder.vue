@@ -23,12 +23,12 @@
                     <span style="font-size: 18px;font-weight: bold">订单详情</span>
                 </div>
                 <div class="text">
-                    <p>订单编号：{{order.id}}</p>
-                    <p>订单状态：{{order.state}}</p>
-                    <p>支付方式：{{order.payMethod}}</p>
+                    <p>订单编号：{{order.order_id}}</p>
+                    <p>订单状态：已支付</p>
+                    <p>支付方式：{{order.payment_method}}</p>
                     <p>订单金额：{{order.total_price}}元</p>
                     <p>配送地址：{{order.address}}</p>
-                    <p>配送方式：{{order.delivery}}</p>
+                    <p>配送方式：{{order.delivery_type}}</p>
                 </div>
             </el-card>
 
@@ -93,14 +93,14 @@
         name: "CheckOrder",
         data(){
             return{
-                username:'Junjun',
+                username:'',
                 order:{
-                    id:'12345678',
-                    state:'已支付',
-                    payMethod: '支付宝',
+                    /*order_id:'12345678',
+                    status:'已支付',
+                    payment_method: '支付宝',
                     total_price: 2333.00,
                     address: 'Flat 72, River Street Tower',
-                    delivery: '快速达',
+                    delivery_type: '快速达',*/
                 },
                 classification: [
                     {
@@ -141,7 +141,7 @@
                     }
                 ],
                 discount: [
-                    {
+                    /*{
                         id: 8,
                         brand: "Nike",
                         name: "Sportswear Essentials",
@@ -190,11 +190,20 @@
                         previous_price: 240,
                         group: "儿童",
                         style: "运动鞋",
-                    }
+                    }*/
                 ]
             }
         },
         created() {
+            this.username = JSON.parse(window.sessionStorage.getItem('username'))
+            const _this = this;
+            axios.post('http://localhost:8181/order/create',
+            JSON.parse(window.sessionStorage.getItem('orderDTO'))).then(function (resp) {
+                    if (resp.data.data.is_paid === true){
+                        _this.order = resp.data.data;
+                        _this.discount = resp.data.data.related_items;
+                    }
+            })
             window.scrollTo(0,0);
         },
         methods:{
