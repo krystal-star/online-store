@@ -331,12 +331,12 @@
         },
         created() {
             const _this = this;
-            axios.get('http://localhost:8181/payment').then(function (resp) {
+            axios.get('http://139.9.86.49:8181/payment').then(function (resp) {
                 _this.existedAddress = resp.data.data.info;
                 _this.showForm = resp.data.data.info.length === 0;
             })
 
-            axios.get('http://localhost:8181/payment/payingItems?cartIds='+this.paying_items.toString())
+            axios.get('http://139.9.86.49:8181/payment/payingItems?cartIds='+this.paying_items.toString())
                 .then(function (resp) {
                 _this.basket = resp.data.data.items;
                 _this.total_price = resp.data.data.total_price;
@@ -400,7 +400,7 @@
                         }
                         console.log(paymentDTO);
                         const _this = this;
-                        axios.post('http://localhost:8181/payment/add', paymentDTO).then(function (resp) {
+                        axios.post('http://139.9.86.49:8181/payment/add', paymentDTO).then(function (resp) {
                             if (resp.data.code === 0) {
                                 _this.$router.go(0);
                             }
@@ -420,7 +420,7 @@
                     });
 
                     const _this = this;
-                    axios.put('http://localhost:8181/payment/delete?paymentId='+id).then(function (resp) {
+                    axios.put('http://139.9.86.49:8181/payment/delete?paymentId='+id).then(function (resp) {
                         if(resp.data.code === 0){
                             _this.$router.go(0);
                         }
@@ -454,8 +454,8 @@
             },
             editAddress(id){
                 const _this = this;
-                axios.put('http://localhost:8181/payment/delete?paymentId='+id).then(function (resp) {});
-                axios.get('http://localhost:8181/payment/choose?paymentId='+id).then(function (resp) {
+                axios.put('http://139.9.86.49:8181/payment/delete?paymentId='+id).then(function (resp) {});
+                axios.get('http://139.9.86.49:8181/payment/choose?paymentId='+id).then(function (resp) {
                     _this.addressForm.lastName = resp.data.data.familyName;
                     _this.addressForm.firstName = resp.data.data.givenName;
                     _this.addressForm.province = resp.data.data.province;

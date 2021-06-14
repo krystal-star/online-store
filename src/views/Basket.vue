@@ -186,7 +186,7 @@
         },
         created() {
             const _this = this;
-            axios.get('http://localhost:8181/cart').then(function (resp) {
+            axios.get('http://139.9.86.49:8181/cart').then(function (resp) {
                 _this.items = resp.data.data.items;
                 _this.discount = resp.data.data.recommend;
             })
@@ -207,7 +207,7 @@
                 //后端修改
                 console.log(id+' '+val);
                 const _this = this;
-                axios.put('http://localhost:8181/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
+                axios.put('http://139.9.86.49:8181/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
                     if (resp.data.code === 0) {
                         _this.$router.go(0);
                     } else {
@@ -220,7 +220,7 @@
                 //后端删除
                 console.log(id);
                 const _this = this;
-                axios.put('http://localhost:8181/cart/delete?cartId='+id).then(function (resp) {
+                axios.put('http://139.9.86.49:8181/cart/delete?cartId='+id).then(function (resp) {
                     if (resp.data.code === 0) {
                         _this.$router.go(0);
                     } else {
@@ -235,7 +235,7 @@
             clearBasket(){
                 //清空购物车
                 const _this = this;
-                axios.put('http://localhost:8181/cart/deleteAll').then(function (resp) {
+                axios.put('http://139.9.86.49:8181/cart/deleteAll').then(function (resp) {
                         _this.$router.go(0);
                 });
             }

@@ -327,7 +327,7 @@ export default {
   },
   created() {
     const _this = this
-    axios.get('http://localhost:8181/home').then(function (resp) {
+    axios.get('http://139.9.86.49:8181/home').then(function (resp) {
       _this.poster = resp.data.data.poster
       _this.trending = resp.data.data.trending
       _this.discount = resp.data.data.discount

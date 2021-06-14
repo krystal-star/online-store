@@ -423,7 +423,7 @@
                     ],
                     user_tel: [
                         {required:true, message: "请输入手机号", trigger:'blur'},
-                        {min:11, max:11, message: "请输入正确的手机号", trigger:'blur'}
+                        {pattern:'^1[34578]\\d{9}$', message: "请输入正确的手机号"}
                     ],
                     password1: [
                         { validator: validatePass, trigger: 'blur' }
@@ -512,7 +512,7 @@
             if(id){
                 this.user.id = JSON.parse(id);
                 const _this=this;
-                axios.get('http://localhost:8181/cart').then(function (resp) {
+                axios.get('http://139.9.86.49:8181/cart').then(function (resp) {
                     _this.basket = resp.data.data.items;
                     _this.total_price = resp.data.data.total_price;
                 })
@@ -602,58 +602,74 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (formName === 'loginForm') {
-                            /*var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
-                            const _this = this;
-                            axios.post('http://localhost:8181/login?'+path).then(function (resp) {
-                                if(resp.data.code === 0){
-                                    window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
-                                    _this.$router.go(0);
-                                }else{
-                                    var failMsg = document.getElementsByClassName("login-fail")[0];
-                                    failMsg.style.visibility = "visible";
-                                }
-                            })*/
-
-                            if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
-                                window.sessionStorage.setItem("username", JSON.stringify("junjun"));
-                                this.$router.go(0);
-                            }else {
-                                var failMsg = document.getElementsByClassName("login-fail")[0];
-                                failMsg.style.visibility = "visible";
-                            }
+                            this.login();
                         }
-
                         if(formName === 'signinForm'){
-                            let infoForm = {
-                                userName: this.signinForm.username,
-                                userTel: this.signinForm.user_tel,
-                                passcode: this.signinForm.password1
-                            }
-                            console.log(infoForm);
-                            var path = 'username='+infoForm.username+'&password='+infoForm.password;
-                            const _this = this;
-                            axios.post('http://localhost:8181/register', infoForm).then(function (resp) {
-                                if (resp.data.code === 0){
-                                    axios.post('http://localhost:8181/login?'+path).then(function (resp) {
-                                        if (resp.data.code === 0) {
-                                            window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
-                                            _this.$router.go(0);
-                                        }
-                                    })
-                            }else{
-                                    _this.error_msg = resp.data.data;
-                                    var failMsg = document.getElementsByClassName('signin-fail')[0];
-                                    failMsg.style.visibility = 'visible';
-                            }
-                            })
-
-                            /*window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
-                            this.$router.go(0);*/
+                            this.register();
+                            this.dialogLoginVisible = true;
                         }
                     } else {
                         return false;
                     }
                 });
+            },
+            login: function(){
+                var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
+                const _this = this;
+                axios.post('http://139.9.86.49:8181/login?'+path).then(function (resp) {
+                    console.log("登陆中");
+                    if(resp.data.code === 0){
+                        console.log("注册成功");
+                        window.sessionStorage.setItem("username", JSON.stringify(resp.data.data));
+                        _this.$router.go(0);
+                        return true;
+                    }else{
+                        var failMsg = document.getElementsByClassName("login-fail")[0];
+                        failMsg.style.visibility = "visible";
+                        return false;
+                    }
+                })
+
+                /*if(this.loginForm.username ==='junjun' && this.loginForm.password === '123'){
+                    window.sessionStorage.setItem("username", JSON.stringify("junjun"));
+                    this.$router.go(0);
+                }else {
+                    var failMsg = document.getElementsByClassName("login-fail")[0];
+                    failMsg.style.visibility = "visible";
+                }*/
+            },
+            register: function(){
+                let infoForm = {
+                    userName: this.signinForm.username,
+                    userTel: this.signinForm.user_tel,
+                    passcode: this.signinForm.password1
+                }
+                console.log(infoForm);
+                var path = 'username='+infoForm.username+'&password='+infoForm.password;
+                const _this = this;
+                axios.post('http://139.9.86.49:8181/register', infoForm).then(function (resp) {
+                    /*if (resp.data.code === 0){
+                        console.log("注册好了");
+                        axios.post('http://139.9.86.49:8181/login?'+path).then(function (resp1) {
+                            console.log("登陆中");
+                            if (resp1.data.code === 0) {
+                                console.log("登陆好了");
+                                window.sessionStorage.setItem("username", JSON.stringify(resp1.data.data));
+                                _this.$router.go(0);
+                            }
+                        })*/
+                        if(resp.data.code === 0){
+                            _this.$router.go(0);
+                    }else{
+                        _this.error_msg = resp.data.data;
+                        console.log("注册报错");
+                        var failMsg = document.getElementsByClassName('signin-fail')[0];
+                        failMsg.style.visibility = 'visible';
+                    }
+                })
+
+                /*window.sessionStorage.setItem("username", JSON.stringify("俊俊"));
+                this.$router.go(0);*/
             },
             dropdownVisible: function () {
                 var dropdown = document.getElementsByClassName("dropdown")[0];
@@ -666,7 +682,7 @@
             logout:function () {
                 window.sessionStorage.removeItem('username');
                 const _this = this;
-                axios.post('http://localhost:8181/logout').then(function (resp) {
+                axios.post('http://139.9.86.49:8181/logout').then(function (resp) {
                     _this.$router.go(0);
                 })
             },
