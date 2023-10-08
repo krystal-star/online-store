@@ -161,18 +161,21 @@
                                 <el-image :src="wechatIcon" fit="scale-down" style="width: 50%"></el-image>
                             </el-radio>
                     </el-radio-group>
-                    <el-button type="info" @click="" class="complete-btn">下单</el-button>
+                    <el-button type="info"
+                               @click="confirmOrder"
+                               class="complete-btn">下单</el-button>
                     </div>
                 </el-card>
             </el-main>
 
-            <el-aside style="margin-top: 8%;margin-left: 2%;width: 350px">
+            <el-aside style="margin-top: 8%;margin-left: 2%;width: 350px;">
                 <el-card class="order-abstract">
                     <div slot="header" class="abstract-header">
                         <h3>订单摘要</h3>
                         <el-button style="float: right;padding: 4px 0" type="text" @click="$router.push('/basket')">编辑</el-button>
                     </div>
                     <div class="show-basket">
+                        <div style="height: 575px;overflow: scroll">
                         <div class="items" v-for="(item,index) in basket">
                             <el-image
                                     style="width: 100px; height: 100px; margin-left: 2%; margin-right: 5%"
@@ -187,6 +190,7 @@
                                 <p class="price">¥{{item.current_price}}</p>
 
                             </div>
+                        </div>
                         </div>
                         <el-divider></el-divider>
 
@@ -318,19 +322,22 @@
                         size: "40",
                         num:1,
                         valid: true
-                    }
+                    },
                 ],
                 total_price:2333,
+                fullscreenLoading:false,
+                paying_items: JSON.parse(window.sessionStorage.getItem('paying_items')),
             }
         },
         created() {
             const _this = this;
-            axios.get('http://localhost:8181/payment').then(function (resp) {
+            axios.get('/payment').then(function (resp) {
                 _this.existedAddress = resp.data.data.info;
                 _this.showForm = resp.data.data.info.length === 0;
             })
 
-            axios.get('http://localhost:8181/cart').then(function (resp) {
+            axios.get('/payment/payingItems?cartIds='+this.paying_items.toString())
+                .then(function (resp) {
                 _this.basket = resp.data.data.items;
                 _this.total_price = resp.data.data.total_price;
             })
@@ -342,7 +349,8 @@
         },
         mounted() {
             //计算预计到达时间
-            var d = new Date();
+            var d1 = new Date();
+            var d2 = new Date();
             var weekday=new Array(7);
             weekday[0]="周日";
             weekday[1]="周一";
@@ -351,11 +359,13 @@
             weekday[4]="周四";
             weekday[5]="周五";
             weekday[6]="周六";
-            var month = d.getMonth()+1;
-            var date = d.getDate();
+            d1.setDate(d1.getDate()+7);
+            d2.setDate(d2.getDate()+2);
+            var month1 = d1.getMonth()+1;
+            var month2 = d2.getMonth()+1;
 
-            this.deliveryOptions[0].time = month+'月'+(date+7)+'日 '+weekday[d.getDay()];
-            this.deliveryOptions[1].time = month+'月'+(date+2)+'日 '+weekday[d.getDay()+2];
+            this.deliveryOptions[0].time = month1+'月'+d1.getDate()+'日 '+weekday[d1.getDay()];
+            this.deliveryOptions[1].time = month2+'月'+d2.getDate()+'日 '+weekday[d2.getDay()];
         },
         methods:{
             setCity(val){
@@ -390,7 +400,7 @@
                         }
                         console.log(paymentDTO);
                         const _this = this;
-                        axios.post('http://localhost:8181/payment/add', paymentDTO).then(function (resp) {
+                        axios.post('/payment/add', paymentDTO).then(function (resp) {
                             if (resp.data.code === 0) {
                                 _this.$router.go(0);
                             }
@@ -410,7 +420,7 @@
                     });
 
                     const _this = this;
-                    axios.put('http://localhost:8181/payment/delete?paymentId='+id).then(function (resp) {
+                    axios.put('/payment/delete?paymentId='+id).then(function (resp) {
                         if(resp.data.code === 0){
                             _this.$router.go(0);
                         }
@@ -444,8 +454,8 @@
             },
             editAddress(id){
                 const _this = this;
-                axios.put('http://localhost:8181/payment/delete?paymentId='+id).then(function (resp) {});
-                axios.get('http://localhost:8181/payment/choose?paymentId='+id).then(function (resp) {
+                axios.put('/payment/delete?paymentId='+id).then(function (resp) {});
+                axios.get('/payment/choose?paymentId='+id).then(function (resp) {
                     _this.addressForm.lastName = resp.data.data.familyName;
                     _this.addressForm.firstName = resp.data.data.givenName;
                     _this.addressForm.province = resp.data.data.province;
@@ -465,6 +475,32 @@
                 this.addressForm.tel = "2323";
                 this.showForm = true;*/
             },
+            confirmOrder(){
+                /*orderDTO:
+                    private Integer[] cartIds;
+                    private Integer paymentId;
+                    private String deliveryType;
+                    private String paymentMethod;*/
+                let orderDTO = {
+                    cartIds: this.paying_items,
+                    paymentId: this.existedAddress[this.chosenAddressIndex].payment_id,
+                    deliveryType: this.deliveryVal === '免费'? '普通达' : '超级快递达',
+                    paymentMethod: this.radioPay === 1? '支付宝':'微信支付'
+                }
+
+                window.sessionStorage.setItem('orderDTO', JSON.stringify(orderDTO));
+
+                const loading = this.$loading({
+                    lock: true,
+                    text: '支付中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                    this.$router.push('/check_order');
+                }, 2000);
+            }
         }
     }
 </script>

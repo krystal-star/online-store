@@ -6,6 +6,7 @@
             <h2>购物车</h2>
             <el-checkbox  v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
             <span class="num">（已选择{{checkedCities.length}}件）</span>
+            <el-link style="float: right; font-size: 16px; margin-right: 6%" @click="clearBasket">清空购物车</el-link>
             <div style="margin: 15px 0;border-bottom-style: solid;border-bottom-width: 0.1em;border-bottom-color: #E9E9EA"></div>
             <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange" v-if="">
                 <div class="items" v-for="(item,index) in items">
@@ -111,7 +112,7 @@
                     color: "黑色",
                     size: '均码',
                     num:10,
-                    valid:false,
+                    valid:true,
                 },
                     {
                         cart_id: 5,
@@ -185,7 +186,7 @@
         },
         created() {
             const _this = this;
-            axios.get('http://localhost:8181/cart').then(function (resp) {
+            axios.get('/cart').then(function (resp) {
                 _this.items = resp.data.data.items;
                 _this.discount = resp.data.data.recommend;
             })
@@ -206,11 +207,12 @@
                 //后端修改
                 console.log(id+' '+val);
                 const _this = this;
-                axios.put('http://localhost:8181/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
+                axios.put('/cart/update?cartId='+id+'+&num='+val).then(function (resp) {
                     if (resp.data.code === 0) {
                         _this.$router.go(0);
                     } else {
                         alert("库存不足");
+                        _this.$router.go(0);
                     }
                 })
             },
@@ -218,7 +220,7 @@
                 //后端删除
                 console.log(id);
                 const _this = this;
-                axios.put('http://localhost:8181/cart/delete?cartId='+id).then(function (resp) {
+                axios.put('/cart/delete?cartId='+id).then(function (resp) {
                     if (resp.data.code === 0) {
                         _this.$router.go(0);
                     } else {
@@ -227,7 +229,15 @@
                 })
             },
             toCheckout(){
+                window.sessionStorage.setItem('paying_items', JSON.stringify(this.checkedCities));
                 this.$router.push('/checkout');
+            },
+            clearBasket(){
+                //清空购物车
+                const _this = this;
+                axios.put('/cart/deleteAll').then(function (resp) {
+                        _this.$router.go(0);
+                });
             }
         },
         mounted(){

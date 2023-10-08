@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <el-header style="height: 95px" class="initial" v-if="!checkout">
+      <el-header style="height: 95px" class="initial" v-if="showHeader">
         <NavMenu />
       </el-header>
 
@@ -29,7 +29,7 @@ export default {
   },
     data(){
       return{
-          checkout:false
+          showHeader:true
       }
     },
     mounted () {
@@ -53,7 +53,11 @@ export default {
     },
     computed:{
       url(){
-          this.checkout = this.$route.path === '/checkout';
+          if(this.$route.path === '/checkout' || this.$route.path === '/check_order'){
+              this.showHeader = false;
+          }else {
+              this.showHeader = true;
+          }
           return this.$route.path;
       }
     }
