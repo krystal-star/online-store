@@ -197,7 +197,7 @@
         created() {
             this.username = JSON.parse(window.sessionStorage.getItem('username'))
             const _this = this;
-            axios.post('http://139.9.86.49:8181/order/create',
+            axios.post('/order/create',
             JSON.parse(window.sessionStorage.getItem('orderDTO'))).then(function (resp) {
                     if (resp.data.data.is_paid === true){
                         _this.order = resp.data.data;

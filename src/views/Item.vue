@@ -276,7 +276,7 @@
         created() {
             let id = window.sessionStorage.getItem('id');
             const _this = this
-            axios.get('http://139.9.86.49:8181/itemInfo/'+JSON.parse(id)).then(function (resp) {
+            axios.get('/itemInfo/'+JSON.parse(id)).then(function (resp) {
                 _this.item = resp.data.data
                 _this.discount = resp.data.data.related_items
                 _this.item.size = resp.data.data.size   //？？？？
@@ -394,7 +394,7 @@
                 if(this.sizeChoosed === true){
                     var id = this.item.id;
                     const _this = this;
-                    axios.post('http://139.9.86.49:8181/cart/add?itemId='+id).then(function (resp) {
+                    axios.post('/cart/add?itemId='+id).then(function (resp) {
                         if (resp.data.code === 0) {
                             _this.$notify({
                                 title: '成功',

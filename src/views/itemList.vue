@@ -534,7 +534,7 @@
         created() {
             let url = window.sessionStorage.getItem('url');
             const _this = this
-            axios.get('http://139.9.86.49:8181'+JSON.parse(url)).then(function (resp) {
+            axios.get(''+JSON.parse(url)).then(function (resp) {
                 _this.items = resp.data.data.items
                 _this.num = resp.data.data.items_number
             })

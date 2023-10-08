@@ -512,7 +512,7 @@
             if(id){
                 this.user.id = JSON.parse(id);
                 const _this=this;
-                axios.get('http://139.9.86.49:8181/cart').then(function (resp) {
+                axios.get('/cart').then(function (resp) {
                     _this.basket = resp.data.data.items;
                     _this.total_price = resp.data.data.total_price;
                 })
@@ -616,7 +616,7 @@
             login: function(){
                 var path = 'username='+this.loginForm.username+'&password='+this.loginForm.password;
                 const _this = this;
-                axios.post('http://139.9.86.49:8181/login?'+path).then(function (resp) {
+                axios.post('/login?'+path).then(function (resp) {
                     console.log("登陆中");
                     if(resp.data.code === 0){
                         console.log("注册成功");
@@ -647,10 +647,10 @@
                 console.log(infoForm);
                 var path = 'username='+infoForm.username+'&password='+infoForm.password;
                 const _this = this;
-                axios.post('http://139.9.86.49:8181/register', infoForm).then(function (resp) {
+                axios.post('/register', infoForm).then(function (resp) {
                     /*if (resp.data.code === 0){
                         console.log("注册好了");
-                        axios.post('http://139.9.86.49:8181/login?'+path).then(function (resp1) {
+                        axios.post('/login?'+path).then(function (resp1) {
                             console.log("登陆中");
                             if (resp1.data.code === 0) {
                                 console.log("登陆好了");
@@ -682,7 +682,7 @@
             logout:function () {
                 window.sessionStorage.removeItem('username');
                 const _this = this;
-                axios.post('http://139.9.86.49:8181/logout').then(function (resp) {
+                axios.post('/logout').then(function (resp) {
                     _this.$router.go(0);
                 })
             },
